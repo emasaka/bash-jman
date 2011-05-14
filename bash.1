@@ -165,17 +165,16 @@ bash \- GNU Bourne-Again SHell
 つまりコマンドは全く実行されません。
 .TP
 .B [\-+]O [\fIshopt_option\fP]
-\fIshopt_option\fP is one of the shell options accepted by the
-\fBshopt\fP builtin (see
+\fIshopt_option\fP には、組み込みコマンド \fBshopt\fP (後述の
 .SM
-.B SHELL BUILTIN COMMANDS
-below).
-If \fIshopt_option\fP is present, \fB\-O\fP sets the value of that option;
-\fB+O\fP unsets it.
-If \fIshopt_option\fP is not supplied, the names and values of the shell
-options accepted by \fBshopt\fP are printed on the standard output.
-If the invocation option is \fB+O\fP, the output is displayed in a format
-that may be reused as input.
+.B シェルの組み込みコマンド
+を参照) に与えるのと同じシェルのオプションを指定します。
+\fIshopt_option\fP が有効なオプションであれば、
+\fB\-O\fP でオプションが設定されます。
+\fB+O\fP で設定解除になります。
+\fIshopt_option\fP を指定しない場合、
+\fBshopt\fP で指定できるオプションの名前と値が標準出力に表示されます。
+このとき、入力として再利用できるかたちで出力されます。
 .TP
 .B \-\-
 .B \-\-
@@ -198,13 +197,12 @@ that may be reused as input.
 .PD 0
 .TP
 .B \-\-debugger
-Arrange for the debugger profile to be executed before the shell
-starts.
-Turns on extended debugging mode (see the description of the
-.B extdebug
-option to the
+シェルの実行を開始する前に、デバッグモードを準備します。
+拡張デバッグモードを有効にします (後述の組み込みコマンド
 .B shopt
-builtin below).
+の
+.B extdebug
+オプションを参照)。
 .TP
 .B \-\-dump\-po\-strings
 \fB\-D\fP と同じですが、
