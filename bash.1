@@ -60,6 +60,7 @@
 .\"WORD:	file descriptor	ファイル・ディスクリプター
 .\"WORD:	exit status		終了ステータス
 .\"WORD:	return status		返却ステータス
+.\"WORD:	control operator	制御演算子
 .\"
 .de }1
 .ds ]X \&\\*(]B\\
@@ -521,9 +522,9 @@ bash \- GNU Bourne-Again SHell
 .RE
 .PP
 .TP
-.B control operator
-A \fItoken\fP that performs a control function.  It is one of the following
-symbols:
+.B 制御演算子 (control operator)
+制御機能を持つ \fIトークン\fP。
+以下の文字のうちのいずれかです:
 .RS
 .PP
 .if t \fB||  &  &&  ;  ;;  (  )  |  |&    <newline>\fP
