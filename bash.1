@@ -298,11 +298,10 @@ bash \- GNU Bourne-Again SHell
 \fBbash\fP の終了ステータスは、
 このスクリプト中で実行された最後のコマンドの終了ステータスになります。
 コマンドが全く実行されなければ、終了ステータスは 0 です。
-An attempt is first made to open the file in the current directory, and,
-if no file is found, then the shell searches the directories in
+ファイルは最初にカレントディレクトリから探し、見つけられなかった場合には、
 .SM
 .B PATH
-for the script.
+の中のディレクトリからスクリプトを探します。
 .SH 起動
 \fIログインシェル(login shell)\fPとは、0 番目の引き数の最初の文字が
 .BR \-
