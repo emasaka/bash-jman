@@ -582,19 +582,20 @@ bash \- GNU Bourne-Again SHell
 コマンドで指定したどのリダイレクションよりも先に実行されます
 (後述の
 .SM
-.B リダイレクション
+.B リダイレクト
 を参照)。
-If \fB|&\fP is used, the standard error of \fIcommand\fP is connected to
-\fIcommand2\fP's standard input through the pipe; it is shorthand for
-\fB2>&1 |\fP.
-This implicit redirection of the standard error is performed after any
-redirections specified by the command.
+\fB|&\fP を使うと、\fIcommand\fP の標準エラー出力もパイプを通して
+\fIcommand2\fP の標準入力に接続されます。
+これは \fB2>&1 |\fP の短縮系です。
+この標準エラー出力の暗黙のリダイレクションは、
+コマンドに指定されたすべてのリダイレクションの後に実行されます。
 .PP
-The return status of a pipeline is the exit status of the last
-command, unless the \fBpipefail\fP option is enabled.
-If \fBpipefail\fP is enabled, the pipeline's return status is the
-value of the last (rightmost) command to exit with a non-zero status,
-or zero if all commands exit successfully.
+\fBpipefail\fP オプションが有効になっている場合を除き、
+パイプラインの返却ステータスは最後のコマンドの終了ステータスになります。
+\fBpipefail\fP が有効になっている場合には、
+パイプラインの返却ステータスは 0 以外のステータスを返した最後の
+(いちばん右の) コマンドの値になり、
+すべてのコマンドが正常終了した場合には 0 になります。
 パイプラインの前に、予約語である
 .B !
 がある場合、
@@ -608,8 +609,8 @@ NOT を取ったものになります。
 経過時間・ユーザ時間・システム時間がパイプラインの終了時に報告されます。
 \fB\-p\fP オプションを指定すると、
 出力フォーマットが POSIX 仕様に変わります。
-When the shell is in \fIposix mode\fP, it does not recognize
-\fBtime\fP as a reserved word if the next token begins with a `-'.
+シェルが \fIposix モードのときには、
+後に続くトークンが `-' であれば \fBtime\fP を予約語と認識しません。
 変数
 .SM
 .B TIMEFORMAT
@@ -621,14 +622,12 @@ When the shell is in \fIposix mode\fP, it does not recognize
 .B TIMEFORMAT
 に関する説明を参照)。
 .PP
-When the shell is in \fIposix mode\fP, \fBtime\fP
-may be followed by a newline.  In this case, the shell displays the
-total user and system time consumed by the shell and its children.
-The
+シェルが \fIposix モードのときには、\fBtime\fP の直後が改行でもかまいません。
+この場合、シェルと子プロセスが消費したユーザ時間とシステム時間を出力します。
+このときにも、経過時間情報のフォーマット指定に変数
 .SM
 .B TIMEFORMAT
-variable may be used to specify the format of
-the time information.
+が使われます。
 .PP
 パイプライン中の各コマンドは、それぞれ別のプロセスとして
 (つまりサブシェル内で) 実行されます。
@@ -655,8 +654,8 @@ the time information.
 .BR & ,
 が同じ優先順位で続きます。
 .PP
-A sequence of one or more newlines may appear in a \fIlist\fP instead
-of a semicolon to delimit commands.
+\fIリスト\fP 中では、コマンドの区切りとして、
+セミコロンの代わりに一つ以上の改行の並びが使われることもあります。
 .PP
 コマンドが制御演算子
 .BR &
@@ -669,9 +668,9 @@ of a semicolon to delimit commands.
 シェルはそれぞれのコマンドが終了するのを順番に待ちます。
 返却ステータスは、最後に実行したコマンドの終了ステータスになります。
 .PP
-AND and OR lists are sequences of one of more pipelines separated by the
-\fB&&\fP and \fB||\fP control operators, respectively.
-AND and OR lists are executed with left associativity.
+AND リストと OR リストは、それぞれ制御演算子 \fB&&\fP と
+\fB||\fP で区切られたパイプラインの並びです。
+AND リストと OR リストは左結合で実行されます。
 AND リストは
 .RS
 .PP
@@ -717,11 +716,10 @@ AND リストと OR リストの返却ステータスは、
 \fIlist\fP の最後は改行文字かセミコロンでなければなりません。これは
 \fIグループコマンド(group command)\fP と呼ばれます。返却ステータスは
 \fIlist\fP の終了ステータスです。
-Note that unlike the metacharacters \fB(\fP and \fB)\fP, \fB{\fP and
-\fB}\fP are \fIreserved words\fP and must occur where a reserved
-word is permitted to be recognized.  Since they do not cause a word
-break, they must be separated from \fIlist\fP by whitespace or another
-shell metacharacter.
+
+メタキャラクターである \fB(\fP と \fB)\fP と違い、 \fB{\fP と \fB}\fP は \fI予約語\fP であり、予約語として認識される場所に現れる必要があることに注意してください。
+これらは単語分割の対象とならないため、
+\fIリスト\fP との間が空白またはシェルのメタ文字で分かれている必要があります。
 .TP
 ((\fIexpression\fP))
 \fIexpression\fP が後述の
@@ -742,51 +740,48 @@ shell metacharacter.
 の間の単語に対しては行われません。
 チルダ展開、パラメータと変数の展開、算術式展開、コマンド置換、
 プロセス置換、クォート除去は実行されます。
-Conditional operators such as \fB\-f\fP must be unquoted to be recognized
-as primaries.
+\fB\-f\fP などの条件演算子は最初に認識されるため、クォートしてはいけません。
 .if t .sp 0.5
 .if n .sp 1
-When used with \fB[[\fP, the \fB<\fP and \fB>\fP operators sort
-lexicographically using the current locale.
+\fB[[\fP においては、\fB<\fP 演算子と \fB>\fP 演算子は、
+現在のロケールにおける辞書順を表します。
 .if t .sp 0.5
 .if n .sp 1
 \fB==\fP 演算子と \fB!=\fP 演算子が使われたとき、
 演算子の右の文字列はパターンと解釈され、
 後述の\fBパターンマッチング\fPで説明する規則に従ってマッチングが行われます。
-If the shell option
+シェルオプション
 .B nocasematch
-Any part of the pattern may be quoted to force it to be matched as a
-string.
+が有効であれば、
+アルファベットの大文字と小文字を考慮せずにマッチングが行われます。
+返り値は、文字列がマッチしたとき (\fB==\fP) またはマッチしなかったとき
+(\fB!=\fP) に 0 となり、そうでない場合に 1 となります。
+パターン中のどの部分でも文字としてマッチングさせるにはクオートします。
 .if t .sp 0.5
 .if n .sp 1
-An additional binary operator, \fB=~\fP, is available, with the same
-precedence as \fB==\fP and \fB!=\fP.
-When it is used, the string to the right of the operator is considered
-an extended regular expression and matched accordingly (as in \fIregex\fP(3)).  
-The return value is 0 if the string matches
-the pattern, and 1 otherwise.
-If the regular expression is syntactically incorrect, the conditional
-expression's return value is 2.
-If the shell option
+そのほか、二項演算子 \fB=~\fP もあります。
+優先順位は \fB==\fP や \fB!=\fP と同じです。
+これを使うと、右辺の文字列は拡張正規表現とみなされ、
+それに従って (\fIregex\fP(3) にあるように) マッチングが行われます。
+文字列がパターンにマッチすれば返り値は 0 であり、
+マッチしなければ返り値は 1 になります。
+正規表現が文法的に誤っていれば、条件式の返り値は 2 になります。
+シェルオプション
 .B nocasematch
-is enabled, the match is performed without regard to the case
-of alphabetic characters.
-Any part of the pattern may be quoted to force it to be matched as a
-string.
-Substrings matched by parenthesized subexpressions within the regular
-expression are saved in the array variable
+が有効であれば、
+アルファベットの大文字と小文字を考慮せずにマッチングが行われます。
+パターン中のどの部分でも文字としてマッチングさせるにはクオートします。
+正規表現中の括弧による部分式にマッチした部分文字列は、配列変数
 .SM
-.BR BASH_REMATCH .
-The element of
+.BR BASH_REMATCH
+に保存されます。
 .SM
 .B BASH_REMATCH
-with index 0 is the portion of the string
-matching the entire regular expression.
-The element of
+のインデックス 0 の要素は、文字列のうち正規表現全体にマッチした部分になります。
 .SM
 .B BASH_REMATCH
-with index \fIn\fP is the portion of the
-string matching the \fIn\fPth parenthesized subexpression.
+のインデックス \fIn\fP の要素は、文字列のうち、
+正規表現中の \fIn\fP 番目の括弧による部分式にマッチした部分になります。
 .if t .sp 0.5
 .if n .sp 1
 式は以下の演算子を使って繋げられます。
@@ -885,24 +880,23 @@ EOF を読み込むとコマンドが終了します。
 マッチングの際にはパス名展開 (後述の
 .B パス名展開
 を参照) と同じ規則が用いられます。
-The \fIword\fP is expanded using tilde
-expansion, parameter and variable expansion, arithmetic substitution,
-command substitution, process substitution and quote removal.
-Each \fIpattern\fP examined is expanded using tilde
-expansion, parameter and variable expansion, arithmetic substitution,
-command substitution, and process substitution.
-If the shell option
+\fIword\fP には、チルダ展開、パラメータと変数の展開、算術式展開、
+コマンド置換、プロセス置換、クォート除去が実行されます。
+それぞれの \fpattern\fP は、チルダ展開、パラメータと変数の展開、
+算術式展開、コマンド置換、プロセス置換、クォート除去のうえで比較されます。
+シェルオプション
 .B nocasematch
-is enabled, the match is performed without regard to the case
-of alphabetic characters.
+が有効であれば、
+アルファベットの大文字と小文字を考慮せずにマッチングが行われます。
+パターン中のどの部分でも文字としてマッチングさせるにはクオートします。
 マッチするものが見つかると、これに対応する \fIlist\fP が実行されます。
-If the \fB;;\fP operator is used, no subsequent matches are attempted after
-the first pattern match.
-Using \fB;&\fP in place of \fB;;\fP causes execution to continue with
-the \fIlist\fP associated with the next set of patterns.
-Using \fB;;&\fP in place of \fB;;\fP causes the shell to test the next
-pattern list in the statement, if any, and execute any associated \fIlist\fP
-on a successful match.
+\fB;;\fP 演算子を使うと、
+最初にマッチしたパターン以降のマッチングは試みられません。
+\fB;;\fP の代わりに \fB;&\fP を使うと、
+その次のパターンに対応する \fIlist\fP の実行に続きます。
+\fB;;\fP の代わりに \fB;;&\fP を使うと、
+次のパターンがあればそのマッチングを試み、
+マッチすれば対応する \fIlist\fP を実行します。
 マッチするパターンが無ければ、終了ステータスは 0 になります。
 マッチするものがあったら、終了ステータスは
 \fIlist\fP 中で最後に実行されたコマンドの終了ステータスになります。
@@ -939,82 +933,81 @@ on a successful match.
 \fBwhile\fP コマンドと \fBuntil\fP コマンドの終了ステータスは、
 \fBdo\fP \fIlist-2\fP で実行された最後のコマンドの終了ステータスになりますが、
 コマンドが全く実行されなかった場合には 0 になります。
-.SS Coprocesses
+.SS コプロセス (Coprocesses)
 .PP
-A \fIcoprocess\fP is a shell command preceded by the \fBcoproc\fP reserved
-word.
-A coprocess is executed asynchronously in a subshell, as if the command
-had been terminated with the \fB&\fP control operator, with a two-way pipe
-established between the executing shell and the coprocess.
+\fIコプロセス (coprocess)\fP は、予約語 \fBcoproc\fP
+で始まるシェルのコマンドです。
+コプロセスは、コマンドが制御演算子 \fB&\fP で終わっているときのように、
+サブシェルで非同期に実行されます。
+実行したシェルとコプロセスの間には、双方向のパイプが設けられます
 .PP
-The format for a coprocess is:
+コプロセスのフォーマットを以下に示します:
 .RS
 .PP
 \fBcoproc\fP [\fINAME\fP] \fIcommand\fP [\fIredirections\fP]
 .RE
 .PP
-This creates a coprocess named \fINAME\fP.
-If \fINAME\fP is not supplied, the default name is \fICOPROC\fP.
-\fINAME\fP must not be supplied if \fIcommand\fP is a \fIsimple
-command\fP (see above); otherwise, it is interpreted as the first word
-of the simple command.
-When the coproc is executed, the shell creates an array variable (see
-.B Arrays
-below) named \fINAME\fP in the context of the executing shell.
-The standard output of
+これにより \fINAME\fP という名前のコプロセスが作られます。
+\fINAME\fP が指定されない場合、デフォルトの名前は \fICOPROC\fP となります。
+\fIcommand\fP が \fI単純なコマンド\fP (前述) のときには、
+\fINAME\fP は指定できません。
+指定すると、単純なコマンドの最初の単語として扱われます。
+コプロセスが実行されると、実行したシェルのコンテキストに
+\fINAME\fP という名前の配列変数 (後述の
+.B 配列
+を参照) が作られます。
 .I command
-is connected via a pipe to a file descriptor in the executing shell,
-and that file descriptor is assigned to \fINAME\fP[0].
-The standard input of
+の標準出力は、実行しているシェルのファイルディスクリプタと
+パイプによって接続されます。
+このファイルディスクリプタは \fINAME\fP[0] に代入されます。
 .I command
-is connected via a pipe to a file descriptor in the executing shell,
-and that file descriptor is assigned to \fINAME\fP[1].
-This pipe is established before any redirections specified by the
-command (see
+の標準入力は、実行しているシェルのファイルディスクリプタと
+パイプによって接続されます。
+このファイルディスクリプタは \fINAME\fP[1] に代入されます。
+このパイプは、コマンドで指定されたほかのリダイレクトより先に設けられます
+(後述の
 .SM
-.B REDIRECTION
-below).
-The file descriptors can be utilized as arguments to shell commands
-and redirections using standard word expansions.
-The process ID of the shell spawned to execute the coprocess is
-available as the value of the variable \fINAME\fP_PID.
-The \fBwait\fP
-builtin command may be used to wait for the coprocess to terminate.
+.B リダイレクト
+を参照)。
+ファイルディスクリプタは、標準的な単語展開により、
+シェルのコマンドの引数やリダイレクションに指定できます
+コプロセスの実行で生成されたシェルのプロセス ID は、変数
+\fINAME\fP_PID の値になります。
+コプロセスの終了を待つには、組み込みコマンド \fBwait\fP を使います。
 .PP
-The return status of a coprocess is the exit status of \fIcommand\fP.
-.SS Shell Function Definitions
+コプロセスの返却ステータスは、\fIcommand\fP の終了ステータスです。
+.SS 関数定義
 .PP
-A shell function is an object that is called like a simple command and
-executes a compound command with a new set of positional parameters.
-Shell functions are declared as follows:
+シェル関数は、単純なコマンドとして呼び出されて、
+新しい位置パラメータのセットを持つ複合コマンドとして実行されるものです。
+シェル関数は以下の形式で宣言します:
 .TP
 \fIname\fP () \fIcompound\-command\fP [\fIredirection\fP]
 .PD 0
 .TP
 \fBfunction\fP \fIname\fP [()] \fIcompound\-command\fP [\fIredirection\fP]
 .PD
-This defines a function named \fIname\fP.
-The reserved word \fBfunction\fP is optional.
-If the \fBfunction\fP reserved word is supplied, the parentheses are optional.
-The \fIbody\fP of the function is the compound command
+これによって \fIname\fP という名前の関数が定義されます。
+予約語 \fBfunction\fP は省略可能です。
+予約語 \fBfunction\fP が与えられた場合、括弧は省略可能です。
+関数の \fI実体\fP は複合コマンド
 .I compound\-command 
-(see \fBCompound Commands\fP above).
-That command is usually a \fIlist\fP of commands between { and }, but
-may be any command listed under \fBCompound Commands\fP above.
-\fIcompound\-command\fP is executed whenever \fIname\fP is specified as the
-name of a simple command.
-Any redirections (see
+です (前述の \fB複合コマンド\fP を参照)。
+多くの場合、 { と } に挟まれたコマンドの \fIリスト\fP が用いられますが、
+前述の \fB複合コマンド\fP で挙げたどのコマンドを用いてもかまいません。
+単純なコマンドの名前として \fIname\fP を指定するといつでも
+\fIcompound\-command\fP が実行されます。
+関数の定義で指定されたリダイレクション (後述の
 .SM
-.B REDIRECTION
-below) specified when a function is defined are performed
-when the function is executed.
-The exit status of a function definition is zero unless a syntax error
-occurs or a readonly function with the same name already exists.
-When executed, the exit status of a function is the exit status of the
-last command executed in the body.  (See
+.B リダイレクト
+を参照) は、関数が実行されるときに処理されます。
+関数定義の終了ステータスは、文法エラーが置きた場合や、
+読み込み専用の関数が同じ名前で定義れていた場合を除き、0 です。
+
+関数を実行したときの終了ステータスは、実体の中で最後に実行されたコマンドの終了ステータスになります (後述の
 .SM
-.B FUNCTIONS
-below.)
+.B 関数
+を参照)
 .SH コメント (COMMENTS)
 シェルが対話的でない場合、または対話的なシェルにおいて
 組み込みコマンドの
