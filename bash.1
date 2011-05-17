@@ -1038,13 +1038,12 @@ EOF を読み込むとコマンドが終了します。
 で挙げた\fIメタ文字 (metacharacters)\fP にはそれぞれ特殊な意味があるので、
 その文字自身を表すためにはクォートしなければなりません。
 .PP
-When the command history expansion facilities are being used
-(see
+履歴展開の機能 (後述の
 .SM
-.B HISTORY EXPANSION
-below), the
-\fIhistory expansion\fP character, usually \fB!\fP, must be quoted
-to prevent history expansion.
+.B 履歴の展開
+を参照) 
+が使われているときには、\fI履歴展開\fP 文字 (通常は \fB!\fP) は、
+履歴展開を防ぐためにクォートしなければなりません。
 .PP
 クォートの方法には、
 .IR "エスケープ文字(escape character)" ,
@@ -1070,7 +1069,7 @@ to prevent history expansion.
 .BR \` ,
 .BR \e ,
 は例外となります。
-and, when history expansion is enabled,
+履歴展開が有効なときには、
 .BR ! .
 .B $
 と
@@ -1086,12 +1085,11 @@ and, when history expansion is enabled,
 前にバックスラッシュを付ければ、
 ダブルクォート文字をダブルクォートによるクォートの内部で
 クォートできます。
-If enabled, history expansion will be performed unless an
+履歴展開は有効であれば実行されますが、ダブルクォート中の
 .B !
-appearing in double quotes is escaped using a backslash.
-The backslash preceding the
+がバックスラッシュでエスケープされている場合を除きます。
 .B !
-is not removed.
+の前のバックスラッシュは削除されません。
 .PP
 特殊なパラメータである
 .B *
@@ -1153,15 +1151,13 @@ ASCII コードの 8 進値が \fInnn\fP である文字 (1 文字につき数�
 ASCII コードの 16 進値が \fInnn\fP である文字 (1 文字につき数字 1 または 2 桁)。
 .TP
 .B \eu\fIHHHH\fP
-the Unicode (ISO/IEC 10646) character whose value is the hexadecimal value
-\fIHHHH\fP (one to four hex digits)
+ユニコード (ISO/IEC 10646) の16 進値が \fIHHHH\fP である文字 (16 進 1〜4 桁)。
 .TP
 .B \eU\fIHHHHHHHH\fP
-the Unicode (ISO/IEC 10646) character whose value is the hexadecimal value
-\fIHHHHHHHH\fP (one to eight hex digits)
+ユニコード (ISO/IEC 10646) の16 進値が \fIHHHHHHHH\fP である文字 (16 進 1〜8 桁)。
 .TP
 .B \ec\fIx\fP
-a control-\fIx\fP character
+control-\fIx\fP の文字
 .PD
 .RE
 .LP
