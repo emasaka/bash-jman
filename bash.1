@@ -1180,14 +1180,15 @@ control-\fIx\fP の文字
 とは
 .I 名前
 で表現されたパラメータです。
-A variable has a \fIvalue\fP and zero or more \fIattributes\fP.
-Attributes are assigned using the
+変数は\fI値\fPと 0 個以上の\fI属性\fPを持ちます。
+属性は
 .B declare
-builtin command (see
-.B declare
-below in
+組み込みコマンド (後述の
 .SM
-.BR "SHELL BUILTIN COMMANDS" ).
+.B シェルの組み込みコマンド
+の
+.B declare
+の項を参照) で設定されます。
 .PP
 パラメータに値が代入されていれば、
 そのパラメータは設定 (set) されていると言われます。
@@ -1224,31 +1225,29 @@ below in
 .BR 特殊パラメータ
 で後述する \fB"$@"\fP という例外を除いて、単語の分割は行われません。
 パス名展開も実行されません。
-Assignment statements may also appear as arguments to the
+代入文は組み込みコマンドの
 .BR alias ,
 .BR declare ,
 .BR typeset ,
 .BR export ,
 .BR readonly ,
-and
 .B local
-builtin commands.
+の引数でも使われます。
 .PP
-In the context where an assignment statement is assigning a value
-to a shell variable or array index, the += operator can be used to
-append to or add to the variable's previous value.
-When += is applied to a variable for which the \fIinteger\fP attribute has been
-set, \fIvalue\fP is evaluated as an arithmetic expression and added to the
-variable's current value, which is also evaluated.
-When += is applied to an array variable using compound assignment (see
-.B Arrays
-below), the
-variable's value is not unset (as it is when using =), and new values are
-appended to the array beginning at one greater than the array's maximum index
-(for indexed arrays) or added as additional key\-value pairs in an
-associative array.
-When applied to a string-valued variable, \fIvalue\fP is expanded and
-appended to the variable's value.
+代入文でシェル変数や配列のインデックスに値を代入する場面では、
++= 演算子を使って変数の直前の値に追加したり加算したりできます。
++= を変数\fI整数\fP属性が設定された変数に適用すると、
+\fI値\fPは算術式展開として評価され、
+同じく評価された変数の現在の値に加算されます。
+ += が配列変数への複合代入 (後述の
+.B 配列
+を参照) に適用すると、
+変数の値が設定されていなければ (= の場合と同じく)、
+新しい値は配列の最大のインデックスより一つ大きい位置から追加されるか
+(インデックスによる配列の場合)、新しいキーと値のペアが追加されます
+(連想配列の場合)。
+文字列の値の変数に適用すると、\fI値\fPが展開され、
+変数の値に追加されます。
 .SS 位置パラメータ(Positional Parameters)
 .PP
 .I 位置パラメータ (positional parameter)
@@ -1303,10 +1302,10 @@ appended to the variable's value.
 ダブルクォートの内部で展開が行われたときは、
 それぞれのパラメータは別々の単語に展開されます。
 つまり "\fB$@\fP" は "\fB$1\fP" "\fB$2\fP" ... と同じです。
-If the double-quoted expansion occurs within a word, the expansion of
-the first parameter is joined with the beginning part of the original
-word, and the expansion of the last parameter is joined with the last
-part of the original word.
+単語の中でダブルクォートの展開が行われるときには、
+最初のパラメータの展開結果に元の単語のダブルクォートより前の部分が
+結び付き、最後のパラメータの展開結果に元の単語のダブルクォートより
+後の部分が結び付きます。
 位置パラメータが無い場合には、"\fB$@\fP" と
 .B $@
 を展開しても空文字列になります (つまり取り除かれます)。
@@ -1375,126 +1374,126 @@ part of the original word.
 を起動したときに使われた、完全なファイル名に展開されます。
 .TP
 .B BASHOPTS
-A colon-separated list of enabled shell options.  Each word in
-the list is a valid argument for the
-.B \-s
-option to the
+コロン区切りのリストで、有効になっているシェルのオプションを示します。
+リスト中のそれぞれの単語は、組み込みコマンド
 .B shopt
-builtin command (see
+の
+.B \-s
+オプション (後述の
 .SM
-.B "SHELL BUILTIN COMMANDS"
-below).  The options appearing in
+.B シェルの組み込みコマンド
+を参照) に対する有効な引き数になっています。
 .SM
 .B BASHOPTS
-are those reported as
+に現れるオプションは、\fBshopt\fP コマンドで
 .I on
-by \fBshopt\fP.
-If this variable is in the environment when
+と表示されるものです。
+もし
 .B bash
-starts up, each shell option in the list will be enabled before
-reading any startup files.
-This variable is read-only.
+を起動したときに、この変数が環境変数に設定されていれば、
+初期化ファイルを読み込む前に、リストにあるすべてのシェルオプションが
+有効に設定されます。
+この変数は読み込み専用です。
 .TP
 .B BASHPID
-Expands to the process ID of the current \fBbash\fP process.
-This differs from \fB$$\fP under certain circumstances, such as subshells
-that do not require \fBbash\fP to be re-initialized.
+現在の \fBbash\fP のプロセス ID に展開されます。
+\fBbash\fP を再初期化しないサブシェルのような、いくつかの環境においては、
+\fB$$\fP と値が異なります。
 .TP
 .B BASH_ALIASES
-An associative array variable whose members correspond to the internal
-list of aliases as maintained by the \fBalias\fP builtin.
-Elements added to this array appear in the alias list; unsetting array
-elements cause aliases to be removed from the alias list.
+組み込みコマンド \fBalias\fP で扱うエイリアスの内部的なリストに
+対応する連想配列変数です。
+この配列に要素を追加すると、エイリアスのリストにも追加されます。
+配列から要素を削除すると、エイリアスがリストから削除されます。
 .TP
 .B BASH_ARGC
-An array variable whose values are the number of parameters in each
-frame of the current \fBbash\fP execution call stack.
-The number of
-parameters to the current subroutine (shell function or script executed
-with \fB.\fP or \fBsource\fP) is at the top of the stack.
-When a subroutine is executed, the number of parameters passed is pushed onto
+現在の \fBbash\fP が実行している呼び出しスタックについて、
+フレームごとの引数の数が並んだ配列変数です。
+現在のサブルーチン (シェル関数や、\fB.\fP か \fBsource\fP で実行された
+スクリプト) の引数の数が、スタックの一番上に置かれます。
+サブルーチンが実行されると、渡されたパラメータの数が
 .SM
-.BR BASH_ARGC .
-The shell sets
+.BR BASH_ARGC
+に追加されます。
+シェルが
 .SM
 .B BASH_ARGC
-only when in extended debugging mode (see the description of the
-.B extdebug
-option to the
+を設定するのは、拡張デバッグモードのときだけです
+ (後述の組み込みコマンド
 .B shopt
-builtin below)
+の
+.B extdebug
+オプションを参照)。
 .TP
 .B BASH_ARGV
-An array variable containing all of the parameters in the current \fBbash\fP
-execution call stack.  The final parameter of the last subroutine call
-is at the top of the stack; the first parameter of the initial call is
-at the bottom.  When a subroutine is executed, the parameters supplied
-are pushed onto
+現在の \fBbash\fP が実行している呼び出しスタックについて、
+すべての引数が並んだ配列変数です。
+一連の呼び出しのうち、最後に呼ばれたサブルーチンの最後の引数が、
+スタックの一番上に置かれます。
+最初に呼ばれたサブルーチンの最初の引数が、スタックの一番下になります。
+サブルーチンが実行されると、渡されたパラメータが
 .SM
-.BR BASH_ARGV .
-The shell sets
+.BR BASH_ARGV
+に追加されます。
+シェルが
 .SM
 .B BASH_ARGV
-only when in extended debugging mode
-(see the description of the
-.B extdebug
-option to the
+を設定するのは、拡張デバッグモードのときだけです
+ (後述の組み込みコマンド
 .B shopt
-builtin below)
+の
+.B extdebug
+オプションを参照)。
 .TP
 .B BASH_CMDS
-An associative array variable whose members correspond to the internal
-hash table of commands as maintained by the \fBhash\fP builtin.
-Elements added to this array appear in the hash table; unsetting array
-elements cause commands to be removed from the hash table.
+組み込みコマンド \fBhash\fP で扱うコマンドの内部的なハッシュテーブルに
+対応する連想配列変数です。
+この配列に要素を追加すると、ハッシュテーブルにも追加されます。
+配列から要素を削除すると、ハッシュテーブルから削除されます。
 .TP
 .B BASH_COMMAND
-The command currently being executed or about to be executed, unless the
-shell is executing a command as the result of a trap,
-in which case it is the command executing at the time of the trap.
+現在実行しているか実行しようとしているコマンドです。
+ただし、トラップによりコマンドを実行しているときのコマンドは除きます。
 .TP
 .B BASH_EXECUTION_STRING
-The command argument to the \fB\-c\fP invocation option.
+起動オプション \fB\-c\fP で指定されたコマンドです。
 .TP
 .B BASH_LINENO
-An array variable whose members are the line numbers in source files
-where each corresponding member of
+ソースファイル中の行番号に対応する要素からなる配列変数で、
+それぞれの要素は
 .SM
 .B FUNCNAME
-was invoked.
-\fB${BASH_LINENO[\fP\fI$i\fP\fB]}\fP is the line number in the source
-file (\fB${BASH_SOURCE[\fP\fI$i+1\fP\fB]}\fP) where
-\fB${FUNCNAME[\fP\fI$i\fP\fB]}\fP was called
-(or \fB${BASH_LINENO[\fP\fI$i-1\fP\fB]}\fP if referenced within another
-shell function).
-Use
+の各要素が呼び出された位置に対応します。
+\fB${BASH_LINENO[\fP\fI$i\fP\fB]}\fP がソースファイル
+(\fB${BASH_SOURCE[\fP\fI$i+1\fP\fB]}\fP)
+中で\fB${FUNCNAME[\fP\fI$i\fP\fB]}\fP が呼び出された行番号です。
+別のシェル関数から参照されると \fB${BASH_LINENO[\fP\fI$i-1\fP\fB]}\fP
+になります。
+現在の行番号は
 .SM
 .B LINENO
-to obtain the current line number.
+です。
 .TP
 .B BASH_REMATCH
-An array variable whose members are assigned by the \fB=~\fP binary
-operator to the \fB[[\fP conditional command.
-The element with index 0 is the portion of the string
-matching the entire regular expression.
-The element with index \fIn\fP is the portion of the
-string matching the \fIn\fPth parenthesized subexpression.
-This variable is read-only.
+条件コマンド \fB[[\fP 中の二項演算子 \fB=~\fP により設定される配列変数です。
+インデックス 0 の要素は、正規表現全体にマッチする部分文字列です。
+インデックス \fIn\fP の要素は、\fIn\fP 番目の括弧による部分式に
+マッチした部分文字列です。
+この変数は読み込み専用です。
 .TP
 .B BASH_SOURCE
-An array variable whose members are the source filenames
-where the corresponding shell function names in the
+ソースファイル名に対応する要素からなる配列変数で、
+それぞれの要素は配列変数
 .SM
 .B FUNCNAME
-array variable are defined.
-The shell function
-\fB${FUNCNAME[\fP\fI$i\fP\fB]}\fP is defined in the file
-\fB${BASH_SOURCE[\fP\fI$i\fP\fB]}\fP and called from
-\fB${BASH_SOURCE[\fP\fI$i+1\fP\fB]}\fP.
+の要素のシェル関数がそれぞれ定義されたファイル名に対応します
+シェル関数 \fB${FUNCNAME[\fP\fI$i\fP\fB]}\fP はファイル
+\fB${BASH_SOURCE[\fP\fI$i\fP\fB]}\fP で定義され、
+\fB${BASH_SOURCE[\fP\fI$i+1\fP\fB]}\fP から呼ばれています。
 .TP
 .B BASH_SUBSHELL
-Incremented by one each time a subshell or subshell environment is spawned.
-The initial value is 0.
+サブシェルやサブシェル環境が作成されるたびに 1 ずつ増えます。
+初期値は 0 です。
 .TP
 .B BASH_VERSINFO
 読み込み専用の配列変数で、配列の各要素は現在実行されている
@@ -1537,8 +1536,7 @@ The initial value is 0.
 から呼ばれたシェル関数においてのみ有効です。
 .TP
 .B COMP_KEY
-The key (or final key of a key sequence) used to invoke the current
-completion function.
+現在の補完関数を呼び出したキー (またはキーシーケンスの最後のキー) です。
 .TP
 .B COMP_LINE
 現在のコマンドラインです。
@@ -1554,42 +1552,37 @@ completion function.
 から呼ばれたシェル関数においてのみ有効です。
 .TP
 .B COMP_TYPE
-Set to an integer value corresponding to the type of completion attempted
-that caused a completion function to be called:
-\fITAB\fP, for normal completion,
-\fI?\fP, for listing completions after successive tabs,
-\fI!\fP, for listing alternatives on partial word completion,
-\fI@\fP, to list completions if the word is not unmodified,
-or
-\fI%\fP, for menu completion.
-This variable is available only in shell functions and external
-commands invoked by the
-programmable completion facilities (see \fBProgrammable Completion\fP
-below).
+補完関数を呼び出した補完のタイプに対応する整数値が設定されます。
+\fITAB\fP は通常の補完です。
+\fI?\fP は連続したタブ入力による候補のリスト表示です。
+\fI!\fP は途中まで補完したあとの候補のリスト表示です。
+\fI@\fP は、途中での一致がないときの候補のリスト表示です。
+\fI%\fP はメニュー補完 (menu completion)です。
+この変数はプログラム補完機能 (後述の \fBプログラム補完\fP を参照)
+から呼ばれたシェル関数と外部コマンドにおいてのみ有効です。
 .TP
 .B COMP_WORDBREAKS
-The set of characters that the \fBreadline\fP library treats as word
-separators when performing word completion.
-If
+単語補完のときに \fBreadline\fP ライブラリが単語分割の区切り文字として
+扱う文字の並びです。
 .SM
 .B COMP_WORDBREAKS
-is unset, it loses its special properties, even if it is
-subsequently reset.
+を unset すると、この変数の特殊な性質は無くなります。後で再び
+set しても元には戻りません。
 .TP
 .B COMP_WORDS
 現在のコマンドラインの各単語からなる配列変数
 (後述の \fB配列\fP 参照) です。
-The line is split into words as \fBreadline\fP would split it, using
+コマンドラインは \fBreadline\fP と同じように前述した
 .SM
 .B COMP_WORDBREAKS
-as described above.
+によって単語に分割されます。
 この変数はプログラム補完機能 (後述の \fBプログラム補完\fP を参照)
 から呼ばれたシェル関数においてのみ有効です。
 .TP
 .B COPROC
-An array variable (see \fBArrays\fP below) created to hold the file descriptors
-for output from and input to an unnamed coprocess (see \fBCoprocesses\fP
-above).
+無名のコプロセス (前述の \fBコプロセス\fP を参照)
+が入出力するファイルディスクリプタを保持する配列変数
+(後述の \fB配列\fP 参照) です。
 .TP
 .B DIRSTACK
 現在のディレクトリスタックの内容を持つ配列変数 (後述の
@@ -1619,14 +1612,14 @@ above).
 この変数は読み込み専用です。
 .TP
 .B FUNCNAME
-An array variable containing the names of all shell functions
-currently in the execution call stack.
-The element with index 0 is the name of any currently-executing
-shell function.
-The bottom-most element (the one with the highest index) is
-.if t \f(CW"main"\fP.
-.if n "main".
-This variable exists only when a shell function is executing.
+現在実行している呼び出しスタックにあるすべてのシェル関数名が
+入った配列変数です。
+インデックス 0 の要素は、実行中のシェル関数の名前です。
+最も下の要素 (最大のインデックスの要素) は
+.if t \f(CW"main"\fP
+.if n "main"
+です。
+この変数は、シェル関数を実行している間のみ存在します。
 .SM
 .B FUNCNAME
 への代入は効果がなく、エラーステータスを返します。
@@ -1639,14 +1632,14 @@ This variable exists only when a shell function is executing.
 しても元には戻りません。
 .if t .sp 0.5
 .if n .sp 1
-This variable can be used with \fBBASH_LINENO\fP and \fBBASH_SOURCE\fP.
-Each element of \fBFUNCNAME\fP has corresponding elements in
-\fBBASH_LINENO\fP and \fBBASH_SOURCE\fP to describe the call stack.
-For instance, \fB${FUNCNAME[\fP\fI$i\fP\fB]}\fP was called from the file
-\fB${BASH_SOURCE[\fP\fI$i+1\fP\fB]}\fP at line number
-\fB${BASH_LINENO[\fP\fI$i\fP\fB]}\fP.
-The \fBcaller\fP builtin displays the current call stack using this
-information.
+この変数は \fBBASH_LINENO\fP や \fBBASH_SOURCE\fP と組になっています。
+\fBFUNCNAME\fP の各要素は \fBBASH_LINENO\fP や \fBBASH_SOURCE\fP
+の各要素に対応し、呼び出しスタックを表します。
+たとえば、\fB${FUNCNAME[\fP\fI$i\fP\fB]}\fP はファイル
+\fB${BASH_SOURCE[\fP\fI$i+1\fP\fB]}\fP の行番号
+\fB${BASH_LINENO[\fP\fI$i\fP\fB]}\fP から呼び出されたものです。
+組み込みコマンド \fBcaller\fP を実行すると、これらの情報から
+現在の呼び出しスタックを表示します。
 .TP
 .B GROUPS
 現在のユーザがメンバになっているグループのリストを含んだ配列変数です。
@@ -1696,8 +1689,10 @@ GNU 標準の \fIcpu-company-system\fP の形式で設定されます。
 デフォルト値はシステム依存です。
 .TP
 .B MAPFILE
-An array variable (see \fBArrays\fP below) created to hold the text
-read by the \fBmapfile\fP builtin when no variable name is supplied.
+組み込みコマンド \fBmapfile\fP に変数名が指定されなかったときに
+読み込んだテキストを保持する配列変数 (後述の
+.B 配列
+を参照) です。
 .TP
 .B OLDPWD
 .B cd
@@ -1729,7 +1724,7 @@ read by the \fBmapfile\fP builtin when no variable name is supplied.
 終了ステータスのリストを含む配列変数です (後述の
 .B 配列
 を参照)。
-(which may contain only a single command).
+パイプラインには 1 つのコマンドしかなくてもかまいません。
 .TP
 .B PPID
 そのシェルの親のプロセス ID。この変数は読み込み専用です。
@@ -1753,26 +1748,24 @@ read by the \fBmapfile\fP builtin when no variable name is supplied.
 しても元には戻りません。
 .TP
 .B READLINE_LINE
-The contents of the
 .B readline
-line buffer, for use with
+の編集バッファの内容です。
 .if t \f(CWbind -x\fP
 .if n "bind -x"
-(see
+(後述の
 .SM
-.B "SHELL BUILTIN COMMANDS"
-below).
+.B シェルの組み込みコマンド
+を参照) で使います。
 .TP
 .B READLINE_POINT
-The position of the insertion point in the
 .B readline
-line buffer, for use with
+の編集バッファでのポイントの位置です。
 .if t \f(CWbind -x\fP
 .if n "bind -x"
-(see
+(後述の
 .SM
-.B "SHELL BUILTIN COMMANDS"
-below).
+.B シェルの組み込みコマンド
+を参照) で使います。
 .TP
 .B REPLY
 組み込みコマンド
@@ -1811,7 +1804,7 @@ below).
 この変数が
 .B bash
 の起動時に環境変数に入っていた場合、
-どの起動ファイルを読むよりも前にリスト中のシェルオプションが有効になります。
+どの初期化ファイルを読むよりも前にリスト中のシェルオプションが有効になります。
 この変数は読み込み専用です。
 .TP
 .B SHLVL
@@ -1846,26 +1839,24 @@ below).
 は使用されません。
 .TP
 .B BASH_XTRACEFD
-If set to an integer corresponding to a valid file descriptor, \fBbash\fP
-will write the trace output generated when
+有効なファイルディスクリプタに対応する整数をセットすると、
+\fBbash\fP は
 .if t \f(CWset -x\fP
 .if n \fIset -x\fP
-is enabled to that file descriptor.
-The file descriptor is closed when
+が設定されたときに、トレース出力をそのファイルディスクリプタに出力します。
 .SM
 .B BASH_XTRACEFD
-is unset or assigned a new value.
-Unsetting
+が unset されるか、新しい値が代入されると、
+ファイルディスクリプタはクローズされます。
 .SM
 .B BASH_XTRACEFD
-or assigning it the empty string causes the
-trace output to be sent to the standard error.
-Note that setting
+を unset するか空文字列を代入すると、
+トレース出力は標準エラー出力に送られます。
 .SM
 .B BASH_XTRACEFD
-to 2 (the standard error file
-descriptor) and then unsetting it will result in the standard error
-being closed.
+に 2 (標準エラー出力のファイルディスクリプタ) を設定して
+unset すると、標準エラー出力がクローズされてしまうことに
+注意してください。
 .TP
 .B CDPATH
 .B cd
@@ -1890,18 +1881,16 @@ SIGWINCH を受信すると自動的に設定されます。
 によって呼び出されたシェル関数によって生成されます。
 .TP
 .B EMACS
-If \fBbash\fP finds this variable in the environment when the shell starts
-with value
+\fBbash\fP が起動したときにこの環境変数が設定されて値が
 .if t \f(CWt\fP,
 .if n "t",
-it assumes that the shell is running in an Emacs shell buffer and disables
-line editing.
+になっていると、Emacs のシェルバッファで動作しているとみなし、
+行編集を無効にします。
 .TP
 .B ENV
-Similar to
 .SM
-.BR BASH_ENV ;
-used when the shell is invoked in POSIX mode.
+.BR BASH_ENV
+と類似の変数で、POSIX モードで使われます。
 .TP
 .B FCEDIT
 組み込みコマンド
@@ -1924,9 +1913,9 @@ used when the shell is invoked in POSIX mode.
 を設定します。
 .TP
 .B FUNCNEST
-If set to a numeric value greater than 0, defines a maximum function
-nesting level.  Function invocations that exceed this nesting level
-will cause the current command to abort.
+0 より大きい数値を設定すると、関数呼び出しを何重まで許すかの
+最大レベルを決めます。
+このレベルを超えて関数を呼び出すと、コマンドが異常終了します。
 .TP
 .B GLOBIGNORE
 パス名展開で無視するファイル名の集合を定義するパターンを
@@ -1938,8 +1927,7 @@ will cause the current command to abort.
 これはマッチしたもののリストから削除されます。
 .TP
 .B HISTCONTROL
-A colon-separated list of values controlling how commands are saved on
-the history list.
+履歴リストに入れるコマンドを制御する値をコロンで区切って並べたリストです。
 .IR ignorespace
 の値が設定されていると、
 .B 空白
@@ -1948,12 +1936,14 @@ the history list.
 の値が設定されていると、
 履歴の最後の行にマッチする行は履歴リストに入りません。
 .I ignoreboth
-is shorthand for \fIignorespace\fP and \fIignoredups\fP.
-A value of
+は \fIignorespace\fP と \fIignoredups\fP の両方を指定します。
 .IR erasedups
-causes all previous lines matching the current line to be removed from
-the history list before that line is saved.
-Any value not in the above list is ignored.
+の値が設定されていると、行が保存される前に、
+現在の行に一致する過去の行が履歴リストから削除されます。
+.IR erasedups
+の値が設定されていると、行が保存される前に、
+現在の行に一致する過去の行が履歴リストから削除されます。
+これらに該当しない値は無視されます。
 パーザが読み込んだ全ての行は
 .BR HISTIGNORE
 の値が示す条件の下で履歴リストに保存されます。
@@ -2002,13 +1992,13 @@ Any value not in the above list is ignored.
 デフォルトは 500 です。
 .TP
 .B HISTTIMEFORMAT
-If this variable is set and not null, its value is used as a format string
-for \fIstrftime\fP(3) to print the time stamp associated with each history
-entry displayed by the \fBhistory\fP builtin.
-If this variable is set, time stamps are written to the history file so
-they may be preserved across shell sessions.
-This uses the history comment character to distinguish timestamps from
-other history lines.
+この変数に空でない値が設定されると、
+組み込みコマンド \fBhistory\fP で履歴エントリを表示するときに
+タイムスタンプを表示するための \fIstrftime\fP(3) の書式文字列
+として使われます。
+この変数が設定されると、ほかのシェルのセッションでも使えるように
+タイムスタンプは履歴ファイルに書き込まれます。
+タイムスタンプはほかの履歴行と区別するために履歴のコメントとなります。
 .TP
 .B HOME
 現在のユーザのホームディレクトリです。
@@ -2159,12 +2149,11 @@ other history lines.
 .SM
 .B コマンドの実行
 を参照)。
-A zero-length (null) directory name in the value of
 .SM
 .B PATH
-indicates the current directory.
-A null directory name may appear as two adjacent colons, or as an initial
-or trailing colon.
+中の長さ 0 の (空の) ディレクトリ名は、カレントディレクトリを示します。
+空のディレクトリ名は、2 つのコロンを並べるか、
+先頭や末尾のコロンで表します。
 デフォルトのパスはシステム依存で、
 .BR bash
 をインストールしたシステム管理者が設定します。
@@ -2174,26 +2163,29 @@ or trailing colon.
 です。
 .TP
 .B POSIXLY_CORRECT
-If this variable is in the environment when \fBbash\fP starts, the shell
-enters \fIposix mode\fP before reading the startup files, as if the
+\fBbash\fP が起動したときにこの環境変数が設定されていると、
+起動オプション
 .B \-\-posix
-invocation option had been supplied.  If it is set while the shell is
-running, \fBbash\fP enables \fIposix mode\fP, as if the command
+を指定したときと同じように、どの初期化ファイルを読むよりも前に
+シェルが \fIposix モード\fP になります。
+シェルの実行中にこの変数が設定されると、
+\fBbash\fP は
 .if t \f(CWset -o posix\fP
 .if n \fIset -o posix\fP
-had been executed.
+コマンドを実行したときと同じように、\fIposix モード\fP が有効になります。
 .TP
 .B PROMPT_COMMAND
 設定されていると、プライマリプロンプトを出す前に毎回、
 この値がコマンドとして実行されます。
 .TP
 .B PROMPT_DIRTRIM
-If set to a number greater than zero, the value is used as the number of
-trailing directory components to retain when expanding the \fB\ew\fP and
-\fB\eW\fP prompt string escapes (see
+0 より大きい値が設定されると、
+プロンプト文字列のエスケープシーケンス \fB\ew\fP や \fB\eW\fP 
+(後述の
 .SM
-.B PROMPTING
-below).  Characters removed are replaced with an ellipsis.
+.B プロンプト
+を参照) を展開するときに、ディレクトリがパス名の最後からこの数だけ残ります。
+削られた部分は省略記号に置き換えられます。
 .TP
 .B PS1
 このパラメータの値は展開されてプライマリのプロンプト文字列として使われます。
@@ -2230,10 +2222,10 @@ below).  Characters removed are replaced with an ellipsis.
 デフォルト値は ``\fB+ \fP'' です。
 .TP
 .B SHELL
-The full pathname to the shell is kept in this environment variable.
-If it is not set when the shell starts,
+この環境変数にシェルのフルパス名が保存されています。
+シェルを起動したときに設定されていない場合は、
 .B bash
-assigns to it the full pathname of the current user's login shell.
+が現在のユーザーのログインシェルのフルパス名を代入します。
 .TP
 .B TIMEFORMAT
 このパラメータの値は、予約語である
@@ -2285,25 +2277,23 @@ CPU のパーセンテージ。(%U + %S) / %R で算出されます。
 .PD 0
 .TP
 .B TMOUT
-If set to a value greater than zero,
+0 より大きい値を設定すると、
 .SM
 .B TMOUT
-is treated as the
-default timeout for the \fBread\fP builtin.
-The \fBselect\fP command terminates if input does not arrive
-after
+の値が組み込みコマンド \fBread\fP のデフォルトのタイムアウト値となります。
+\fBselect\fP コマンドは、端末からの入力の後に入力がないと
 .SM
 .B TMOUT
-seconds when input is coming from a terminal.
-In an interactive shell, the value is interpreted as the
-number of seconds to wait for input after issuing the primary prompt.
+秒後に終了します。
+対話シェルではこの値は、プライマリのプロンプトを出してから
+入力を待つ秒数として解釈されます
+この秒数待って入力が来ないと、
 .B Bash
-terminates after waiting for that number of seconds if input does
-not arrive.
+は終了します
 .TP
 .B TMPDIR
-If set, \fBbash\fP uses its value as the name of a directory in which
-\fBbash\fP creates temporary files for the shell's use.
+設定すると、値を \fBbash\fP がシェル用にテンポラリファイルを作る
+ディレクトリ名として使います。
 .TP
 .B auto_resume
 この変数はシェルがユーザとジョブ制御の相互作用をどのように扱うかを決めます。
@@ -2358,28 +2348,26 @@ If set, \fBbash\fP uses its value as the name of a directory in which
 .PD
 .SS 配列
 .B bash
-は 1 次元の配列変数を扱うことができます。
+は 1 次元のインデックスによる配列または連想配列の変数を扱うことができます。
 全ての変数は配列として使用できます。
 .B declare
 組み込みコマンドを使えば、明示的に配列を宣言できます。
 配列のサイズの上限はありませんし、
 メンバのインデックス付けや代入を
 連続的にしなければならないという条件もありません。
-Indexed arrays are referenced using integers (including arithmetic
-expressions)  and are zero-based; associative arrays are referenced
-using arbitrary strings.
+インデックスによる配列は 0 からの整数 (算術式を含む) で参照し、
+連想配列は任意の文字列で参照します。
 .PP
 変数の代入の際に \fIname\fP[\fIsubscript\fP]=\fIvalue\fP
 という記法が使われた場合、配列は自動的に生成されます。
 .I subscript
 は算術式として扱われますが、この式は評価すると
 数値になるものでなければなりません。
-If
 .I subscript
-evaluates to a number less than zero, it is used as
-an offset from one greater than the array's maximum index (so a subcript
-of -1 refers to the last element of the array).
-明示的に配列を宣言するには、
+を評価すると 0 未満の数になる場合、最大のインデックス +1
+からのオフセットとして扱われます。つまり、subscript
+が -1 のときは、配列の最後の要素を参照します。
+インデックスによる配列を明示的に宣言するには、
 .B declare \-a \fIname\fP
 を使います (後述の
 .SM
@@ -2388,8 +2376,9 @@ of -1 refers to the last element of the array).
 .B declare \-a \fIname\fP[\fIsubscript\fP]
 も許されます。\fIsubscript\fP は無視されます。
 .PP
-Associative arrays are created using
-.BR "declare \-A \fIname\fP" .
+連想配列は
+.BR "declare \-A \fIname\fP"
+で作られます。
 .PP
 組み込みコマンドの
 .B declare
@@ -2403,14 +2392,14 @@ Associative arrays are created using
 という形式の複合代入 (compound assignment) を用いて行います。
 ここでそれぞれの
 \fIvalue\fP の形式は [\fIsubscript\fP]=\fIstring\fP です。
-Indexed array assignments do not require the bracket and subscript.
-ブラケット([])と添字を省略しなかった場合、
+インデックスによる配列では、ブラケット ([]) と subscript は省略できます。
+ブラケットと subscript を省略しなかった場合、
 そのインデックスに対して代入が行われます。
 省略した場合には、代入される要素のインデックスは、
 その文の中で直前に代入されたインデックスに 1 を加えたものになります。
 インデックスは 0 から始まります。
 .PP
-When assigning to an associative array, the subscript is required.
+連想配列への代入では、subscript は省略できません。
 .PP
 この記法は組み込みコマンド
 .B declare
@@ -2432,10 +2421,10 @@ When assigning to an associative array, the subscript is required.
 \fIname\fP の各要素を別々の単語に展開します。
 配列のメンバが全く無いときは、${\fIname\fP[@]}
 は空の単語に展開されます。
-If the double-quoted expansion occurs within a word, the expansion of
-the first parameter is joined with the beginning part of the original
-word, and the expansion of the last parameter is joined with the last
-part of the original word.
+単語の中でダブルクォートの展開が行われるときには、
+最初のパラメータの展開結果に元の単語のダブルクォートより前の部分が
+結び付き、最後のパラメータの展開結果に元の単語のダブルクォートより
+後の部分が結び付きます。
 これは特殊パラメータ \fB*\fP や \fB@\fP に似ています (前述の
 .B 特殊パラメータ
 を参照)。
@@ -2445,15 +2434,15 @@ ${\fIname\fP[\fIsubscript\fP]} の長さに展開されます。
 配列中の要素数に展開されます。添字無しで配列変数を参照すると、
 要素 0 を参照したことになります。
 .PP
-An array variable is considered set if a subscript has been assigned a
-value.  The null string is a valid value.
+配列変数は subscript に対して値が代入されれば
+設定されているとみなされます。
+空文字列は有効な値です。
 .PP
 組み込みコマンドの
 .B unset
 は配列の破棄に使われます。\fBunset\fP \fIname\fP[\fIsubscript\fP]
 とすると、インデックスが \fIsubscript\fP である配列の要素が破棄されます。
-Care must be taken to avoid unwanted side effects caused by pathname
-expansion.
+パス名展開による意図しない副作用に注意してください。
 \fBunset\fP \fIname\fP (\fIname\fP は配列) または
 \fBunset\fP \fIname\fP[\fIsubscript\fP]
 (\fIsubscript\fP が \fB*\fP または \fB@\fP) とすると、
@@ -2465,12 +2454,12 @@ expansion.
 .B readonly
 いずれにおいても、
 .B \-a
-オプションで配列を指定できます。 and a
+オプションでインデックスによる配列を指定できます。
 .B \-A
-option to specify an associative array.
-If both options are supplied, 
+オプションで連想配列を指定できます。
+両方が指定されたときには、
 .B \-A
-takes precedence.
+が優先します。
 組み込みコマンド
 .B read
 では、
