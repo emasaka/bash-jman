@@ -2505,8 +2505,7 @@ ${\fIname\fP[\fIsubscript\fP]} の長さに展開されます。
 生成されたファイル名が実在する必要はありません。
 ブレース展開されるパターンは、
 .IR "前置部分 (preamble: 省略可能)" 、
-対になるブレースの間に ether コンマで区切って並べた文字列
-or a sequence expression、
+対になるブレースで囲んだコンマ区切りの文字列またはシーケンス式、
 .I 後置部分 (postscript: 省略可能)
 を順に並べたものです。
 前置部分はブレース内にある文字列それぞれの先頭部分に追加され、
@@ -2518,21 +2517,20 @@ or a sequence expression、
 左から右への順番がそのまま残ります。
 例えば a\fB{\fPd,c,b\fB}\fPe は `ade ace abe' と展開されます。
 .PP
-A sequence expression takes the form
-\fB{\fP\fIx\fP\fB..\fP\fIy\fP\fB[..\fP\fIincr\fP\fB]}\fP,
-where \fIx\fP and \fIy\fP are either integers or single characters,
-and \fIincr\fP, an optional increment, is an integer.
-When integers are supplied, the expression expands to each number between
-\fIx\fP and \fIy\fP, inclusive.
-Supplied integers may be prefixed with \fI0\fP to force each term to have the
-same width.  When either \fIx\fP or \fPy\fP begins with a zero, the shell
-attempts to force all generated terms to contain the same number of digits,
-zero-padding where necessary.
-When characters are supplied, the expression expands to each character
-lexicographically between \fIx\fP and \fIy\fP, inclusive.  Note that
-both \fIx\fP and \fIy\fP must be of the same type.
-When the increment is supplied, it is used as the difference between
-each term.  The default increment is 1 or -1 as appropriate.
+シーケンス式は
+\fB{\fP\fIx\fP\fB..\fP\fIy\fP\fB[..\fP\fIincr\fP\fB]}\fP
+の形になります。\fIx\fP と \fIy\fP は整数または 1 つの文字で、
+省略可能な \fIincr\fP は整数です。
+整数が与えられると、
+\fIx\fP と \fIy\fP の間の数をすべて列挙した形に展開されます。
+与る整数の前に \fI0\fP を付けると、すべての項が同じ幅に揃えられます。
+\fIx\fP か \fPy\fP のどちらかが 0 で始まる場合、生成されるすべての項が
+同じ文字数になるように、必要であれば前に 0 が付けられます。
+文字が与えられると
+辞書順で \fIx\fP と \fIy\fP の間の文字をすべて列挙した形に展開されます。
+\fIx\fP と \fIy\fP は同じ型である必要があります。
+increment が与えられると、その値が各項の間の差となります。
+increment のデフォルトは、1 または -1 のうち適切なほうです。
 .PP
 ブレースの展開は他のどの展開よりも前に実行されます。
 また、他の展開において特殊な意味を持つ文字もそのまま結果に残ります。
@@ -2679,8 +2677,7 @@ ${\fIparameter\fP}
 これが\fI間接展開 (indirect expansion)\fP と呼ばれるものです。
 ただし ${!\fIprefix\fP*} や ${\fB!\fP\fIname\fP[\fI@\fP]} の展開は例外です。
 これは以下で説明します。
-The exclamation point must immediately follow the left brace in order to
-introduce indirection.
+間接展開を表すには、感嘆符は左ブレースの直後に続ける必要があります。
 .PP
 以下に示すそれぞれの場合、\fIword\fP に対してチルダ展開、
 パラメータ展開、コマンド置換、算術式展開が行われます。
@@ -2747,56 +2744,54 @@ ${\fIparameter\fP\fB:\fP\fIoffset\fP\fB:\fP\fIlength\fP}
 を参照)。
 \fIoffset\fP を評価すると 0 未満の数になる場合、この値は
 \fIparameter\fP の値の末尾からのオフセットとして使われます。
-If \fIlength\fP evaluates to a number less than zero, and \fIparameter\fP
-is not \fB@\fP and not an indexed or associative array, it is interpreted
-as an offset from the end of the value of \fIparameter\fP rather than
-a number of characters, and the expansion is the characters between the
-two offsets.
+\fIlength\fP を評価すると 0 未満の数になる場合、
+\fIparameter\fP が \fB@\fP ではなく、配列や連想配列ではなければ、
+この値は文字数ではなく \fIparameter\fP の値の末尾からのオフセットとして使われ、
+展開結果は 2 つのオフセットの間の部分文字列となります。
 \fIparameter\fP が \fB@\fP ならば、結果は \fIoffset\fP から始まる
 \fIlength\fP 個の位置パラメータになります。
 \fIparameter\fP が @ または * のインデックスが付いている配列名ならば、
 結果は配列の ${\fIparameter\fP[\fIoffset\fP]} を先頭とする要素
 \fIlength\fP 個となります。
-A negative \fIoffset\fP is taken relative to one greater than the maximum
-index of the specified array.
-Substring expansion applied to an associative array produces undefined
-results.
-Note that a negative offset must be separated from the colon by at least
-one space to avoid being confused with the :- expansion.
+負の \fIoffset\fP は、指定された配列の最大のインデックス + 1
+からの相対値と解釈されます。
+連想配列に部分文字列展開した場合の結果は決められていません。
+負のオフセットを指定するときには、:- 式と混同されないよう、
+1 つ以上の空白でコロンと離す必要があることに注意してください。
 位置パラメータを使う場合以外は、
 部分文字列のインデックスは 0 から始まります。位置パラメータの場合には、
 インデックスは 1 から始まります。
-If \fIoffset\fP is 0, and the positional parameters are used, \fB$0\fP is
-prefixed to the list.
+位置パラメータが使われて \fIoffset\fP が 0 の場合、
+\fB$0\fP の値が先頭に置かれます。
 .TP
 ${\fB!\fP\fIprefix\fP\fB*\fP}
 .PD 0
 .TP
 ${\fB!\fP\fIprefix\fP\fB@\fP}
 .PD
-\fBNames matching prefix\fP.
+\fB前方一致する名前\fP.
 \fIprefix\fP で始まるすべての変数の名前に展開して、
 .SM
 .B IFS
 特殊変数の最初の文字によって区切ります。
-When \fI@\fP is used and the expansion appears within double quotes, each
-variable name expands to a separate word.
+ダブルクォートの中で \fI@\fP が使われた場合、それぞれの変数の名前は
+別々の単語に展開されます。
 .TP
 ${\fB!\fP\fIname\fP[\fI@\fP]}
 .PD 0
 .TP
 ${\fB!\fP\fIname\fP[\fI*\fP]}
 .PD
-\fBList of array keys\fP.
-If \fIname\fP is an array variable, expands to the list of array indices
-(keys) assigned in \fIname\fP.
-If \fIname\fP is not an array, expands to 0 if \fIname\fP is set and null
-otherwise.
-When \fI@\fP is used and the expansion appears within double quotes, each
-key expands to a separate word.
+\fB配列のキーのリスト\fP.
+\fIname\fP が配列変数であれば、\fIname\fP に代入されている配列の
+インデックス (キー) のリストに展開されます。
+\fIname\fP が配列でない場合は、\fIname\fP が設定されていれば 0 に、
+そうでなければ空に展開されます。
+ダブルクォートの中で \fI@\fP が使われた場合、それぞれのキーは
+別々の単語に展開されます。
 .TP
 ${\fB#\fP\fIparameter\fP}
-\fBParameter length\fP.
+\fBパラメータの長さ\fP.
 \fIparameter\fP の値に含まれる文字数に置換されます。
 .I parameter
 が
@@ -2816,7 +2811,7 @@ ${\fIparameter\fP\fB#\fP\fIword\fP}
 .TP
 ${\fIparameter\fP\fB##\fP\fIword\fP}
 .PD
-\fBRemove matching prefix pattern\fP.
+\fBパターンに前方一致した部分を取り除く\fP.
 .I word
 が展開され、パス名展開の場合と同じようなパターンを作ります。
 このパターンが
@@ -2848,7 +2843,7 @@ ${\fIparameter\fP\fB%\fP\fIword\fP}
 .TP
 ${\fIparameter\fP\fB%%\fP\fIword\fP}
 .PD
-\fBRemove matching suffix pattern\fP.
+\fBパターンに後方一致した部分を取り除く\fP.
 .I word
 が展開され、パス名展開の場合と同じようなパターンを作ります。
 このパターンが
@@ -2876,7 +2871,7 @@ ${\fIparameter\fP\fB%%\fP\fIword\fP}
 展開結果はリストとして得られます。
 .TP
 ${\fIparameter\fP\fB/\fP\fIpattern\fP\fB/\fP\fIstring\fP}
-\fBPattern substitution\fP.
+\fBパターンの置換\fP.
 \fIpattern\fP が展開され、
 パス名展開の場合と同じようなパターンを作ります。
 \fIparameter\fP の展開が行われ、
@@ -2916,34 +2911,31 @@ ${\fIparameter\fP\fB,\fP\fIpattern\fP}
 .TP
 ${\fIparameter\fP\fB,,\fP\fIpattern\fP}
 .PD
-\fBCase modification\fP.
-This expansion modifies the case of alphabetic characters in \fIparameter\fP.
-The \fIpattern\fP is expanded to produce a pattern just as in
-pathname expansion.
-The \fB^\fP operator converts lowercase letters matching \fIpattern\fP
-to uppercase; the \fB,\fP operator converts matching uppercase letters
-to lowercase.
-The \fB^^\fP and \fB,,\fP expansions convert each matched character in the
-expanded value; the \fB^\fP and \fB,\fP expansions match and convert only
-the first character in the expanded value.
-If \fIpattern\fP is omitted, it is treated like a \fB?\fP, which matches
-every character.
-If
+\fB大文字小文字の変換\fP.
+\fIparameter\fP に含まれるアルファベットの大文字小文字を変換します。
+\fIpattern\fP が展開され、
+パス名展開の場合と同じようなパターンを作ります。
+\fB^\fP 演算子は \fIpattern\fP にマッチした小文字を大文字に変換します。
+\fB,\fP 演算子は \fIpattern\fP にマッチした大文字を小文字に変換します。
+\fB^^\fP 演算子と \fB,,\fP 演算子は、マッチした中のすべての文字を変換します。
+\fB^\fP 演算子と \fB,\fP 演算子の場合は、マッチした中の最初の文字だけ変換します。
+\fIpattern\fP を省略した場合、\fB?\fP を指定したものとして扱われ、
+すべての文字にマッチします。
 .I parameter
-is
+が
 .B @
-or
-.BR * ,
-the case modification operation is applied to each positional
-parameter in turn, and the expansion is the resultant list.
-If
+または
+.BR *
+の場合は、位置パラメータのそれぞれに大文字小文字の変換が適用され、
+結果はリストに展開されます。
+
 .I parameter
-is an array variable subscripted with
+が添字に
 .B @
-or
-.BR * ,
-the case modification operation is applied to each member of the
-array in turn, and the expansion is the resultant list.
+または
+.BR *
+の付いた範列変数の場合は、配列の要素のそれぞれに大文字小文字の変換が適用され、
+結果はリストに展開されます。
 .SS コマンド置換
 .PP
 \fIコマンド置換 (command substitution)\fP を用いると、
@@ -3048,19 +3040,15 @@ $(\^\fIcommand\fP\|) という形式を用いたときは、
 .B IFS
 が設定されていないか、その値が正確にデフォルト値の
 .BR <スペース><タブ><改行>
-ならば、
-then
-sequences of
+ならば、他の展開の結果の先頭や末尾の
 .BR <space> ,
 .BR <tab> ,
-and
 .B <newline>
-at the beginning and end of the results of the previous
-expansions are ignored, and
-any sequence of
+の並びは無視され、
+先頭と末尾以外の
 .SM
 .B IFS
-characters not at the beginning or end serves to delimit words.
+文字の任意の列で単語が区切られます。 
 .SM
 .B IFS
 がデフォルト以外の値を持っていれば、空白文字
@@ -3120,10 +3108,9 @@ characters not at the beginning or end serves to delimit words.
 .B nullglob
 オプションが設定されていて、かつマッチするファイル名が見つからなければ、
 その単語は削除されます。
-If the
 .B failglob
-shell option is set, and no matches are found, an error message
-is printed and the command is not executed.
+オプションが設定されていて、かつマッチするファイル名が見つからなければ、
+エラーメセージが表示されコマンドは実行されません。
 シェルのオプション
 .B nocaseglob
 が有効ならば、マッチングにおいてアルファベットの大文字と小文字は区別さ
@@ -3195,8 +3182,8 @@ is printed and the command is not executed.
 .PP
 パターンに含まれる文字のうち、後述する特殊パターン文字以外の文字は、
 自分自身にマッチします。NUL 文字がパターン中に現われてはいけません。
-A backslash escapes the following character; the
-escaping backslash is discarded when matching.
+バックスラッシュは特殊パターン文字をエスケープします。
+バックスラッシュ自身はマッチングに使われません。
 特殊パターン文字をその文字そのものにマッチさせるためには、
 クォートしなければなりません。
 .PP
@@ -3207,12 +3194,12 @@ escaping backslash is discarded when matching.
 .TP
 .B *
 空文字列を含む、任意の文字列にマッチします。
-When the \fBglobstar\fP shell option is enabled, and \fB*\fP is used in
-a pathname expansion context, two adjacent \fB*\fPs used as a single
-pattern will match all files and zero or more directories and
-subdirectories.
-If followed by a \fB/\fP, two adjacent \fB*\fPs will match only directories
-and subdirectories.
+シェルオプション \fBglobstar\fP が有効で、
+\fB*\fP がパス名展開に用いられる場面では、
+2 つ連続した \fB*\fPs が 1 つのパターンとして使われると、
+0 レベル以上のディレクトリやサブディレクトリのすべてのファイルにマッチします
+2 つ連続した \fB*\fPs の後に \fB/\fP が続く場合には、
+ディレクトリとサブディレクトリのみにマッチします。
 .TP
 .B ?
 任意の 1 文字にマッチします。
@@ -3257,7 +3244,7 @@ and subdirectories.
 .if t alnum   alpha   ascii   blank   cntrl   digit   graph   lower   print   punct   space   upper   word   xdigit
 .br
 文字クラスは、そのクラスの属する任意の文字にマッチします。
-The \fBword\fP character class matches letters, digits, and the character _.
+文字クラス \fBword\fP は、文字、数字、_ にマッチします。
 .br
 .if t .sp 0.5
 .if n .sp 1
