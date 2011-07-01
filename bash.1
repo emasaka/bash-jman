@@ -3313,13 +3313,13 @@ $(\^\fIcommand\fP\|) という形式を用いたときは、
 の後に置けます。
 リダイレクトは左から右へと、現われた順に処理されます。
 .PP
-Each redirection that may be preceded by a file descriptor number
-may instead be preceded by a word of the form {\fIvarname\fP}.
-In this case, for each redirection operator except
->&- and <&-, the shell will allocate a file descriptor greater
-than 10 and assign it to \fIvarname\fP.  If >&- or <&- is preceded
-by {\fIvarname\fP}, the value of \fIvarname\fP defines the file
-descriptor to close.
+ファイル・ディスクリプター番号で始まるリダイレクトでは、
+代わりに {\fIvarname\fP} という形式の単語で始めることもできます。
+この場合、>&- と <&- 以外のリダイレクト演算子では、
+シェルは 10 より大きいファイル・ディスクリプターを割り当て、
+\fIvarname\fP に代入します。
+{\fIvarname\fP} で始まる >&- や <&- では、\fIvarname\fP の値は
+クローズするファイル・ディスクリプターを指定します。
 .PP
 以下の説明においては、ファイル・ディスクリプター番号が省略され、
 かつリダイレクト演算子の最初の文字が
@@ -3390,9 +3390,9 @@ ls 2\fB>&\fP1 \fB>\fP dirlist
 .PP
 ファイルのオープンや作成に失敗すると、リダイレクトも失敗します。
 .PP
-Redirections using file descriptors greater than 9 should be used with
-care, as they may conflict with file descriptors the shell uses
-internally.
+9 より大きいファイル・ディスクリプターを使ったリダイレクトには注意が
+必要です。シェルが内部的に使うファイル・ディスクリプタと競合する場合が
+あるからです。
 .SS 入力のリダイレクト
 .PP
 入力をリダイレクトすると、
@@ -3489,22 +3489,21 @@ and
 \fB>\fP\fIword\fP 2\fB>&\fP1
 .RE
 .PP
-.SS Appending Standard Output and Standard Error
+.SS 標準出力と標準エラー出力の追加出力
 .PP
-This construct allows both the
-standard output (file descriptor 1) and
-the standard error output (file descriptor 2)
-to be appended to the file whose name is the
-expansion of
-.IR word .
+この構造を使うと、
+標準出力 (ファイル・ディスクリプター 1) と標準エラー出力
+(ファイル・ディスクリプター 2) の両方を、
+.I word
+を展開した結果の名前を持つファイルに追加できます。
 .PP
-The format for appending standard output and standard error is:
+標準出力と標準エラー出力の追加出力は以下の形式です:
 .RS
 .PP
 \fB&>>\fP\fIword\fP
 .RE
 .PP
-This is semantically equivalent to
+これは次のものと同じ意味です:
 .RS
 .PP
 \fB>>\fP\fIword\fP 2\fB>&\fP1
@@ -3561,8 +3560,8 @@ This is semantically equivalent to
 を含む行から取り除かれます。
 これにより、シェルスクリプト中のヒアドキュメントを
 自然な形でインデントさせることができます。
-.SS "Here Strings"
-A variant of here documents, the format is:
+.SS ヒアストリング(Here Strings)
+ヒアドキュメントの変形で、以下の形式です:
 .RS
 .PP
 .nf
@@ -3570,8 +3569,7 @@ A variant of here documents, the format is:
 .fi
 .RE
 .PP
-The \fIword\fP is expanded and supplied to the command on its standard
-input.
+\fIword\fP は展開されてコマンドの標準入力に与えられます。
 .SS ファイル・ディスクリプターの複製
 .PP
 リダイレクト演算子
@@ -3616,28 +3614,32 @@ input.
 \fIn\fP が省略され、かつ \fIword\fP が
 1 桁以上の数字には展開されなかった場合、
 前に説明したように標準出力と標準エラー出力がリダイレクトされます。
-.SS "Moving File Descriptors"
+.SS ファイル・ディスクリプターの変更
 .PP
-The redirection operator
+リダイレクト演算子
 .RS
 .PP
 [\fIn\fP]\fB<&\fP\fIdigit\fP\fB\-\fP
 .RE
 .PP
-moves the file descriptor \fIdigit\fP to file descriptor
-.IR n ,
-or the standard input (file descriptor 0) if \fIn\fP is not specified.
-\fIdigit\fP is closed after being duplicated to \fIn\fP.
+を使うと、ファイル・ディスクリプターの \fIdigit\fP を
+.IR n
+に変更します。
+\fIn\fP が指定されていない場合は、標準入力
+(ファイル・ディスクリプター 0) が使われます。
+\fIdigit\fP は \fIn\fP に複製された後にクローズされます。
 .PP
-Similarly, the redirection operator
+同様に、演算子
 .RS
 .PP
 [\fIn\fP]\fB>&\fP\fIdigit\fP\fB\-\fP
 .RE
 .PP
-moves the file descriptor \fIdigit\fP to file descriptor
-.IR n ,
-or the standard output (file descriptor 1) if \fIn\fP is not specified.
+を使うと、ファイル・ディスクリプターの \fIdigit\fP を
+.IR n
+に変更します。
+\fIn\fP が指定されていない場合は、標準出力
+(ファイル・ディスクリプター 1) が使われます。
 .SS 読み書きのためのファイル・ディスクリプターのオープン
 .PP
 リダイレクト演算子が
