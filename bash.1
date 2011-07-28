@@ -3763,8 +3763,8 @@ and
 .B FUNCNAME
 変数の最初の要素に関数の名前が設定されます。
 .PP
-シェル実行環境の状態は全て、関数とその呼び出し側で同じになりますが、
-例外として
+通常、シェル実行環境の状態は全て、関数とその呼び出し側で同じになります。
+ただし、以下の例外があります:
 .SM
 .B DEBUG
 と
@@ -3774,37 +3774,33 @@ and
 .B シェルの組み込みコマンド
 の項で、組み込みコマンド
 .B trap
-の説明を参照) は継承されません。
-unless the function has been given the
-\fBtrace\fP attribute (see the description of the
+の説明を参照) は、
+関数に \fBtrace\fP 属性 (後述の組み込みコマンド
 .SM
 .B declare
-builtin below) or the
-\fB\-o functrace\fP shell option has been enabled with
-the \fBset\fP builtin
-(in which case all functions inherit the \fBDEBUG\fP and \fBRETURN\fP traps),
-and the
+の説明を参照) が与えらえている場合や、\fB\-o functrace\fP シェルオプションが
+組み込みコマンド \fBset\fP によって有効になっている (すべての関数が
+\fBDEBUG\fP と \fBRETURN\fP のトラップを継承している) 場合を除いて
+継承されません。
 .SM
 .B ERR
-trap is not inherited unless the \fB\-o errtrace\fP shell option has
-been enabled.
+トラップは、\fB\-o errtrace\fP シェルオプションが有効になっていないかぎり
+継承されません。
 .PP
 関数ローカルの変数は、組み込みコマンド
 .B local
 で宣言できます。
 普通は、変数とその値は関数とその呼び出し側で共有されます。
 .PP
-The \fBFUNCNEST\fP variable, if set to a numeric value greater
-than 0, defines a maximum function nesting level.  Function
-invocations that exceed the limit cause the entire command to
-abort.
+\fBFUNCNEST\fP 変数に 0 より大きい数値をセットすると、
+関数呼び出しを何重まで許すかの最大レベルを決めます。
+このレベルを超えて関数を呼び出すと、コマンドが異常終了します。
 .PP
 組み込みコマンド
 .B return
 が関数中で実行された場合、関数は終了し、
 関数呼び出しの次のコマンドから実行が再開されます。
-Any command associated with the \fBRETURN\fP trap is executed
-before execution resumes.
+再開される前に、\fBRETURN\fP トラップに設定されたコマンドが実行されます。
 関数の終了時には、位置パラメータの値と特殊パラメータ
 .B #
 の値は、関数の実行前の値に戻ります。
@@ -3822,8 +3818,8 @@ before execution resumes.
 をオプション
 .B \-F
 で実行すると、関数名だけがリスト表示されます。
-(and optionally the source file and line number, if the \fBextdebug\fP
-shell option is enabled).
+また、\fBextdebug\fP シェルオプションが有効になっていると、
+ソースファイルと行番号も表示されます。
 関数をエクスポートして、
 サブシェルでその関数が自動的に定義されている状態にできます。
 これを行うには、組み込みコマンドの
@@ -3831,19 +3827,19 @@ shell option is enabled).
 に
 .B \-f
 オプションを付けて実行します。
-A function definition may be deleted using the \fB\-f\fP option to
-the
+組み込みコマンドの
 .B unset
-builtin.
-Note that shell functions and variables with the same name may result
-in multiple identically-named entries in the environment passed to the
-shell's children.
-Care should be taken in cases where this may cause a problem.
+に \fB\-f\fP オプションを付けて実行することで、
+関数定義を削除することもできます。
+
+同じ名前のシェル関数と変数がシェルの子プロセスにエクスポートされると、
+同じ環境の中にまったく同じ名前のエントリーが複数できてしまうことに
+注意してください。これが問題を起こす場合には注意が必要です。
 .PP
-関数は再帰させることができます。
-The \fBFUNCNEST\fP variable may be used to limit the depth of the
-function call stack and restrict the number of function invocations.
-By default, no limit is imposed on the number of recursive calls.
+関数は再帰させることができます。\fBFUNCNEST\fP 変数を使うと、
+関数の呼び出しスタックの深さを制限し、関数の呼び出し回数を制限する
+ことができます。
+デフォルトでは再帰呼び出し回数に制限は課せられていません。
 .SH 算術式評価
 シェルにおいては、特定の状況下で算術式を評価させることができます
 (組み込みコマンドの \fBlet\fP と \fB算術式展開\fP を参照)。
