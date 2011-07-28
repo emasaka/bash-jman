@@ -4414,13 +4414,13 @@ POSIX に適合する形で \fBtest\fP コマンドを使う場合には
 .B SIGQUIT
 も無視します。
 ジョブ制御が有効でないときには、非同期コマンドは
+継承されたシグナルハンドラに加え
 .SM
 .B SIGINT
 と
 .SM
 .B SIGQUIT
 も無視します
-in addition to these inherited handlers.
 コマンド置換の結果として実行されたコマンドは、
 キーボードで生成されたジョブ制御シグナルを無視します。
 無視されるシグナルは
