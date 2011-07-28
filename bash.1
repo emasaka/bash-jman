@@ -3949,13 +3949,13 @@ and
 のいずれかであれば、 対応するファイル・ディスクリプター
 0、1、2 が調べられます。
 .PP
-Unless otherwise specified, primaries that operate on files follow symbolic
-links and operate on the target of the link, rather than the link itself.
+ほかに指定されていなければ、ファイルに対するプライマリはシンボリッククリンク
+をたどり、リンク自身ではなくリンク先を対象とします。
 .if t .sp 0.5
 .if n .sp 1
-When used with \fB[[\fP, the \fB<\fP and \fB>\fP operators sort
-lexicographically using the current locale.
-The \fBtest\fP command sorts using ASCII ordering.
+
+\fB[[\fP では \fB<\fP と \fB>\fP の演算子は現在のロケールでの辞書順で
+比較します。\fBtest\fP コマンドは ASCII 順で比較します。
 .sp 1
 .PD 0
 .TP
@@ -4034,12 +4034,12 @@ The \fBtest\fP command sorts using ASCII ordering.
 デバイス番号と i-ノード番号が同じならば真となります。
 .TP
 \fIfile1\fP \-\fBnt\fP \fIfile2\fP
-\fIfile1\fP が (変更日時に関して) \fIfile2\fP より新しければ真となります。
-or if \fIfile1\fP exists and \fPfile2\fP does not.
+\fIfile1\fP が (変更日時に関して) \fIfile2\fP より新しいか
+\fIfile1\fP が存在するのに \fPfile2\fP が存在しなければ真となります。
 .TP
 \fIfile1\fP \-\fBot\fP \fIfile2\fP
-\fIfile1\fP が \fIfile2\fP より古ければ真となります。
-or if \fIfile2\fP exists and \fIfile1\fP does not.
+\fIfile1\fP が \fIfile2\fP より古いか、
+\fIfile2\fP が存在するのに \fIfile1\fP が存在しなければ真となります。
 .TP
 .B \-o \fIoptname\fP
 シェルオプション
@@ -4051,9 +4051,9 @@ or if \fIfile2\fP exists and \fIfile1\fP does not.
 オプションを参照してください。
 .TP
 .B \-v \fIvarname\fP
-True if the shell variable
+シェル変数
 .I varname
-is set (has been assigned a value).
+がセットされている (値が代入されている) ならば真となります。
 .TP
 .B \-z \fIstring\fP
 \fIstring\fP の長さが 0 ならば真となります。
@@ -4069,8 +4069,8 @@ is set (has been assigned a value).
 \fIstring1\fP \fB=\fP \fIstring2\fP
 .PD
 文字列が同じならば真となります。
-\fB=\fP should be used
-with the \fBtest\fP command for POSIX conformance.
+POSIX に適合する形で \fBtest\fP コマンドを使う場合には
+\fB=\fP を使う必要があります。
 .TP
 \fIstring1\fP \fB!=\fP \fIstring2\fP
 2 つの文字列が異なれば真となります。
