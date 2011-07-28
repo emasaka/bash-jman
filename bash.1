@@ -4281,14 +4281,15 @@ POSIX に適合する形で \fBtest\fP コマンドを使う場合には
 サブシェル環境で実行されます。サブシェル環境に対して行われた変更は、
 元のシェル実行環境に影響を及ぼすことはできません。
 .PP
-Subshells spawned to execute command substitutions inherit the value of
-the \fB\-e\fP option from the parent shell.  When not in \fIposix\fP mode,
-\fBbash\fP clears the \fB\-e\fP option in such subshells.
+コマンド置換の実行で生成されたサブシェルは、
+\fB\-e\fP オプションの値を親シェルから継承します。
+\fIposix\fP モードでなければ、\fBbash\fP は \fB\-e\fP
+オプションをサブシェルごとにクリアします。
 .PP
-If a command is followed by a \fB&\fP and job control is not active, the
-default standard input for the command is the empty file \fI/dev/null\fP.
-Otherwise, the invoked command inherits the file descriptors of the calling
-shell as modified by redirections.
+コマンドの後に \fB&\fP が付けられたときに、ジョブ制御が有効でなければ、
+コマンドのデフォルトの標準入力は空ファイル \fI/dev/null\fP となります。
+そうでなければ、呼び出されたコマンドは、呼び出したシェルの
+ファイル・ディスクリプターを、リダイレクトも含めて継承します。
 .SH 環境
 プログラムの起動時には、
 .I 環境 (environment)
