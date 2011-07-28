@@ -4345,13 +4345,14 @@ POSIX に適合する形で \fBtest\fP コマンドを使う場合には
 環境変数としてそのコマンドに渡されます。
 .SH 終了ステータス
 .PP
-The exit status of an executed command is the value returned by the
-\fIwaitpid\fP system call or equivalent function.  Exit statuses
-fall between 0 and 255, though, as explained below, the shell may
-use values above 125 specially.  Exit statuses from shell builtins and
-compound commands are also limited to this range. Under certain
-circumstances, the shell will use special values to indicate specific
-failure modes.
+実行したコマンドの終了ステータスは、\fIwaitpid\fP
+システムコールまたはそれに相当する関数が返した値です。
+終了ステータスは 0 から 255 の値をとりますが、後述するように、
+125 より大きい値は特別にシェルによって使われることがあります。
+シェルの組み込みコマンドや複合コマンドの終了ステータスも、
+同じ範囲に制限されます。
+環境によっては、シェルは仕様で決められた失敗のモードを表す
+特別の値を使います。
 .PP
 シェルは、終了コード 0 で終了したコマンドは正常終了したとみなします。
 終了コード 0 は成功を示します。
@@ -4372,7 +4373,8 @@ failure modes.
 シェルの組み込みコマンドは、
 成功した場合にはステータス 0 (\fI真\fP) を返し、
 実行中にエラーが起こった場合には 0 でない値 (\fI偽\fP) を返します。
-All builtins return an exit status of 2 to indicate incorrect usage.
+組み込みコマンドはすべて、正しくない使い方であることを示すのに
+終了ステータス 2 を返します。
 .PP
 \fBbash\fP 自身が返す終了ステータスは、文法エラーが起きなければ、
 実行した最後のコマンドの終了ステータスです。
