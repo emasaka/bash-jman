@@ -3912,12 +3912,13 @@ and
 パラメータ展開は式の評価より前に行われます。
 式の中では、シェル変数を (パラメータ展開規則を用いずに)
 変数名で参照できます。
-A shell variable that is null or unset evaluates to 0 when referenced
-by name without using the parameter expansion syntax.
-変数の値は変数が参照された際に算術式として評価されます。
-or when a variable which has been given the
-\fIinteger\fP attribute using \fBdeclare -i\fP is assigned a value.
-A null value evaluates to 0.
+空か値が設定されていないシェル変数は、
+パラメータの展開の文法を使わずに名前を参照されると、
+0 として評価されます。
+変数の値は、変数が参照されたときや、\fBdeclare -i\fP によって
+\fI整数\fP 属性が設定された変数に値が代入されるときに、
+算術式として評価されます。
+空の値は 0 として評価されます。
 式で用いるためにシェル変数の \fI整数属性\fP を有効にする必要はありません。
 .PP
 先頭が 0 である定数は 8 進数として解釈されます。
@@ -3926,7 +3927,7 @@ A null value evaluates to 0.
 [\fIbase#\fP]n の形式で表します。ここで \fIbase\fP は 2 から 64 の間の
 10 進数であり、算術的な意味での基数を表します。
 \fIn\fP はその基数における数を表します。
-If \fIbase#\fP is omitted, then base 10 is used.
+\fIbase#\fP が省略されると 10 進数となります。
 ある桁において 9 より大きい数字を表すには文字を使います。
 文字を使う場合には、アルファベット小文字、大文字、@, _ をこの順番で使います。
 \fIbase\fP が 36 以下の場合には、大文字と小文字は区別されず、
