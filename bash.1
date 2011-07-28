@@ -4176,13 +4176,13 @@ POSIX に適合する形で \fBtest\fP コマンドを使う場合には
 .B PATH
 に含まれるディレクトリの完全な探索は、
 そのコマンドがハッシュ表の中に無い場合にのみ行われます。
-If the search is unsuccessful, the shell searches for a defined shell
-function named \fBcommand_not_found_handle\fP.
-If that function exists, it is invoked with the original command and
-the original command's arguments as its arguments, and the function's
-exit status becomes the exit status of the shell.
-If that function is not defined, the shell prints an error
-message and returns an exit status of 127.
+探索に失敗すると、シェルは \fBcommand_not_found_handle\fP
+という名前のシェル関数の定義を探します。
+存在する場合には、元のコマンドと元のコマンドの引数を引数として、
+この関数を呼び出します。この関数の終了ステータスがシェルの
+終了ステータスとなります。
+この関数が定義されていない場合には、シェルはエラーメッセージを
+表示して終了ステータス 127 を返します。
 .PP
 検索に成功したか、コマンド名に 1 つ以上のスラッシュが含まれる場合には、
 シェルは指定されたプログラムを独立した実行環境で実行します。
