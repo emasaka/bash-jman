@@ -4685,9 +4685,10 @@ ASCII のベル文字 (07)
 "曜日 月 日" という形式の日付 (例: "Tue May 26")
 .TP
 .B \eD{\fIformat\fP}
-the \fIformat\fP is passed to \fIstrftime\fP(3) and the result is inserted
-into the prompt string; an empty \fIformat\fP results in a locale-specific
-time representation.  The braces are required
+\fIformat\fP が \fIstrftime\fP(3) に渡され、
+その結果がプロンプト文字列に挿入されます。
+\fIformat\fP が空の場合には (ブレースは必要)、
+ロケールで指定された時刻表記になります。
 .TP
 .B \ee
 ASCII のエスケープ文字 (033)
@@ -4737,22 +4738,19 @@ ASCII のエスケープ文字 (033)
 \fBbash\fP のリリース。バージョンにパッチレベルを加えたもの (例 : 2.00.0)
 .TP
 .B \ew
-現在の作業ディレクトリ
-with
+現在の作業ディレクトリ。
 .SM
 .B $HOME
-abbreviated with a tilde
-(uses the value of the
+の部分はチルダに短縮されます。
 .SM
 .B PROMPT_DIRTRIM
-variable)
+の値が適用されます。
 .TP
 .B \eW
 現在の作業ディレクトリのベース名
-with
 .SM
 .B $HOME
-abbreviated with a tilde
+の部分はチルダに短縮されます。
 .TP
 .B \e!
 このコマンドの履歴番号
