@@ -4528,15 +4528,11 @@ POSIX に適合する形で \fBtest\fP コマンドを使う場合には
 プロセスは、
 プロセスのグループ ID が端末のグループ ID と異なるプロセスです。
 このようなプロセスは、キーボードで生成したシグナルの影響を受けません。
-端末への読み書きが許されるのはフォアグラウンドプロセス
-or, if the
-user so specifies with \f(CWstty tostop\fP
-だけです。
+フォアグラウンドプロセスだけが端末からの読み込みが許され、
+\f(CWstty tostop\fP で許可されている場合には出力も許されます。
 バックグラウンドプロセスが端末からの読み込み
-(端末への書き込み
-when
-\f(CWstty tostop\fP is in effect
-) を行おうとすると、
+(\f(CWstty tostop\fP が有効なときには端末への書き込みも)
+を行おうとすると、
 このプロセスには端末ドライバから
 .SM
 .B SIGTTIN (SIGTTOU)
@@ -4612,16 +4608,14 @@ Control-Y) を打ち込むと、
 は
 .BR %\-
 を使って参照できます。
-In output pertaining to jobs (e.g., the output of the
+ジョブに関する出力 (
 .B jobs
-command)
-、カレントジョブには必ず
+コマンドの出力など) では、カレントジョブには必ず
 .BR +
 というフラグが付き、前のジョブには
 .BR \-
 というフラグが付きます。
-A single % (with no accompanying job specification) also refers to the
-current job.
+ジョブ名が付いていない単独の % もカレントジョブを示します。
 .PP
 単にジョブを呼べば、
 そのジョブをフォアグラウンドに持ってきます。つまり、
@@ -4647,19 +4641,16 @@ current job.
 オプションが指定されていると、
 .B bash
 はこのような変化を即座に報告します。
-Any trap on
+子プロセスが終了するたびに
 .SM
 .B SIGCHLD
-is executed for each child that exits.
+のトラップが実行されます。
 .PP
-ジョブを停止させたままで
- (or, if the \fBcheckjobs\fP shell option has
-been enabled using the \fBshopt\fP builtin, running)
+ジョブを停止させたままで (\fBcheckjobs\fP シェルオプションが
+組み込みコマンド \fBshopt\fP により有効になっているときには実行中でも)
 .B bash
-を終了 (exit) させようとすると
-、シェルは警告メッセージを出力します。
-and, if the \fBcheckjobs\fP option is enabled, lists the
-jobs and their statuses.
+を終了 (exit) させようとすると、シェルは警告メッセージを出力します。
+\fBcheckjobs\fP オプションが有効のときには、ジョブとその状態を一覧表示します。
 このような時には、
 .B jobs
 コマンドを使ってジョブの状態を調べられます。
