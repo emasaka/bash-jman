@@ -6223,13 +6223,12 @@ complete -D -F _completion_loader
 .SM
 .B HISTFILESIZE
 で指定された行数を越えないように、必要に応じて切り詰められます。
-When the history file is read,
-lines beginning with the history comment character followed immediately
-by a digit are interpreted as timestamps for the preceding history line.
-These timestamps are optionally displayed depending on the value of the
+履歴ファイルを読み込むときに、履歴のコメント文字で始まり直後に数字が続く行は、
+直前の履歴行のタイムスタンプとして解釈されます。
+こうしたタイムスタンプを表示するかどうかは変数
 .SM
 .B HISTTIMEFORMAT
-variable.
+の値により決まります。
 対話的なシェルが終了する際には、最近の
 .SM
 .B HISTSIZE
@@ -6251,14 +6250,12 @@ variable.
 .B HISTFILE
 が設定されていないか、履歴ファイルが書き込めない状態だと、
 履歴は保存されません。
-If the
+変数
 .SM
 .B HISTTIMEFORMAT
-variable is set, time stamps are written to the history file, marked
-with the history comment character, so
-they may be preserved across shell sessions.
-This uses the history comment character to distinguish timestamps from
-other history lines.
+が設定されている場合、シェルのセッションを超えて保存されるよう、
+タイムスタンプは履歴のコメント文字を付けて履歴ファイルに書き込まれます。
+履歴のコメント文字は、タイムスタンプをほかの履歴行と区別するために使われます。
 履歴の保存を行った後には、履歴ファイルは行数が
 .SM
 .B HISTFILESIZE
