@@ -6339,11 +6339,11 @@ complete -D -F _completion_loader
 履歴展開文字をクォートできるのは、
 バックスラッシュ (\^\fB\e\fP\^) とシングルクォートだけです。
 .PP
-Several characters inhibit history expansion if found immediately
-following the history expansion character, even if it is unquoted:
-space, tab, newline, carriage return, and \fB=\fP.
-If the \fBextglob\fP shell option is enabled, \fB(\fP will also
-inhibit expansion.
+履歴展開文字の直後にあって、クォートされていなくても、
+履歴展開されない文字があります。
+空白文字、タブ文字、改行文字、復帰文字、\fB=\fP です。
+シェルオプションの \fBextglob\fP が有効になっている場合には、
+\fB(\fP も展開されません。
 .PP
 組み込みコマンドの
 .B shopt
@@ -6385,23 +6385,23 @@ inhibit expansion.
 の項目における
 .B histchars
 の説明を参照)。
-The shell uses
-the history comment character to mark history timestamps when
-writing the history file.
+シェルは履歴ファイルに書き込むときに、履歴のタイムスタンプを示す
+のに履歴のコメント文字を使います。
 .SS イベント指示子 (Event Designator)
 .PP
 イベント指示子は、
 履歴リスト中のコマンドラインエントリを参照するものです。
-Unless the reference is absolute, events are relative to the current
-position in the history list.
+絶対位置の参照でない限り、イベントは履歴リスト中で
+現在の位置からの相対的な位置を示します。
 .PP
 .PD 0
 .TP
 .B !
 履歴置換を開始します。ただし、
 .BR ブランク文字、
-改行文字、=, ( (when the \fBextglob\fP shell option is enabled using
-the \fBshopt\fP builtin) のいずれかが後に続く場合は除きます。
+改行文字、=、
+( (シェルオプション \fBextglob\fP が組み込みコマンド \fBshopt\fP
+によって有効になっている場合) のいずれかが後に続く場合は除きます。
 .TP
 .B !\fIn\fR
 .I n
@@ -6567,10 +6567,10 @@ the \fBshopt\fP builtin) のいずれかが後に続く場合は除きます。
 / の代わりに任意の区切り文字を使えます。
 また最後の区切り文字がイベント行の最後の文字ならば、
 これは省略できます。
-An \fBa\fP may be used as a synonym for \fBg\fP.
+\fBa\fP は \fBg\fP の別名です。
 .TP
 .B G
-Apply the following `\fBs\fP' modifier once to each word in the event line.
+続く `\fBs\fP' 修飾子をイベント行の各単語に 1 回ずつ適用します。
 .PD
 .SH シェルの組み込みコマンド
 .\" start of bash_builtins
