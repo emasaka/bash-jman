@@ -6581,14 +6581,15 @@ complete -D -F _completion_loader
 で始まるオプションを受け付けるものは、オプションの終わりを表す
 .B \-\-
 も受け付けます。
-The \fB:\fP, \fBtrue\fP, \fBfalse\fP, and \fBtest\fP builtins
-do not accept options and do not treat \fB\-\-\fP specially.
-The \fBexit\fP, \fBlogout\fP, \fBbreak\fP, \fBcontinue\fP, \fBlet\fP,
-and \fBshift\fP builtins accept and process arguments beginning with
-\fB\-\fP without requiring \fB\-\-\fP.
-Other builtins that accept arguments but are not specified as accepting
-options interpret arguments beginning with \fB\-\fP as invalid options and
-require \fB\-\-\fP to prevent this interpretation.
+組み込みコマンド \fB:\fP, \fBtrue\fP, \fBfalse\fP, \fBtest\fP
+はオプションを持たず、\fB\-\-\fP を特別に扱いません。
+組み込みコマンド \fBexit\fP, \fBlogout\fP, \fBbreak\fP, \fBcontinue\fP,
+\fBlet\fP, \fBshift\fP は、\fB\-\fP で始まる引数を \fB\-\-\fP なしで
+受け取り処理します。
+そのほかの組み込みコマンドは、
+受け取ると明記されているオプション以外を引数として受け取り、
+\fB\-\fP で始まる引数を不正なオプションをとて解釈します。
+この解釈を防ぐには \fB\-\-\fP が必要です。
 .sp .5
 .PD 0
 .TP
@@ -6760,20 +6761,21 @@ vi\-move, vi\-command\fP,
 .B \-x \fIkeyseq\fP:\fIshell\-command\fP
 \fIkeyseq\fP が押されるたびごとに、
 \fIshell\-command\fP が実行されるようにします。
-When \fIshell\-command\fP is executed, the shell sets the
+\fIshell\-command\fP を実行するとき、シェルは変数
 .SM
 .B READLINE_LINE
-variable to the contents of the \fBreadline\fP line buffer and the
+に \fBreadline\fP の編集バッファの内容を設定し、変数
 .SM
 .B READLINE_POINT
-variable to the current location of the insertion point.
-If the executed command changes the value of
+に現在の挿入ポイントの位置を設定します。
+実行したコマンドが
+ changes the value of
 .SM
 .B READLINE_LINE
-or
+や
 .SM
-.BR READLINE_POINT ,
-those new values will be reflected in the editing state.
+.BR READLINE_POINT
+の値を変更した場合、新しい値が編集の状態に反映されます。
 .PD
 .PP
 認識できないオプションが与えられた場合やエラーが起きた場合を除けば、
@@ -6791,7 +6793,7 @@ break します。
 は 1 以上でなければなりません。
 .I n
 がループの深さよりも大きい場合には、全てのループから抜けます。
-The return value is 0 unless \fIn\fP is not greater than or equal to 1.
+\fIn\fP が 1 未満の場合を除けば、返り値は 0 です。
 .TP
 \fBbuiltin\fP \fIshell\-builtin\fP [\fIarguments\fP]
 指定されたシェル組み込みコマンドを実行します。コマンドには
@@ -6805,18 +6807,18 @@ The return value is 0 unless \fIn\fP is not greater than or equal to 1.
 がシェル組み込みコマンドでなければ、終了ステータスは偽となります。
 .TP
 \fBcaller\fP [\fIexpr\fP]
-Returns the context of any active subroutine call (a shell function or
-a script executed with the \fB.\fP or \fBsource\fP builtins).
-Without \fIexpr\fP, \fBcaller\fP displays the line number and source
-filename of the current subroutine call.
-If a non-negative integer is supplied as \fIexpr\fP, \fBcaller\fP 
-displays the line number, subroutine name, and source file corresponding
-to that position in the current execution call stack.  This extra
-information may be used, for example, to print a stack trace.  The
-current frame is frame 0.
-The return value is 0 unless the shell is not executing a subroutine
-call or \fIexpr\fP does not correspond to a valid position in the
-call stack.
+実行中のサブルーチン (シェル関数や、組み込みコマンド \fB.\fP か
+\fBsource\fP で呼び出したスクリプト) 呼び出しのコンテキストを返します。
+\fIexpr\fP が指定されていなければ、\fBcaller\fP は
+現在のサブルーチン呼び出しの行番号とソースファイル名を表示します
+\fIexpr\fP に負でない整数が与えられた場合、\fBcaller\fP は、
+現在の呼び出しスタック中で指定した位置の行番号、サブルーチン名、
+ソースファイルを表示します。
+スタックトレースを表示する場合などに、範囲外の情報が使われるかもしれません。
+現在のフレームはフレーム 0 です。
+シェルがサブルーチンを呼び出していない場合や、
+\fIexpr\fP が呼び出しスタックの有効な位置に相当しない場合を除けば、
+返り値は 0 です。
 .TP
 \fBcd\fP [\fB\-L\fP|[\fB\-P\fP [\fB\-e\fP]]] [\fIdir\fP]
 カレントディレクトリを \fIdir\fP に変更します。
@@ -6852,26 +6854,22 @@ call stack.
 オプションも参照)。
 .B \-L
 オプションを指定すると、シンボリックリンクを辿るようになります。
-If the
 .B \-e
-option is supplied with
-.BR \-P ,
-and the current working directory cannot be successfully determined
-after a successful directory change, \fBcd\fP will return an unsuccessful
-status.
+オプションを
+.BR \-P
+オプションと同時に指定したとき、ディレクトリの変更が成功した後に
+カレントディレクトリが判定できないと、\fBcd\fP は失敗のステータスを返します。
 引き数に
 .B \-
 を指定するのは、
 .SM
 .B $OLDPWD
 を指定するのと同じ意味です。
-If a non-empty directory name from
 .SM
 .B CDPATH
-is used, or if
-\fB\-\fP is the first argument, and the directory change is
-successful, the absolute pathname of the new working directory is
-written to the standard output.
+にある空でないディレクトリ名が使われたときや、
+\fB\-\fP が最初の引数のときに、ディレクトリの変更が成功すると、
+新しいディレクトリの絶対パス名が標準出力に書かれます。
 ディレクトリの変更が成功した場合には返り値は真になります。
 そうでない場合には偽になります。
 .TP
@@ -6948,12 +6946,12 @@ written to the standard output.
 既存の補完指定が (入力として再利用できるかたちで) 出力されます。
 \fB\-r\fP オプションは、それぞれの \fIname\fP の補完指定を削除します。
 \fIname\fP が指定されなかった場合はすべての補完指定を削除します。
-The \fB\-D\fP option indicates that the remaining options and actions should
-apply to the ``default'' command completion; that is, completion attempted
-on a command for which no completion has previously been defined.
-The \fB\-E\fP option indicates that the remaining options and actions should
-apply to ``empty'' command completion; that is, completion attempted on a
-blank line.
+\fB\-D\fP オプションは、残りのオプションと動作を
+``デフォルトの'' コマンド補完に適用することを示します。
+つまり、補完があらかじめ定義されていないコマンドに試みられる補完です。
+\fB\-E\fP オプションは、残りのオプションと動作を
+``空の'' コマンド補完に適用することを示します。
+つまに、空行に試みられる補完です。
 .sp 1
 単語補完が試みられたときにこれらの補完指定に加えられる処理は、
 前述の \fBプログラム補完\fP で示しています。
@@ -6975,8 +6973,8 @@ blank line.
 .RS
 .TP 8
 .B bashdefault
-Perform the rest of the default \fBbash\fP completions if the compspec
-generates no matches.
+補完仕様がマッチを全く生成しなかった場合に、
+\fBbash\fP のデフォルトの補完を用います。
 .TP 8
 .B default
 補完仕様がマッチを全く生成しなかった場合に、
@@ -6989,18 +6987,18 @@ readline のデフォルトの補完を用います。
 .B filenames
 補完仕様がファイル名を生成することを readline に伝え、
 readline がファイル名特有の処理
-(ディレクトリ名にスラッシュを加えたり、quoting special characters、末尾の空白を削除したり、など)
-を行えるようにします。
+(ディレクトリ名にスラッシュを加えたり、特殊文字をクォートしたり、
+末尾の空白を削除したり、など) を行えるようにします。
 シェル関数と共に用いることを想定しています。
 .TP 8
 .B nospace
-Tell readline not to append a space (the default) to words completed at
-the end of the line.
+行末で単語を補完したときに空白を付け加える (デフォルト) のを
+やめるように readline に伝えます。
 .TP 8
 .B plusdirs
-After any matches defined by the compspec are generated, 
-directory name completion is attempted and any
-matches are added to the results of the other actions.
+補完仕様で定義されたマッチにより候補が生成された後に、
+ディレクトリ名の補完を試み、マッチした候補がすべてほかの
+動作の結果に付け加えられます。
 .RE
 .TP 8
 \fB\-A\fP \fIaction\fP
@@ -7043,7 +7041,7 @@ matches are added to the results of the other actions.
 シェル関数の名前。
 .TP 8
 .B group
-Group names.  May also be specified as \fB\-g\fP.
+グループ名。\fB\-g\fP でも指定できます。
 .TP 8
 .B helptopic
 \fBhelp\fP 組み込みコマンドで許可されたヘルプトピック。
@@ -7062,7 +7060,7 @@ Group names.  May also be specified as \fB\-g\fP.
 ジョブ制御が有効であれば、実行中のジョブ名。
 .TP 8
 .B service
-Service names.  May also be specified as \fB\-s\fP.
+サービス名。\fB\-s\fP でも指定できます。
 .TP 8
 .B setopt
 \fBset\fP 組み込みコマンドの \fB\-o\fP オプションで有効な引き数。
@@ -7099,12 +7097,12 @@ Service names.  May also be specified as \fB\-s\fP.
 が展開されて補完対象のリストを生成します。
 .TP 8
 \fB\-P\fP \fIprefix\fP
-\fIprefix\fP is added at the beginning of each possible completion
-after all other options have been applied.
+ほかのすべてのオプションが適用された後で、
+それぞれの補完候補の先頭に \fIprefix\fP が付け加えられます。
 .TP 8
 \fB\-S\fP \fIsuffix\fP
-\fIsuffix\fP is appended to each possible completion
-after all other options have been applied.
+ほかのすべてのオプションが適用された後で、
+それぞれの補完候補の後に \fIsuffix\fP が付け加えられます。
 .TP 8
 \fB\-W\fP \fIwordlist\fP
 \fIwordlist\fP は
@@ -7130,23 +7128,22 @@ after all other options have been applied.
 .RE
 .TP
 \fBcompopt\fP [\fB\-o\fP \fIoption\fP] [\fB\-DE\fP] [\fB+o\fP \fIoption\fP] [\fIname\fP]
-Modify completion options for each \fIname\fP according to the
-\fIoption\fPs, or for the
-currently-executing completion if no \fIname\fPs are supplied.
-If no \fIoption\fPs are given, display the completion options for each
-\fIname\fP or the current completion.
-The possible values of \fIoption\fP are those valid for the \fBcomplete\fP
-builtin described above.
-The \fB\-D\fP option indicates that the remaining options should
-apply to the ``default'' command completion; that is, completion attempted
-on a command for which no completion has previously been defined.
-The \fB\-E\fP option indicates that the remaining options should
-apply to ``empty'' command completion; that is, completion attempted on a
-blank line.
+\fIname\fP の補完オプションを \fIoption\fP にしたがって変更します。
+\fIname\fP が指定されない場合は、実行中の補完が対象になります。
+\fIoption\fPs が与えられない場合は、\fIname\fP または現在の補完の
+補完オプションを表示します。
+\fIoption\fP に指定できる値は、前述の組み込みコマンド
+\fBcomplete\fP で有効なものです。
+\fB\-D\fP オプションは、残りのオプションを ``デフォルトの''
+コマンド補完に適用することを示します。
+つまり、補完があらかじめ定義されていないコマンドに試みられる補完です。
+\fB\-E\fP オプションは、残りのオプションを ``空の''
+コマンド補完に適用することを示します。
+つまに、空行に試みられる補完です。
 .sp 1
-The return value is true unless an invalid option is supplied, an attempt
-is made to modify the options for a \fIname\fP for which no completion
-specification exists, or an output error occurs.
+不正なオプションが指定された場合、
+補完仕様が定義されていない \fIname\fP のオプションを変更しようとした場合、
+出力エラーが起こったとき、を除いては、返り値は真になります。
 .TP
 \fBcontinue\fP [\fIn\fP]
 .BR for ,
@@ -7161,7 +7158,7 @@ specification exists, or an output error occurs.
 .I n
 がループの深さよりも大きい場合、
 最後のループ (「トップレベル」のループ) で実行が継続されます。
-The return value is 0 unless \fIn\fP is not greater than or equal to 1.
+\fIn\fP が 1 未満の場合を除けば、返り値は 0 です。
 .TP
 \fBdeclare\fP [\fB\-aAfFgilrtux\fP] [\fB\-p\fP] [\fIname\fP[=\fIvalue\fP] ...]
 .PD 0
@@ -7176,29 +7173,26 @@ The return value is 0 unless \fIn\fP is not greater than or equal to 1.
 それぞれの属性と値が表示されます。
 .B \-p
 に \fIname\fP を指定すると、他のオプションは無視されます。
-When
 .B \-p
-is supplied without \fIname\fP arguments, it will display the attributes
-and values of all variables having the attributes specified by the
-additional options.
-If no other options are supplied with \fB\-p\fP, \fBdeclare\fP will display
-the attributes and values of all shell variables.  The \fB\-f\fP option
-will restrict the display to shell functions.
+オプションが \fIname\fP 引数なしで指定されると、
+ほかのオプションで指定された属性を持っている
+すべての変数の属性と値を表示します。
+\fB\-p\fP のほかのオプションが指定されない場合、
+\fBdeclare\fP はすべてのシェル変数の属性と値を表示します。
+\fB\-f\fP オプションは表示をシェル関数に制限します。
 .B \-F
 オプションを指定すると、関数定義の表示を止めます。
 関数の名前と属性だけが出力されます。
-If the \fBextdebug\fP shell option is enabled using \fBshopt\fP,
-the source file name and line number where the function is defined
-are displayed as well.
+\fBshopt\fP によってシェルオプション \fBextdebug\fP が有効になっていれば、
+関数が定義されているソースファイルの名前と行番号も表示されます。
 .B \-F
 オプションを指定すると、
 .B \-f
 オプションも指定したことになります。
-The
 .B \-g
-option forces variables to be created or modified at the global scope,
-even when \fBdeclare\fP is executed in a shell function.
-It is ignored in all other cases.
+オプションは、\fBdeclare\fP がシェル関数の中で実行されたときでも、
+変数がグローバルスコープに作られ変更されるようにします。
+ほかの場合には無視されます。
 以下のオプションを使うと、
 指定した属性を持つ変数の出力を制限したり、
 変数に属性を与えたりできます:
@@ -7211,9 +7205,9 @@ It is ignored in all other cases.
 を参照) です。
 .TP
 .B \-A
-Each \fIname\fP is an associative array variable (see
-.B Arrays
-above).
+\fIname\fP はそれぞれ連想配列変数 (前述の
+.B 配列
+を参照) です。
 .TP
 .B \-f
 関数名だけを使います。
@@ -7225,24 +7219,22 @@ above).
 を参照) が実行されます。
 .TP
 .B \-l
-When the variable is assigned a value, all upper-case characters are
-converted to lower-case.
-The upper-case attribute is disabled.
+変数に値が代入されると、すべての大文字は小文字に変換されます。
+大文字属性は無効になります。
 .TP
 .B \-r
 \fIname\fP を読み込み専用にします。
 これ以降、代入文を用いて値を代入したり unset したりできなくなります。
 .TP
 .B \-t
-Give each \fIname\fP the \fItrace\fP attribute.
-Traced functions inherit the \fBDEBUG\fP and \fBRETURN\fP traps from
-the calling shell.
-The trace attribute has no special meaning for variables.
+\fIname\fP にそれぞれ \fItrace\fP 属性を与えます。
+traced 属性の関数は \fBDEBUG\fP と \fBRETURN\fP のトラップを
+呼び出したシェルから受け継ぎます
+trace 属性は変数には意味を持ちません。
 .TP
 .B \-u
-When the variable is assigned a value, all lower-case characters are
-converted to upper-case.
-The lower-case attribute is disabled.
+変数に値が代入されると、すべての小文字は大文字に変換されます。
+小文字属性は無効になります。
 .TP
 .B \-x
 \fIname\fP に印を付け、
@@ -7250,15 +7242,14 @@ The lower-case attribute is disabled.
 .PD
 .PP
 `\-' ではなく `+' を使うと属性を消します。
-ただし例外として、\fB+a\fP を使って配列変数を破棄することはできません。
-and \fB+r\fP will not
-remove the readonly attribute.
+ただし例外として、\fB+a\fP を使って配列変数を破棄することはできず、
+\fB+r\fP を使って読み込み専用属性を消すことはできません。
 関数内で使った場合、
 .B local
 コマンドを使った場合と同様に \fIname\fP はローカルとなります。
-unless the \fB\-g\fP option is supplied,
-If a variable name is followed by =\fIvalue\fP, the value of
-the variable is set to \fIvalue\fP.
+\fB\-g\fP オプションが与えられなければ、
+変数名に =\fIvalue\fP が続く場合、
+変数の値として \fIvalue\fP が設定されます。
 返り値は基本的には 0 ですが、不正なオプションに出会った場合、
 .if n ``\-f foo=bar'',
 .if t \f(CW\-f foo=bar\fP,
@@ -7268,7 +7259,7 @@ the variable is set to \fIvalue\fP.
 .B 配列
 を参照)、\fIname\fP のいずれかが正しいシェル変数名でない場合、
 読み込み専用変数の読み込み専用属性を無効にしようとした場合、
-an attempt is made to turn off array status for an array variable,
+配列変数の配列属性を無効にしようとした場合、
 存在しない関数を \fB\-f\fP オプションで表示しようとした場合は除きます。
 .RE
 .TP
@@ -7324,10 +7315,9 @@ an attempt is made to turn off array status for an array variable,
 オプション無しの場合には、それぞれの
 .I jobspec
 がアクティブなジョブのテーブルから削除されます。
-If
 .I jobspec
-is not present, and neither \fB\-a\fP nor \fB\-r\fP is supplied,
-the shell's notion of the \fIcurrent job\fP is used.
+がなく、かつ \fB\-a\fP オプションも \fB\-r\fP オプションも
+与えられていない場合には、\fIカレントジョブ\fPが使われます。
 \fB\-h\fP オプションが与えられている場合、どの
 .I jobspec
 もテーブルから削除されず、
@@ -7344,6 +7334,7 @@ the shell's notion of the \fIcurrent job\fP is used.
 オプションも
 .B \-r
 オプションも与えられていない場合には、\fIカレントジョブ\fPが使われます。
+\" 訳注 上の文章は重複している。
 .I jobspec
 が与えられていない場合、
 .B \-a
@@ -7419,12 +7410,10 @@ ASCII コードの 8 進値が \fInnn\fP である文字 (1 文字につき数�
 ASCII コードの 16 進値が \fInnn\fP である文字 (1 文字につき数字 1 または 2 桁)。
 .TP
 .B \eu\fIHHHH\fP
-the Unicode (ISO/IEC 10646) character whose value is the hexadecimal value
-\fIHHHH\fP (one to four hex digits)
+ユニコード (ISO/IEC 10646) の16 進値が \fIHHHH\fP である文字 (16 進 1〜4 桁)。
 .TP
 .B \eU\fIHHHHHHHH\fP
-the Unicode (ISO/IEC 10646) character whose value is the hexadecimal value
-\fIHHHHHHHH\fP (one to eight hex digits)
+ユニコード (ISO/IEC 10646) の16 進値が \fIHHHHHHHH\fP である文字 (16 進 1〜8 桁)。
 .PD
 .RE
 .TP
@@ -7546,8 +7535,7 @@ POSIX の\fI特殊\fP組み込みコマンドだけに制限されます。
 このシェル内でエクスポートされている全ての名前のリストが出力されます。
 .B \-n
 オプションを与えると、指定した変数からエクスポート属性が取り除かれます。
-If a variable name is followed by =\fIword\fP, the value of
-the variable is set to \fIword\fP.
+変数名に =\fIword\fP が続くと、変数の値に \fIword\fP が設定されます。
 不正なオプションがあった場合、
 \fIname\fP のいずれかが不正なシェル変数名であった場合、
 関数でない名前に対して
@@ -7762,33 +7750,29 @@ the variable is set to \fIword\fP.
 偽を返します。
 .TP
 \fBhash\fP [\fB\-lr\fP] [\fB\-p\fP \fIfilename\fP] [\fB\-dt\fP] [\fIname\fP]
-Each time \fBhash\fP is invoked,
+\fBhash\fP が実行されると、
 .I name
 それぞれに対して、
 .B $PATH
 内のディレクトリの検索を行ってコマンドの完全なファイル名を調べ、
 その結果を記憶します。
-Any previously-remembered pathname is discarded.
+それまでに記憶されていたファイル名は捨てられます。
 .B \-p
 オプションが指定されると、パス検索は実行されず、
 .I filename
 がそのコマンドの完全なファイル名として使われます。
 .B \-r
 オプションを与えると、シェルは記憶している位置を全て忘れます。
-The
 .B \-d
-option causes the shell to forget the remembered location of each \fIname\fP.
-If the
+オプションを与えると、シェルは \fIname\fP の記憶している位置を忘れます。
 .B \-t
-option is supplied, the full pathname to which each \fIname\fP corresponds
-is printed.  If multiple \fIname\fP arguments are supplied with \fB\-t\fP,
-the \fIname\fP is printed before the hashed full pathname.
-The
+オプションを与えると、\fIname\fP に対応する完全なファイル名が表示されます。
+\fB\-t\fP に複数の  \fIname\fP 引数が指定された場合、
+記憶されている完全なファイル名の前に \fIname\fP が表示されます。
 .B \-l
-option causes output to be displayed in a format that may be reused as input.
-引き数が与えられていない場合
-or if only \fB\-l\fP is supplied,
-は、記憶しているコマンドに関する情報が出力されます。
+オプションを与えると、入力として再利用できるかたちで出力されます。
+引き数が与えられていない場合や、\fB\-l\fP だけが与えられた場合は、
+記憶しているコマンドに関する情報が出力されます。
 .I name
 が見つからない場合と不正なオプションが与えられた場合を除き、
 返却ステータスは真となります。
@@ -7807,13 +7791,13 @@ or if only \fB\-l\fP is supplied,
 .PD 0
 .TP
 .B \-d
-Display a short description of each \fIpattern\fP
+\fIpattern\fP の短い説明を表示します。
 .TP
 .B \-m
-Display the description of each \fIpattern\fP in a manpage-like format
+\fIpattern\fP の説明を manpage 風のフォーマットで表示します。
 .TP
 .B \-s
-Display only a short usage synopsis for each \fIpattern\fP
+\fIpattern\fP の短い書式のみを表示します。
 .PD
 .PP
 .I pattern
@@ -7841,14 +7825,13 @@ Display only a short usage synopsis for each \fIpattern\fP
 を指定すると、最新の
 .I n
 行だけがリスト表示されます。
-If the shell variable
+シェル変数
 .SM
 .B HISTTIMEFORMAT
-is set and not null,
-it is used as a format string for \fIstrftime\fP(3) to display
-the time stamp associated with each displayed history entry.
-No intervening blank is printed between the formatted time stamp
-and the history line.
+に空でない値が設定されると、履歴エントリを表示するときに
+タイムスタンプを表示するための \fIstrftime\fP(3) の書式文字列
+として使われます。
+タイムスタンプと履歴行の間には空白は表示されません。
 \fIfilename\fP が与えられている場合、
 これは履歴ファイルの名前として使われます。
 これが与えられていない場合には
@@ -7896,15 +7879,12 @@ and the history line.
 が追加される前に削除されます。
 .PD
 .PP
-If the
 .SM
 .B HISTTIMEFORMAT
-variable is set, the time stamp information
-associated with each history entry is written to the history file,
-marked with the history comment character.
-When the history file is read, lines beginning with the history
-comment character followed immediately by a digit are interpreted
-as timestamps for the previous history line.
+変数が設定されていると、履歴エントリのタイムスタンプの情報は、
+履歴のコメント文字を付けて履歴ファイルに書き込まれます。
+履歴ファイルを読み込むときに、履歴のコメント文字で始まり直後に数字が続く行は、
+直前の履歴行のタイムスタンプとして解釈されます。
 不正なオプションがある場合、
 履歴ファイルの読み書きの間にエラーが起きた場合、
 \fB\-d\fP オプションの引き数として不正な \fIoffset\fP の値が与えられた場合、
@@ -7946,21 +7926,20 @@ as timestamps for the previous history line.
 .I jobspec
 が与えられた場合を除き、返却ステータスは 0 です。
 .PP
-If the
 .B \-x
-option is supplied,
+オプションが指定されると、
 .B jobs
-replaces any
-.I jobspec
-found in
+は
 .I command
-or
+や
 .I args
-with the corresponding process group ID, and executes
+中の
+.I jobspec
+を対応するプロセスのグループ ID で置き換え、
 .I command
-passing it
-.IR args ,
-returning its exit status.
+に
+.IR args
+を与えて実行し、終了ステータスを返します。
 .RE
 .TP
 \fBkill\fP [\fB\-s\fP \fIsigspec\fP | \fB\-n\fP \fIsignum\fP | \fB\-\fP\fIsigspec\fP] [\fIpid\fP | \fIjobspec\fP] ...
@@ -8061,70 +8040,72 @@ prefix)
 .TP
 \fBreadarray\fP [\fB\-n\fP \fIcount\fP] [\fB\-O\fP \fIorigin\fP] [\fB\-s\fP \fIcount\fP] [\fB\-t\fP] [\fB\-u\fP \fIfd\fP] [\fB\-C\fP \fIcallback\fP] [\fB\-c\fP \fIquantum\fP] [\fIarray\fP]
 .PD
-Read lines from the standard input into the indexed array variable
-.IR array ,
-or from file descriptor 
-.IR fd
-if the 
+標準入力の各行を配列変数
+.IR array
+に読み込みます。
 .B \-u
-option is supplied.
-The variable
+オプションが指定されたときは、ファイル・ディスクリプター
+.IR fd
+から読み込みます。
+変数
 .SM
 .B MAPFILE
-is the default \fIarray\fP.
-Options, if supplied, have the following meanings:
+が \fIarray\fP のデフォルトです。
+オプションが指定された場合、以下の意味を持ちます:
 .RS
 .PD 0
 .TP
 .B \-n
-Copy at most
+最大
 .I count
-lines.  If \fIcount\fP is 0, all lines are copied.
+行をコピーします。\fIcount\fP が 0 であれば、すべての行をコピーします。
 .TP
 .B \-O
-Begin assigning to
 .I array
-at index
-.IR origin .
-The default index is 0.
+のインデックス
+.IR origin
+から代入します。デフォルトのインデックスは 0 です。
 .TP
 .B \-s
-Discard the first \fIcount\fP lines read.
+最初の \fIcount\fP 行を読み捨てます。
 .TP
 .B \-t
-Remove a trailing newline from each line read.
+読み込んだ各行末の改行文字を削除します。
 .TP
 .B \-u
-Read lines from file descriptor \fIfd\fP instead of the standard input.
+標準入力のかわりにファイル・ディスクリプター \fIfd\fP から行を読み込みます。
 .TP
 .B \-C
-Evaluate
+\fIquantum\fP 行が読み込まれるごとに
 .I callback
-each time \fIquantum\fP lines are read.  The \fB\-c\fP option specifies
-.IR quantum .
+を評価します。\fB\-c\fP オプションで
+.IR quantum
+を指定します。
 .TP
 .B \-c
-Specify the number of lines read between each call to
-.IR callback .
+.IR callback
+を呼び出す間隔の行数を指定します。
 .PD
 .PP
-If
+.BR \-c
+なしで
 .B \-C
-is specified without 
-.BR \-c ,
-the default quantum is 5000.
-When \fIcallback\fP is evaluated, it is supplied the index of the next
-array element to be assigned and the line to be assigned to that element
-as additional arguments.
-\fIcallback\fP is evaluated after the line is read but before the 
-array element is assigned.
+が指定されたとき、デフォルトの間隔は 5000 です。
+
+\fIcallback\fP が評価されるとき、
+次に代入される配列要素のインデックスと、
+その要素に代入される行が、引数として与えられます。
+\fIcallback\fP は、行が読み込まれてから
+配列の要素に代入されるまでの間に評価されます。
 .PP
-If not supplied with an explicit origin, \fBmapfile\fP will clear \fIarray\fP
-before assigning to it.
+始点が明示的に指定されない場合、\fBmapfile\fP は値を代入する前に
+\fIarray\fP をクリアします。
 .PP
-\fBmapfile\fP returns successfully unless an invalid option or option
-argument is supplied, \fIarray\fP is invalid or unassignable, or if
-\fIarray\fP is not an indexed array.
+\fBmapfile\fP は、
+不正なオプションやオプション引数が指定された場合や、
+\fIarray\fP が不正か代入できない場合や、
+\fIarray\fP がインデックスによる配列でない場合でなければ、
+成功の状態を返します。
 .RE
 .TP
 \fBpopd\fP [\-\fBn\fP] [+\fIn\fP] [\-\fIn\fP]
@@ -8179,8 +8160,8 @@ argument is supplied, \fIarray\fP is invalid or unassignable, or if
 \fBprintf\fP [\fB\-v\fP \fIvar\fP] \fIformat\fP [\fIarguments\fP]
 \fIarguments\fP を整形して標準出力に書き出します。
 フォーマットは \fIformat\fP で制御します。
-The \fB\-v\fP option causes the output to be assigned to the variable
-\fIvar\fP rather than being printed to the standard output.
+\fB\-v\fP オプションが与えられると、標準出力に書き出す代わりに、
+変数 \fIvar\fP に代入されます。
 .sp 1
 \fIformat\fP は 3 つのタイプのオブジェクトを含む文字列です。
 3 つのオブジェクトとは、(そのまま標準出力にコピーされる) プレーン文字・
@@ -8193,27 +8174,28 @@ The \fB\-v\fP option causes the output to be assigned to the variable
 .TP
 .B %b
 \fBprintf\fP は対応する \fIargument\fP 中の
-バックスラッシュのエスケープシーケンスを展開します
-(except that \fB\ec\fP terminates output, backslashes in
-\fB\e\(aq\fP, \fB\e"\fP, and \fB\e?\fP are not removed, and octal escapes
-beginning with \fB\e0\fP may contain up to four digits).
+バックスラッシュのエスケープシーケンスを展開します。
+ただし、\fB\ec\fP で出力を終了し、\fB\e\(aq\fP, \fB\e"\fP,
+\fB\e?\fP のバックスラッシュは削られ、
+ \fB\e0\fP で始まる 8 進数のエスケープシーケンスは 4 桁までです。
 .TP
 .B %q
 \fBprintf\fP は対応する
 \fIargument\fP をシェルの入力として再利用できるフォーマットで出力します。
 .TP
 .B %(\fIdatefmt\fP)T
-causes \fBprintf\fP to output the date-time string resulting from using
-\fIdatefmt\fP as a format string for \fIstrftime\fP(3).  The corresponding
-\fIargument\fP is an integer representing the number of seconds since the
-epoch.  Two special argument values may be used: -1 represents the current
-time, and -2 represents the time the shell was invoked.
+\fBprintf\fP は \fIdatefmt\fP を \fIstrftime\fP(3)
+の書式文字列として使って日付と時刻の文字列を出力します。
+対応する \fIargument\fP は、紀元 (1970年 1 月 1 日 00:00:00 UTC)
+からの秒数を表す整数値です。argument には 2 つの特別な値が使えます。
+-1 は現在時刻を表します。-2 はシェルが起動した時刻を表します。
 .PD
 .PP
-Arguments to non-string format specifiers are treated as C constants,
-except that a leading plus or minus sign is allowed, and if the leading
-character is a single or double quote, the value is the ASCII value of
-the following character.
+
+文字列でないフォーマット指定に対する引数は、C の定数として扱われます。
+ただし、先頭のプラスとマイナスの記号は許されます。
+また、先頭の文字がシングルクォートやダブルクォートであれば、
+続く文字の ASCII コードの値が引数の値となります。
 .PP
 \fIformat\fP は必要に応じて再利用され、
 全ての \fIarguments\fP を処理します。
@@ -8296,9 +8278,8 @@ the following character.
 不正なオプションが与えられなければ、返却ステータスは 0 となります。
 .TP
 \fBread\fP [\fB\-ers\fP] [\fB\-a\fP \fIaname\fP] [\fB\-d\fP \fIdelim\fP] [\fB\-i\fP \fItext\fP] [\fB\-n\fP \fInchars\fP] [\fB\-N\fP \fInchars\fP] [\fB\-p\fP \fIprompt\fP] [\fB\-t\fP \fItimeout\fP] [\fB\-u\fP \fIfd\fP] [\fIname\fP ...]
-標準入力
-or from the file descriptor
-\fIfd\fP supplied as an argument to the \fB\-u\fP option
+標準入力、
+または \fB\-u\fP オプションに指定されたファイル・ディスクリプター \fIfd\fP
 から 1 行を読み込み、最初の単語を最初の
 .IR name
 に代入し、2 番目の単語を 2 番目の
@@ -8340,35 +8321,32 @@ or from the file descriptor
 .SM
 .B READLINE ライブラリ
 のセクションを参照) を使って行を取得します。
-Readline uses the current (or default, if line editing was not previously
-active) editing settings.
+readline は現在の (行編集がそれまで有効になっていなければデフォルトの)
+編集設定を使います。
 .TP
 .B \-i \fItext\fP
-If
+行を取得するのに
 .B readline
-is being used to read the line, \fItext\fP is placed into the editing
-buffer before editing begins.
+が使われるとき、入力を開始する前に編集バッファに \fItext\fP が置かれます。
 .TP
 .B \-n \fInchars\fP
 組み込みコマンド \fBread\fP は、
 入力行全体が読み込まれるのを待たず、
 文字 \fInchars\fP を読み込んだ時に戻ります。
-but honor a delimiter if fewer
-than \fInchars\fP characters are read before the delimiter.
+ただし、\fInchars\fP 文字が読み込まれる前に区切り文字が現れたときは、
+区切り文字を優先します。
 .TP
 .B \-N \fInchars\fP
 入力行全体が読み込まれるのを待たず、
 文字 \fInchars\fP を読み込んだ時に戻ります。
-unless EOF is encountered or
-\fBread\fP times out.
-Delimiter characters encountered in the input are
-not treated specially and do not cause \fBread\fP to return until
-\fInchars\fP characters are read.
+ただし、EOF に遭遇したときや、
+\fBread\fP がタイムアウトになったときを除きます。
+入力で区切り文字に遭遇しても特別扱いはせず、
+\fInchars\fP 文字を読み込むまでは \fBread\fP が戻ることはありません。
 .TP
 .B \-p \fIprompt\fP
-入力を読み込もうとする前に\fIプロンプト\fPを表示します。
-on standard error,
-。末尾に改行は付きません。
+入力を読み込もうとする前に標準エラー出力に\fIプロンプト\fPを表示します。
+末尾に改行は付きません。
 プロンプトが表示されるのは、入力を端末から読み込む場合だけです。
 .TP
 .B \-r
@@ -8383,19 +8361,17 @@ on standard error,
 .B \-t \fItimeout\fP
 入力行全体が \fItimeout\fP 秒以内で読み込まれない場合、
 \fBread\fP をタイムアウトさせて、失敗の状態を返します。
-\fItimeout\fP may be a decimal number with a fractional portion following
-the decimal point.
+\fItimeout\fP は小数部を持つ十進数でもかまいません。
 このオプションは、
-\fBread\fP が入力を端末やパイプ
-or other special file
-から読み込んでいる場合にのみ効果があります。
-it has no effect when reading from regular files.
-If \fItimeout\fP is 0, \fBread\fP returns success if input is available on
-the specified file descriptor, failure otherwise.
-The exit status is greater than 128 if the timeout is exceeded.
+\fBread\fP が入力を端末やパイプ、その他の特殊ファイルから
+読み込んでいる場合にのみ効果があります。
+通常のファイルから読み込んでいる場合には影響ありません。
+\fItimeout\fP が 0 のときは、\fBread\fP は指定したファイル・ディスクリプター
+から読み込める状態であれば成功の状態を返し、そうでなければ失敗の状態を返します。
+タイムアウト時間を超えた場合、終了ステータスは 128 より大きい値になります。
 .TP
 .B \-u \fIfd\fP
-Read input from file descriptor \fIfd\fP.
+ファイル・ディスクリプター \fIfd\fP から入力を読み込みます。
 .PD
 .PP
 .I name
@@ -8405,9 +8381,9 @@ Read input from file descriptor \fIfd\fP.
 に代入されます。
 ファイル末尾に到達したり
 \fBread\fP がタイムアウトしたり
-(in which case the return code is greater than 128)
-, or an invalid file descriptor is supplied
-しなければ、終了コードは 0 です。
+(この場合には終了ステータスは 128 より大きい値になります)
+不正なファイル・ディスクリプターが指定されたりしなければ、
+終了コードは 0 です。
 .RE
 .TP
 \fBreadonly\fP [\fB\-aAf\fP] [\fB\-p\fP] [\fIname\fP[=\fIword\fP] ...]
@@ -8420,23 +8396,20 @@ Read input from file descriptor \fIfd\fP.
 オプションを与えた場合、\fIname\fP に対応する関数に同様の印が付きます。
 .B \-a
 オプション与えると、配列変数だけが対象となります。
-the
 .B \-A
-option restricts the variables to associative arrays.
-If both options are supplied,
+オプション与えると、連想配列変数だけが対象となります。
+両方のオプションを与えると、
 .B \-A
-takes precedence.
+が優先されます。
 .I name
 引き数が全く与えられてない場合、または
 .B \-p
 オプションが与えられた場合、読み込み専用の名前全ての一覧が出力されます。
-The other options may be used to restrict the output to a subset of
-the set of readonly names.
+ほかのオプションを指定すると、出力を読み込み専用の名前の一部に限定します。
 .B \-p
 オプションを使うと、
 入力として再利用できるようなフォーマットで出力が行われます。
-If a variable name is followed by =\fIword\fP, the value of
-the variable is set to \fIword\fP.
+変数名に =\fIword\fP が続くと、変数の値に \fIword\fP が設定されます。
 返却ステータスは基本的に 0 ですが、
 不正なオプションがあった場合、
 .I name
@@ -8462,8 +8435,8 @@ the variable is set to \fIword\fP.
 スクリプトの終了ステータスとして返します。
 関数の外側で \fB.\fP\^ によるスクリプトの実行中以外に使われた場合、
 返却ステータスは偽となります。
-Any command associated with the \fBRETURN\fP trap is executed
-before execution resumes after the function or script.
+関数やスクリプトから実行が戻る前に、
+\fBRETURN\fP トラップ に設定されたコマンドが実行されます。
 .TP
 \fBset\fP [\fB\-\-abefhkmnptuvxBCEHPT\fP] [\fB\-o\fP \fIoption\-name\fP] [\fIarg\fP ...]
 .PD 0
@@ -8471,11 +8444,10 @@ before execution resumes after the function or script.
 \fBset\fP [\fB+abefhkmnptuvxBCEHPT\fP] [\fB+o\fP \fIoption\-name\fP] [\fIarg\fP ...]
 .PD
 オプション無しの場合は、シェル変数全ての名前と値の組が表示されます。
-表示は、入力
-for setting or resetting the currently-set variables
+表示は、現在設定されている変数を設定や再設定をする入力
 として再利用できるフォーマットで行われます。
-Read-only variables cannot be reset.
-In \fIposix mode\fP, only shell variables are listed.
+読み込み専用の変数は再設定できません。
+\fIposix モード\fP ではシェル変数だけが表示されます。
 出力は現在のロケールに従ってソートされます。
 オプションが指定されている場合、
 オプションはシェルの属性を設定または解除します。
@@ -8501,13 +8473,12 @@ In \fIposix mode\fP, only shell variables are listed.
 これはジョブ制御が有効な場合に限り有効です。
 .TP 8
 .B \-e
-if a \fIpipeline\fP (which may consist of a single
-\fIsimple command\fP),  a \fIsubshell\fP command enclosed in parentheses,
-or one of the commands executed as part of a command list enclosed
-by braces (see
+\fIパイプライン\fP (1 つの \fI単純なコマンド\fP からなるものでもよい)、
+括弧で囲まれた \fIサブシェル\fP のコマンド、
+ブレース (前述の
 .SM
-.B SHELL GRAMMAR
-above)
+.B シェルの文法
+を参照) で囲まれたコマンドのリストから実行されたコマンドの 1 つ
 が 0 でないステータスで終了した場合、即座に終了します。
 ただし失敗したコマンドが
 .B while
@@ -8521,19 +8492,18 @@ above)
 .B &&
 または
 .B ||
-リストの一部である
-except the command following the final \fB&&\fP or \fB||\fP,
-any command in a pipeline but the last,
+リストの一部である (最後の \fB&&\fP や \fB||\fP の後のコマンドを除く)、
+パイプラインの中の最後のコマンド以外である、
 コマンドの返り値が
 .B !
 で反転されている、のいずれかの場合にはシェルは終了しません。
-A trap on \fBERR\fP, if set, is executed before the shell exits.
-This option applies to the shell environment and each subshell environment
-separately (see
+\fBERR\fP のトラップが設定されていれば、シェルが終了する前に実行されます。
+このオプションはシェルの環境とサブシェルの環境に別々に適用され
+(前述の
 .SM
-.B "COMMAND EXECUTION ENVIRONMENT"
-above), and may cause
-subshells to exit before executing all the commands in the subshell.
+.B "コマンド実行環境"
+を参照)、
+サブシェルはすべてのコマンドを実行する前に終了するかもしれません。
 .TP 8
 .B \-f
 パス名展開を無効にします。
@@ -8578,7 +8548,7 @@ emacs 形式のコマンド行編集インタフェースを使います。
 ただし、
 .B \-\-noediting
 オプション付きでシェルを実行した場合は除きます。
-This also affects the editing interface used for \fBread \-e\fP.
+これは、\fBread \-e\fP での編集インタフェースにも影響します。
 .TP 8
 .B errexit
 .BR \-e
@@ -8637,7 +8607,7 @@ This also affects the editing interface used for \fBread \-e\fP.
 と同じです。
 .TP 8
 .B nolog
-Currently ignored.
+現在では無視されます。
 .TP 8
 .B notify
 .BR \-b
@@ -8656,10 +8626,10 @@ Currently ignored.
 と同じです。
 .TP 8
 .B pipefail
-If set, the return value of a pipeline is the value of the last
-(rightmost) command to exit with a non-zero status, or zero if all
-commands in the pipeline exit successfully.
-This option is disabled by default.
+設定されている場合、パイプラインの返り値は、
+0 以外のステータスで終了した最後の (いちばん右の) コマンドの値になります。
+パイプラインのすべてのコマンドが成功の状態で終了すると 0 になります。
+このオプションは、デフォルトで無効です。
 .TP 8
 .B posix
 .B bash
@@ -8677,7 +8647,7 @@ This option is disabled by default.
 .TP 8
 .B vi
 vi 形式のコマンド行編集インタフェースを使います。
-This also affects the editing interface used for \fBread \-e\fP.
+これは、\fBread \-e\fP での編集インタフェースにも影響します。
 .TP 8
 .B xtrace
 .BR \-x
@@ -8728,9 +8698,8 @@ This also affects the editing interface used for \fBread \-e\fP.
 コマンドを 1 つ読み込み、実行してから終了します。
 .TP 8
 .B \-u
-パラメータ展開の実行中に、設定が取り消されている変数
-and parameters other than the special parameters "@" and "*"
-をエラーとして扱います。
+パラメータ展開の実行中に、特殊パラメータ "@" と "*" 以外で
+設定が取り消されている変数やパラメータをエラーとして扱います。
 設定が取り消されている変数やパラメータを展開しようとした場合、
 シェルはエラーメッセージを出力します。
 シェルが対話的でなければ、0 でないステータスで終了します。
@@ -8739,10 +8708,8 @@ and parameters other than the special parameters "@" and "*"
 シェルの入力行を、読み込んだ際に表示します。
 .TP 8
 .B \-x
-\fI単純なコマンド\fP,
-\fBfor\fP command, \fBcase\fP command, \fBselect\fP command,
-arithmetic \fBfor\fP command
-をそれぞれ展開した後、
+\fI単純なコマンド\fP、\fBfor\fP コマンド、\fBcase\fP コマンド、
+\fBselect\fP コマンド、算術 \fBfor\fP コマンドをそれぞれ展開した後、
 .SM
 .BR PS4
 を展開した値を表示し、その後にそのコマンドと展開した引き数を表示します。
@@ -8767,9 +8734,10 @@ arithmetic \fBfor\fP command
 の代わりに使った時です。
 .TP 8
 .B \-E
-If set, any trap on \fBERR\fP is inherited by shell functions, command
-substitutions, and commands executed in a subshell environment.
-The \fBERR\fP trap is normally not inherited in such cases.
+設定されている場合、\fBERR\fP のトラップは、
+シェル関数、コマンド置換、サブシェル環境で実行されるコマンド
+に継承されます。
+\fBERR\fP のトラップは、通常はそのような場合に継承されません。
 .TP 8
 .B \-H
 .B !
@@ -8788,11 +8756,10 @@ The \fBERR\fP trap is normally not inherited in such cases.
 ディレクトリの論理的な接続が辿られます。
 .TP 8
 .B \-T
-If set, any traps on \fBDEBUG\fP and \fBRETURN\fP are inherited by shell
-functions, command substitutions, and commands executed in a
-subshell environment.
-The \fBDEBUG\fP and \fBRETURN\fP traps are normally not inherited
-in such cases.
+設定されている場合、\fBDEBUG\fP と \fBRETURN\fP のトラップは、
+シェル関数、コマンド置換、サブシェル環境で実行されるコマンド
+に継承されます。
+\fBDEBUG\fP と \fBRETURN\fP のトラップは、通常はそのような場合に継承されません。
 .TP 8
 .B \-\-
 このオプションの後に引き数が続いていない場合には、
@@ -8901,9 +8868,9 @@ in such cases.
 .PD 0
 .TP 8
 .B autocd
-If set, a command name that is the name of a directory is executed as if
-it were the argument to the \fBcd\fP command.
-This option is only used by interactive shells.
+設定されている場合、ディレクトリの名前のコマンド名は、
+それが \fBcd\fP コマンドの引き数に指定されたものとして実行されます。
+このオプションが使われるのは対話的シェルだけです。
 .TP 8
 .B cdable_vars
 設定されている場合、組み込みコマンド
@@ -8929,14 +8896,15 @@ This option is only used by interactive shells.
 通常のパス検索が行われます。
 .TP 8
 .B checkjobs
-If set, \fBbash\fP lists the status of any stopped and running jobs before
-exiting an interactive shell.  If any jobs are running, this causes
-the exit to be deferred until a second exit is attempted without an
-intervening command (see
+設定されている場合、\fBbash\fP は対話的シェルが終了する前に、
+停止中のジョブや実行中のジョブの状態を一覧します。
+実行中のジョブがあれば、シェルの終了は、
+間にほかのコマンドを挟まずに 2 回目に終了が試みられるまで延期されます
+(前述の
 .SM
-.B "JOB CONTROL"
-above).  The shell always
-postpones exiting if any jobs are stopped.
+.B "ジョブ制御"
+を参照)。
+停止中のジョブがある場合は、シェルは常に終了を延期します。
 .TP 8
 .B checkwinsize
 設定されている場合、\fBbash\fP
@@ -8957,45 +8925,53 @@ postpones exiting if any jobs are stopped.
 これを使うと、複数行に分かれているコマンドの再編集が容易になります。
 .TP 8
 .B compat31
-If set,
+
+設定されている場合、
 .B bash
-changes its behavior to that of version 3.1 with respect to quoted
-arguments to the \fB[[\fP conditional command's \fB=~\fP operator.
+は、条件コマンド \fB[[\fP の \fB=~\fP 演算子のクォートされた引き数に関して
+version 3.1 の動作に変更します。
 .TP 8
 .B compat32
-If set,
+設定されている場合、
 .B bash
-changes its behavior to that of version 3.2 with respect to locale-specific
-string comparison when using the \fB[[\fP
-conditional command's \fB<\fP and \fB>\fP operators.
-Bash versions prior to bash-4.1 use ASCII collation and
-.IR strcmp (3);
-bash-4.1 and later
-use the current locale's collation sequence and
+は、条件コマンド \fB[[\fP の \fB<\fP 演算子と \fB>\fP
+演算子によるロケール固有の文字列比較に関して、
+version 3.2 の動作に変更します。
+Bash の bash-4.1 より前のバージョンでは、ASCII コードの照合と
+.IR strcmp (3)
+を使います。
+bash-4.1 およびそれ以後のバージョンでは、
+現在のロケールの照合と
 .IR strcoll (3).
+を使います。
 .TP 8
 .B compat40
-If set,
+設定されている場合、
 .B bash
-changes its behavior to that of version 4.0 with respect to locale-specific
-string comparison when using the \fB[[\fP
-conditional command's \fB<\fP and \fB>\fP operators (see previous item)
-and the effect of interrupting a command list.
+は、条件コマンド \fB[[\fP の \fB<\fP 演算子と \fB>\fP
+演算子によるロケール固有の文字列比較 (前項を参照)
+とコマンドリストの解釈の効果に関して、
+version 4.0 の動作に変更します。
 .TP 8
 .B compat41
-If set,
-.BR bash ,
-when in posix mode, treats a single quote in a double-quoted
-parameter expansion as a special character.  The single quotes must match
-(an even number) and the characters between the single quotes are considered
-quoted.  This is the behavior of posix mode through version 4.1.
-The default bash behavior remains as in previous versions.
+
+設定されている場合、
+.BR bash
+は posix モードのときに、
+ダブルクォートの中のパラメータ展開で
+シングルクォートを特殊文字として扱います。
+シングルクォートは対応がとれている (偶数個) 必要があり、
+シングルクォートの間の文字はクォートされているものとして扱われます。
+これは version 4.1 の posix モードの動作です。
+bash のデフォルトの動作は前のバージョンのままです。
 .TP 8
 .B dirspell
-If set,
+設定されている場合、
 .B bash
-attempts spelling correction on directory names during word completion
-if the directory name initially supplied does not exist.
+は
+attempts  during 
+単語補完のときに指定されたディレクトリ名が存在しなければ、
+ディレクトリ名のスペルの訂正を試みます。
 .TP 8
 .B dotglob
 設定されている場合、
@@ -9020,41 +8996,42 @@ if the directory name initially supplied does not exist.
 このオプションは、対話的なシェルではデフォルトで有効です。
 .TP 8
 .B extdebug
-If set, behavior intended for use by debuggers is enabled:
+設定されている場合、デバッガのための動作が有効になります。
 .RS
 .TP
 .B 1.
-The \fB\-F\fP option to the \fBdeclare\fP builtin displays the source
-file name and line number corresponding to each function name supplied
-as an argument.
+組み込みコマンド \fBdeclare\fP の \fB\-F\fP オプション
+引き数で指定された関数のソースファイル名と行番号を表示します。
 .TP
 .B 2.
-If the command run by the \fBDEBUG\fP trap returns a non-zero value, the
-next command is skipped and not executed.
+\fBDEBUG\fP のトラップで実行されたコマンドが 0 以外を返したとき、
+次のコマンドはスキップされ実行されません。
 .TP
 .B 3.
-If the command run by the \fBDEBUG\fP trap returns a value of 2, and the
-shell is executing in a subroutine (a shell function or a shell script
-executed by the \fB.\fP or \fBsource\fP builtins), a call to
-\fBreturn\fP is simulated.
+\fBDEBUG\fP のトラップで実行されたコマンドが 2 を返し、
+シェルがサブルーチン (シェル関数や、組み込みコマンドの
+\fB.\fP や \fBsource\fP で実行されたシェルスクリプト)
+を実行しているとき、\fBreturn\fP の呼び出しがシミュレートされます。
 .TP
 .B 4.
 .SM
 .B BASH_ARGC
-and
+と
 .SM
 .B BASH_ARGV
-are updated as described in their descriptions above.
+が、それぞれの説明で前述したように設定されます。
 .TP
 .B 5.
-Function tracing is enabled:  command substitution, shell functions, and
-subshells invoked with \fB(\fP \fIcommand\fP \fB)\fP inherit the
-\fBDEBUG\fP and \fBRETURN\fP traps.
+関数のトレースが有効になります。
+コマンド置換、シェル関数、\fB(\fP \fIcommand\fP \fB)\fP
+から起動されたサブシェルは、
+\fBDEBUG\fP と \fBRETURN\fP のトラップを継承します。
 .TP
 .B 6.
-Error tracing is enabled:  command substitution, shell functions, and
-subshells invoked with \fB(\fP \fIcommand\fP \fB)\fP inherit the
-\fBERR\fP trap.
+エラーのトレースが有効になります。
+コマンド置換、シェル関数、\fB(\fP \fIcommand\fP \fB)\fP
+から起動されたサブシェルは、
+\fBERR\fP のトラップを継承します。
 .RE
 .TP 8
 .B extglob
@@ -9062,38 +9039,38 @@ subshells invoked with \fB(\fP \fIcommand\fP \fB)\fP inherit the
 これについては、前述の\fBパス名展開\fPで説明しています。
 .TP 8
 .B extquote
-If set, \fB$\fP\(aq\fIstring\fP\(aq and \fB$\fP"\fIstring\fP" quoting is
-performed within \fB${\fP\fIparameter\fP\fB}\fP expansions
-enclosed in double quotes.  This option is enabled by default.
+設定されている場合、ダブルクォート中の \fB${\fP\fIparameter\fP\fB}\fP
+の展開で、\fB$\fP\(aq\fIstring\fP\(aq と \fB$\fP"\fIstring\fP"
+のクォートが機能します。
+このオプションは、デフォルトで有効です。
 .TP 8
 .B failglob
-If set, patterns which fail to match filenames during pathname expansion
-result in an expansion error.
+設定されている場合、パス名展開でパターンがファイル名のマッチに失敗すると、
+展開エラーになります。
 .TP 8
 .B force_fignore
-If set, the suffixes specified by the
+設定されている場合、単語補完において、シェル変数
 .SM
 .B FIGNORE
-shell variable
-cause words to be ignored when performing word completion even if
-the ignored words are the only possible completions.
-See
+で指定されたサフィックスの単語は、その単語が唯一の補完候補でも除外されます。
+詳しい説明については、前述の
 .SM
-\fBSHELL VARIABLES\fP
-above for a description of
+\fBシェル変数\fP
+の
 .SM
-.BR FIGNORE .
-This option is enabled by default.
+.BR FIGNORE
+の説明を参照してください。
+このオプションは、デフォルトで有効です。
 .TP 8
 .B globstar
-If set, the pattern \fB**\fP used in a pathname expansion context will
-match all files and zero or more directories and subdirectories.
-If the pattern is followed by a \fB/\fP, only directories and
-subdirectories match.
+設定されている場合、\fB**\fP というパターンがパス名展開で使われると、
+0 レベル以上のディレクトリやサブディレクトリのすべてのファイルにマッチします。
+直後に \fB/\fP が続く場合には、
+ディレクトリとサブディレクトリのみにマッチします。
 .TP 8
 .B gnu_errfmt
-If set, shell error messages are written in the standard GNU error
-message format.
+設定されている場合、シェルのエラーメッセージは
+GNU 標準のエラーメッセージの形式で出力されます。
 .TP 8
 .B histappend
 設定されている場合、シェルの終了時に履歴リストが変数
@@ -9146,8 +9123,9 @@ message format.
 このオプションはデフォルトで有効になっています。
 .TP 8
 .B lastpipe
-If set, and job control is not active, the shell runs the last command of
-a pipeline not executed in the background in the current shell environment.
+設定されており、かつジョブ制御が有効でなければ、
+シェルはバックグラウンドでの実行ではないパイプラインの最後のコマンドを
+現在のシェル環境で実行します。
 .TP 8
 .B lithist
 設定されており、かつ
@@ -9157,11 +9135,12 @@ a pipeline not executed in the background in the current shell environment.
 できる限り途中に改行を埋め込むことで履歴に保存されます。
 .TP 8
 .B login_shell
-The shell sets this option if it is started as a login shell (see
+シェルがログインシェルとして起動されると
+(前述の
 .SM
 .B "INVOCATION"
-above).
-The value may not be changed.
+を参照)、このオプションが設定されます。
+この値を変更することはできません。
 .TP 8
 .B mailwarn
 設定されており、かつ \fBbash\fP がメールをチェックするファイルが
@@ -9188,10 +9167,10 @@ The value may not be changed.
 ファイル名の大文字と小文字を区別せずにマッチングを行います。
 .TP 8
 .B nocasematch
-If set,
+設定されている場合、
 .B bash
-matches patterns in a case\-insensitive fashion when performing matching
-while executing \fBcase\fP or \fB[[\fP conditional commands.
+は \fBcase\fP や条件コマンド \fB[[\fP のパターンマッチで
+大文字小文字を区別せずにパターンをマッチさせます。
 .TP 8
 .B nullglob
 設定されている場合、
@@ -9208,8 +9187,7 @@ while executing \fBcase\fP or \fB[[\fP conditional commands.
 .B promptvars
 設定されている場合、
 プロンプト文字列に対して
-parameter expansion, command substitution, arithmetic
-expansion, and quote removal
+パラメータ展開、コマンド置換、算術式展開、クォート削除
 が行われます。
 この展開は前述の
 .SM
@@ -9251,9 +9229,9 @@ expansion, and quote removal
 .SM
 .B SIGCONT
 シグナルを受け取るまで、シェルの実行をサスペンドします。
-A login shell cannot be suspended; the
+ログインシェルはサスペンドできません。
 .B \-f
-option can be used to override this and force the suspension.
+オプションを与えると、これに優先してサスペンドします。
 シェルがログインシェルかつ
 .B \-f
 が与えられていない場合と、ジョブ制御が有効でない場合とを除いて、
@@ -9271,14 +9249,14 @@ option can be used to override this and force the suspension.
 .SM
 .BR 条件式
 セクションで説明したプライマリで構成されます。
-\fBtest\fP does not accept any options, nor does it accept and ignore
-an argument of \fB\-\-\fP as signifying the end of options.
+\fBtest\fP はオプションを受け取らず、
+\fB\-\-\fP をオプションの終わりを示すものとして受け取りも無視もしません。
 .if t .sp 0.5
 .if n .sp 1
 式は次に示す演算子を使って結合できます。
 優先度の高い順に示します。
-The evaluation depends on the number of arguments; see below.
-Operator precedence is used when there are five or more arguments.
+式の評価は以下のように引き数の数に依存します。
+引き数が 5 つ以上のときは演算子の優先度に従います。
 .RS
 .PD 0
 .TP
@@ -9351,8 +9329,8 @@ Operator precedence is used when there are five or more arguments.
 .if t .sp 0.5
 .if n .sp 1
 .LP
-When used with \fBtest\fP or \fB[\fP, the \fB<\fP and \fB>\fP operators
-sort lexicographically using ASCII ordering.
+\fBtest\fP や \fB[\fP では、演算子 \fB<\fP と \fB>\fP は
+ASCII コードにもとづき辞書順にソートします
 .RE
 .PD
 .TP
@@ -9398,10 +9376,10 @@ sort lexicographically using ASCII ordering.
 それぞれの
 .I sigspec
 は、<\fIsignal.h\fP> で定義されているシグナル名またはシグナル番号です。
-Signal names are case insensitive and the
+シグナル名は大文字小文字は区別されず、先頭の
 .SM
 .B SIG
-prefix is optional.
+は省略可能です。
 .if t .sp 0.5
 .if n .sp 1
 .I sigspec
@@ -9415,62 +9393,64 @@ prefix is optional.
 が
 .SM
 .BR DEBUG
-であれば、\fI単純なコマンド\fP,
-\fIfor\fP command, \fIcase\fP command, \fIselect\fP command,
-every arithmetic \fIfor\fP command, and before the first command executes in a shell function
+であれば、\fI単純なコマンド\fP、\fIfor\fP コマンド、
+\fIcase\fP コマンド、\fIselect\fP コマンド、
+算術 \fIfor\fP コマンド、シェル関数の最初のコマンドの実行前
  (前述の
 .SM
 .B シェルの文法
 セクションを参照) が終わるたびにコマンド
 .I arg
 が実行されます。
-Refer to the description of the \fBextdebug\fP option to the
-\fBshopt\fP builtin for details of its effect on the \fBDEBUG\fP trap.
-If a
+\fBDEBUG\fP のトラップの効果いついて、詳しくは
+組み込みコマンド \fBshopt\fP の \fBextdebug\fP
+オプションの説明を参照してください。
 .I sigspec
-is
+が
 .SM
-.BR RETURN ,
-the command
+.BR RETURN
+であれば、組み込みコマンドの \fB.\fP または \fBsource\fP
+から実行されたスクリプトが終わるたびにコマンド
 .I arg
-is executed each time a shell function or a script executed with
-the \fB.\fP or \fBsource\fP builtins finishes executing.
+が実行されます。
 .if t .sp 0.5
 .if n .sp 1
-If a
+
 .I sigspec
-is
+が
 .SM
-.BR ERR ,
-the command
+.BR ERR
+であれば、
+単純なコマンドが 0 以外の終了ステータスのときにコマンド
 .I arg
-is executed whenever a simple command has a non\-zero exit status,
-subject to the following conditions.
-The
+が実行されます。これは以下の条件によります。
+失敗したコマンドが
+.B while
+または
+.B until
+キーワード直後のコマンドリストに含まれる場合、
+.I if
+文の条件に含まれる場合、
+.B &&
+や
+.B ||
+のリスト中で実行するコマンドに含まれる場合、
+or if the command's return value is
+being inverted via
+コマンドの戻り値が
+.BR !
+で反転されている場合には、
 .SM
 .B ERR
-trap is not executed if the failed
-command is part of the command list immediately following a
-.B while
-or
-.B until
-keyword, 
-part of the test in an
-.I if
-statement, part of a command executed in a
-.B &&
-or
-.B ||
-list, or if the command's return value is
-being inverted via
-.BR ! .
-These are the same conditions obeyed by the \fBerrexit\fP option.
+のトラップは実行されません。
+これは \fBerrexit\fP オプションと同じ条件です。
 .if t .sp 0.5
 .if n .sp 1
 シェルのエントリで無視されるシグナルは、
 トラップもリセットもできません。
-Trapped signals that are not being ignored are reset to their original
-values in a subshell or subshell environment when one is created.
+無視されなかったトラップのシグナルは、
+サブシェルやサブシェル環境では作られたときに
+元の値にリセットされます。
 .I sigspec
 のいずれかが不正であれば、返却ステータスは偽になります。
 それ以外の場合には、
@@ -9509,16 +9489,16 @@ values in a subshell or subshell environment when one is created.
 が
 .IR file
 を返さない場合です。
-The
 .B \-P
-option forces a
-.SM
-.B PATH
-search for each \fIname\fP, even if
+オプションを使うと、
 .if t \f(CWtype -t name\fP
 .if n ``type -t name''
-would not return
-.IR file .
+が
+.IR file
+を返さない場合でも \fIname\fP を
+.SM
+.B PATH
+から探します。
 コマンドがハッシュされている場合、
 .B \-p
 や
@@ -9539,9 +9519,10 @@ would not return
 エイリアスや関数も出力されます。
 .B \-a
 を使う時には、ハッシュされているコマンドの表は参照されません。
-The
+
 .B \-f
-option suppresses shell function lookup, as with the \fBcommand\fP builtin.
+オプションを使うと、
+組み込みコマンド \fBcommand\fP と同じように、シェル関数を探しません。
 .B type
 は、引き数のいずれかが見つかれば真を返し、
 どれも見つからなければ偽を返します。
@@ -9562,9 +9543,7 @@ option suppresses shell function lookup, as with the \fBcommand\fP builtin.
 .BR hard ,
 .BR soft ,
 .BR unlimited
-です。
-which stand for the current hard limit, the current soft limit, and
-no limit, respectively.
+で、それぞれ現在の強い制限、現在の弱い制限、制限なしを表します。
 .I limit
 を省略すると、リソースの弱い制限の現在値が表示されます。
 ただし、\fB\-H\fP が与えられている場合は除きます。
@@ -9577,7 +9556,7 @@ no limit, respectively.
 現在の制限を全て報告する
 .TP
 .B \-b
-The maximum socket buffer size
+ソケットバッファの最大サイズ
 .TP
 .B \-c
 生成されるコアファイル (core) の最大サイズ
@@ -9586,20 +9565,20 @@ The maximum socket buffer size
 プロセスのデータセグメントの最大サイズ
 .TP
 .B \-e
-The maximum scheduling priority ("nice")
+スケジュール優先度 ("nice") の最大値
 .TP
 .B \-f
-シェル and its children が生成できるファイルの最大サイズ
+シェルとその子プロセスのシェルが生成できるファイルの最大サイズ
 .TP
 .B \-i
-The maximum number of pending signals
+保留中シグナルの最大数
 .TP
 .B \-l
 メモリにロックできる最大サイズ
 .TP
 .B \-m
 常駐セットサイズの最大値
-(many systems do not honor this limit)
+(多くのシステムはこの制限を守りません)
 .TP
 .B \-n
 オープンできるファイル・ディスクリプターの最大数
@@ -9610,10 +9589,10 @@ The maximum number of pending signals
 (これは設定できないかもしれません)
 .TP
 .B \-q
-The maximum number of bytes in POSIX message queues
+POSIX メッセージキューの最大バイト数
 .TP
 .B \-r
-The maximum real-time scheduling priority
+リアルタイム・スケジューリングの優先度の最大値
 .TP
 .B \-s
 最大スタックサイズ
@@ -9625,15 +9604,13 @@ CPU 時間の最大量 (秒単位)
 1 人のユーザが使用できる最大のプロセス数
 .TP
 .B \-v
-シェル
-and, on some systems, to its children
-が使用できる最大の仮想メモリ量
+シェルと、システムによってはその子プロセスのシェルが使用できる最大の仮想メモリ量
 .TP
 .B \-x
-The maximum number of file locks
+ファイルロックの最大数
 .TP
 .B \-T
-The maximum number of threads
+スレッドの最大数
 .PD
 .PP
 .I limit
