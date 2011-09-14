@@ -118,8 +118,8 @@ bash \- GNU Bourne-Again SHell
 に準拠する実装を目指しています。
 .\"O .B Bash
 .\"O can be configured to be POSIX-conformant by default.
-.B Bash
-はデフォルトで POSIX 適合に設定することもできます。
+.B bash
+はデフォルトで POSIX 準拠に設定することもできます。
 .\"O .SH OPTIONS
 .SH オプション
 .\"O All of the  single-character shell options documented in the
@@ -243,7 +243,7 @@ bash \- GNU Bourne-Again SHell
 .\"O that may be reused as input.
 \fIshopt_option\fP を指定しない場合、
 \fBshopt\fP で指定できるオプションの名前と値が標準出力に表示されます。
-このとき、入力として再利用できる形で出力されます。
+このとき、\fB+O\fP では、入力として再利用できる形で出力されます。
 .TP
 .B \-\-
 .\"O A
@@ -267,7 +267,7 @@ bash \- GNU Bourne-Again SHell
 .PP
 .\"O .B Bash
 .\"O also interprets a number of multi-character options.
-.B Bash
+.B bash
 が解釈するオプションには複数の文字からなるものもたくさんあります。
 .\"O These options must appear on the command line before the
 .\"O single-character options to be recognized.
@@ -387,7 +387,7 @@ bash \- GNU Bourne-Again SHell
 .\"O from the POSIX standard to match the standard (\fIposix mode\fP).
 \fBbash\fP の動作のうち、
 デフォルトの振舞いが POSIX 1003.2 の標準と異なる部分を、
-標準に適合するように変更します (\fIposix モード\fP)。
+標準に準拠するように変更します (\fIposix モード\fP)。
 .TP
 .B \-\-restricted
 .\"O The shell becomes restricted (see
@@ -432,7 +432,7 @@ bash \- GNU Bourne-Again SHell
 .\"O .B $0
 .\"O is set to the name of the file, and the positional parameters
 .\"O are set to the remaining arguments.
-このように
+このような形で
 .B bash
 が起動された場合、
 .B $0
@@ -745,7 +745,8 @@ bash \- GNU Bourne-Again SHell
 .\"O connected to a network connection, as when executed by the remote shell
 .\"O daemon, usually \fIrshd\fP, or the secure shell daemon \fIsshd\fP.
 .B bash
-は、自分を起動したのがリモートシェルデーモン (通常はリモートシェルデーモン
+は、標準入力がネットワークに接続されて起動されたかどうかにより、
+自分を起動したのがリモートシェルデーモン (通常はリモートシェルデーモン
 \fIrshd\fP またはセキュアシェルデーモン \fIsshd\fP) かどうかを調べます。
 .\"O If
 .\"O .B bash
@@ -819,7 +820,7 @@ bash \- GNU Bourne-Again SHell
 .\"O Also known as a
 .\"O .BR token .
 .B 単語 (word)
-シェルが 1 単位とみなす文字並び。
+シェルが 1 単位とみなす文字の並び。
 .BR トークン(token)
 とも言われます。
 .TP
@@ -857,7 +858,7 @@ bash \- GNU Bourne-Again SHell
 .\"O symbols:
 .B 制御演算子 (control operator)
 制御機能を持つ \fIトークン\fP。
-以下の文字のうちのいずれかです:
+以下のシンボルのうちのいずれかです:
 .RS
 .PP
 .if t \fB||  &  &&  ;  ;;  (  )  |  |&    <newline>\fP
@@ -909,6 +910,7 @@ bash \- GNU Bourne-Again SHell
 ブランク区切りの単語とリダイレクションを記述し、
 最後に制御演算子を置いたものです。
 最初の単語は実行するコマンドを指定します。
+これは 0 番目の引き数となります。
 残りの単語は起動されるコマンドに引き数として渡されます。
 .PP
 .\"O The return value of a \fIsimple command\fP is its exit status, or
@@ -926,7 +928,7 @@ bash \- GNU Bourne-Again SHell
 .\"O or \fB|&\fP.
 \fIパイプライン (pipeline)\fPは、記号
 .B |
-または \fB|&\fP で区切った 1 つ以上のコマンド列です。
+または \fB|&\fP で区切った 1 つ以上のコマンドの並びです。
 .\"O The format for a pipeline is:
 パイプラインのフォーマットを以下に示します:
 .RS
@@ -972,9 +974,9 @@ bash \- GNU Bourne-Again SHell
 \fBpipefail\fP オプションが有効になっている場合を除き、
 パイプラインの返却ステータスは最後のコマンドの終了ステータスになります。
 \fBpipefail\fP が有効になっている場合には、
-パイプラインの返却ステータスは 0 以外のステータスを返した最後の
-(一番右の) コマンドの値になり、
-全てのコマンドが正常終了した場合には 0 になります。
+0 以外のステータスを返した最後の (一番右の) コマンドの値が
+パイプラインの返却ステータスになり、
+全てのコマンドが正常終了した場合にのみ 0 になります。
 .\"O If the reserved word
 .\"O .B !
 .\"O precedes a pipeline, the exit status of that pipeline is the logical
@@ -984,8 +986,8 @@ bash \- GNU Bourne-Again SHell
 パイプラインの前に、予約語である
 .B !
 がある場合、
-そのパイプラインの終了ステータスは上記の終了ステータスの
-NOT を取ったものになります。
+そのパイプラインの終了ステータスは上記の終了ステータスを
+論理否定したものになります。
 値を返す前に、シェルはパイプライン中の全てのコマンドが終了するのを待ちます。
 .PP
 .\"O If the
@@ -1002,8 +1004,8 @@ NOT を取ったものになります。
 出力フォーマットが POSIX 仕様に変わります。
 .\"O When the shell is in \fIposix mode\fP, it does not recognize
 .\"O \fBtime\fP as a reserved word if the next token begins with a `-'.
-シェルが \fIposix モードのときには、
-後に続くトークンが `-' であれば \fBtime\fP を予約語と認識しません。
+シェルが \fIposix モード\fP のときには、
+後に続くのが `-' で始まるトークンであれば \fBtime\fP を予約語と認識しません。
 .\"O The
 .\"O .B TIMEFORMAT
 .\"O variable may be set to a format string that specifies how the timing
@@ -1026,16 +1028,18 @@ NOT を取ったものになります。
 .\"O When the shell is in \fIposix mode\fP, \fBtime\fP
 .\"O may be followed by a newline.  In this case, the shell displays the
 .\"O total user and system time consumed by the shell and its children.
-シェルが \fIposix モードのときには、\fBtime\fP の直後が改行でもかまいません。
-この場合、シェルと子プロセスが消費したユーザ時間とシステム時間を出力します。
+シェルが \fIposix モード\fP のときには、\fBtime\fP の直後が
+改行でもかまいません。
+この場合、シェルと子プロセスがそれまでに消費した
+ユーザ時間とシステム時間を出力します。
 .\"O The
 .\"O .B TIMEFORMAT
 .\"O variable may be used to specify the format of
 .\"O the time information.
-このときにも、経過時間情報のフォーマット指定に変数
+このときにも、経過時間情報のフォーマットを変数
 .SM
 .B TIMEFORMAT
-が使われます。
+で指定できます。
 .PP
 .\"O Each command in a pipeline is executed as a separate process (i.e., in a
 .\"O subshell).
@@ -1057,7 +1061,7 @@ NOT を取ったものになります。
 .BR ; ,
 .BR & ,
 .BR && ,
-.BR || ,
+.BR ||
 のいずれかで区切って並べ、最後に
 .BR ; ,
 .BR & ,
@@ -1086,7 +1090,7 @@ NOT を取ったものになります。
 .\"O A sequence of one or more newlines may appear in a \fIlist\fP instead
 .\"O of a semicolon to delimit commands.
 \fIリスト\fP 中では、コマンドの区切りとして、
-セミコロンの代わりに一つ以上の改行の並びが使われることもあります。
+セミコロンの代わりに一つ以上の改行が使われることもあります。
 .PP
 .\"O If a command is terminated by the control operator
 .\"O .BR & ,
@@ -1198,8 +1202,7 @@ AND リストと OR リストの返却ステータスは、
 \fIlist\fP の最後は改行文字かセミコロンでなければなりません。これは
 \fIグループコマンド(group command)\fP と呼ばれます。返却ステータスは
 \fIlist\fP の終了ステータスです。
-
-メタキャラクターである \fB(\fP と \fB)\fP と違い、 \fB{\fP と \fB}\fP は \fI予約語\fP であり、予約語として認識される場所に現われる必要があることに注意してください。
+メタ文字である \fB(\fP と \fB)\fP の組と違い、 \fB{\fP と \fB}\fP の組は \fI予約語\fP であり、予約語として認識される場所に現われる必要があることに注意してください。
 これらは単語分割の対象とならないため、
 \fIリスト\fP との間が空白またはシェルのメタ文字で分かれている必要があります。
 .TP
@@ -1240,7 +1243,8 @@ AND リストと OR リストの返却ステータスは、
 の間の単語に対しては行われません。
 チルダ展開、パラメータと変数の展開、算術式展開、コマンド置換、
 プロセス置換、クォート除去は実行されます。
-\fB\-f\fP などの条件演算子は最初に認識されるため、クォートしてはいけません。
+\fB\-f\fP などの条件演算子がプライマリとして認識されるためには、
+クォートされていてはいけません。
 .if t .sp 0.5
 .if n .sp 1
 .\"O When used with \fB[[\fP, the \fB<\fP and \fB>\fP operators sort
@@ -1267,9 +1271,10 @@ AND リストと OR リストの返却ステータスは、
 .\"O string.
 が有効であれば、
 アルファベットの大文字と小文字を考慮せずにマッチングが行われます。
-返り値は、文字列がマッチしたとき (\fB==\fP) またはマッチしなかったとき
-(\fB!=\fP) に 0 となり、そうでない場合に 1 となります。
-パターン中のどの部分でも文字としてマッチングさせるにはクォートします。
+返り値は、\fB==\fP 演算子では文字列がマッチしたときに、
+\fB!=\fP 演算子では文字列がマッチしなかったときに 0 となり、
+そうでない場合に 1 となります。
+パターン中のどの部分でもただの文字列としてマッチングさせるにはクォートします。
 .if t .sp 0.5
 .if n .sp 1
 .\"O An additional binary operator, \fB=~\fP, is available, with the same
@@ -1306,7 +1311,7 @@ AND リストと OR リストの返却ステータスは、
 .\"O .B BASH_REMATCH
 .\"O with index 0 is the portion of the string
 .\"O matching the entire regular expression.
-パターン中のどの部分でも文字としてマッチングさせるにはクォートします。
+パターン中のどの部分でもただの文字列としてマッチングさせるにはクォートします。
 正規表現中の括弧による部分式にマッチした部分文字列は、配列変数
 .SM
 .BR BASH_REMATCH
@@ -1422,11 +1427,11 @@ AND リストと OR リストの返却ステータスは、
 次に、算術式\fIexpr2\fPがゼロになるまで繰り返し評価されます。
 算術式\fIexpr2\fPの評価結果がゼロでなければ、そのたびごとに\fIlist\fPが実行され、
 算術式\fIexpr3\fPが評価されます。
-どの算術式も省略された場合は、
-評価結果が 1 とみなされた場合のように振舞います。
+どの算術式も、省略された場合は、
+評価結果が 1 であったものとして振舞います。
 返却ステータスは \fIlist\fP 中で実行された
 最後のコマンドの終了ステータスとなりますが、
-算術式のいずれかが無効である場合には不正な値となります。
+算術式のいずれかが不正である場合には偽となります。
 .TP
 \fBselect\fP \fIname\fP [ \fBin\fP \fIword\fP ] ; \fBdo\fP \fIlist\fP ; \fBdone\fP
 .\"O The list of words following \fBin\fP is expanded, generating a list
@@ -1508,7 +1513,7 @@ EOF を読み込むとコマンドが終了します。
 を参照) と同じ規則が用いられます。
 \fIword\fP には、チルダ展開、パラメータと変数の展開、算術式展開、
 コマンド置換、プロセス置換、クォート除去が実行されます。
-それぞれの \fpattern\fP は、チルダ展開、パラメータと変数の展開、
+それぞれの \fIpattern\fP は、チルダ展開、パラメータと変数の展開、
 算術式展開、コマンド置換、プロセス置換、クォート除去のうえで比較されます。
 .\"O If the shell option
 .\"O .B nocasematch
@@ -1529,7 +1534,6 @@ EOF を読み込むとコマンドが終了します。
 .B nocasematch
 が有効であれば、
 アルファベットの大文字と小文字を考慮せずにマッチングが行われます。
-パターン中のどの部分でも文字としてマッチングさせるにはクォートします。
 マッチするものが見つかると、これに対応する \fIlist\fP が実行されます。
 \fB;;\fP 演算子を使うと、
 最初にマッチしたパターン以降のマッチングは試みられません。
@@ -1557,10 +1561,10 @@ EOF を読み込むとコマンドが終了します。
 最初に
 .B if 
 .I list
-が実行されます。この終了ステータスが 0 ならば、\fBthen\fP \fIlist\fP
+が実行されます。\fIlist\fP の終了ステータスが 0 ならば、\fBthen\fP \fIlist\fP
 が実行されます。
 そうでなければ \fBelif\fP \fIlist\fP がそれぞれ順番に実行され、
-この終了ステータスが 0 ならば、対応する \fBthen\fP \fIlist\fP
+\fIlist\fP の終了ステータスが 0 ならば、対応する \fBthen\fP \fIlist\fP
 が実行され、コマンドが終了します。そうでなければ、\fBelse\fP \fIlist\fP
 が (もし存在すれば) 実行されます。
 終了ステータスは最後に実行されたコマンドの終了ステータスですが、
@@ -1580,9 +1584,9 @@ EOF を読み込むとコマンドが終了します。
 .\"O .I list-1
 .\"O returns a non-zero exit status.
 \fBwhile\fP コマンドは、\fIlist-1\fP 中の最後のコマンドが終了ステータス
-0 を返すまで、繰り返して \fBdo\fP \fIlist-2\fP を実行します。\fBuntil\fP
+0 を返す間、繰り返して \fBdo\fP \fIlist-2\fP を実行します。\fBuntil\fP
 コマンドは \fBwhile\fP コマンドとほぼ同じですが、
-評価の条件が否定となる点が異なります。
+評価の条件が逆となる点が異なります。
 .I list-2
 は
 .I list-1
@@ -1603,8 +1607,8 @@ EOF を読み込むとコマンドが終了します。
 .\"O A coprocess is executed asynchronously in a subshell, as if the command
 .\"O had been terminated with the \fB&\fP control operator, with a two-way pipe
 .\"O established between the executing shell and the coprocess.
-\fIコプロセス (coprocess)\fP は、予約語 \fBcoproc\fP
-で始まるシェルのコマンドです。
+\fIコプロセス (coprocess)\fP とは、予約語 \fBcoproc\fP
+で始まるシェルのコマンドのことです。
 コプロセスは、コマンドが制御演算子 \fB&\fP で終わっているときのように、
 サブシェルで非同期に実行されます。
 実行したシェルとコプロセスの間には、双方向のパイプが設けられます
@@ -1638,10 +1642,10 @@ EOF を読み込むとコマンドが終了します。
 .B 配列
 を参照) が作られます。
 .I command
-.\"O The standard input of
-の標準出力は、実行しているシェルのファイル・ディスクリプターと
+の標準出力は、実行しているシェルのファイル・ディスクリプターの一つと
 パイプによって接続されます。
 このファイル・ディスクリプターは \fINAME\fP[0] に代入されます。
+.\"O The standard input of
 .\"O .I command
 .\"O is connected via a pipe to a file descriptor in the executing shell,
 .\"O and that file descriptor is assigned to \fINAME\fP[1].
@@ -1679,8 +1683,8 @@ EOF を読み込むとコマンドが終了します。
 .\"O A shell function is an object that is called like a simple command and
 .\"O executes a compound command with a new set of positional parameters.
 .\"O Shell functions are declared as follows:
-シェル関数は、単純なコマンドとして呼び出されて、
-新しい位置パラメータのセットを持つ複合コマンドとして実行されるものです。
+シェル関数とは、単純なコマンドとして呼び出されて、
+新しい位置パラメーターの一式を持つ複合コマンドを実行するもののことです。
 シェル関数は以下の形式で宣言します:
 .TP
 \fIname\fP () \fIcompound\-command\fP [\fIredirection\fP]
@@ -1724,9 +1728,8 @@ EOF を読み込むとコマンドが終了します。
 .\"O .SM
 .\"O .B FUNCTIONS
 .\"O below.)
-関数定義の終了ステータスは、文法エラーが置きた場合や、
-読み込み専用の関数が同じ名前で定義れていた場合を除き、0 です。
-
+関数定義の終了ステータスは、文法エラーが起きた場合や、
+読み込み専用の関数が同じ名前で定義されていた場合を除き、0 です。
 関数を実行したときの終了ステータスは、実体の中で最後に実行されたコマンドの終了ステータスになります (後述の
 .SM
 .B 関数
@@ -1772,7 +1775,7 @@ EOF を読み込むとコマンドが終了します。
 .\"O reserved words from being recognized as such, and to prevent
 .\"O parameter expansion.
 \fIクォート (quoting)\fP を使うと、
-特定の文字や単語のシェルに対する特別な意味を取り除けます。
+特定の文字や単語のシェルに対する特別な意味をなくします。
 クォートを用いると、特殊文字の特殊な扱いを無効にしたり、
 予約語が予約語として識別されることを防いだり、
 パラメータの展開を防いだりできます。
@@ -1795,12 +1798,12 @@ EOF を読み込むとコマンドが終了します。
 .\"O below), the
 .\"O \fIhistory expansion\fP character, usually \fB!\fP, must be quoted
 .\"O to prevent history expansion.
-履歴展開の機能 (後述の
+コマンドの履歴展開の機能 (後述の
 .SM
 .B 履歴の展開
 を参照) 
-が使われているときには、\fI履歴展開\fP 文字 (通常は \fB!\fP) は、
-履歴展開を防ぐためにクォートしなければなりません。
+が使われているときには、\fI履歴展開\fP 文字 (通常は \fB!\fP) の
+履歴展開を防ぐためにはクォートしなければなりません。
 .PP
 .\"O There are three quoting mechanisms: the
 .\"O .IR "escape character" ,
@@ -1856,13 +1859,14 @@ EOF を読み込むとコマンドが終了します。
 保持しますが、
 .BR $ ,
 .BR \` ,
-.BR \e ,
+.BR \e
 は例外となります。
 履歴展開が有効なときには、
-.BR ! .
+.BR !
+がこれに加わります。
 .B $
 と
-.B `
+.B \`
 はダブルクォートの内部でも特殊な意味を失いません。
 バックスラッシュの場合は、次の文字が
 .BR $ ,
@@ -3992,7 +3996,7 @@ CPU のパーセンテージ。(%U + %S) / %R で算出されます。
 対話シェルではこの値は、プライマリのプロンプトを出してから
 入力を待つ秒数として解釈されます
 この秒数待って入力が来ないと、
-.B Bash
+.B bash
 は終了します
 .TP
 .B TMPDIR
@@ -6983,7 +6987,6 @@ and
 .\"O When used with \fB[[\fP, the \fB<\fP and \fB>\fP operators sort
 .\"O lexicographically using the current locale.
 .\"O The \fBtest\fP command sorts using ASCII ordering.
-
 \fB[[\fP では \fB<\fP と \fB>\fP の演算子は現在のロケールでの辞書順で
 比較します。\fBtest\fP コマンドは ASCII 順で比較します。
 .sp 1
@@ -7148,7 +7151,7 @@ and
 .\"O True if the strings are equal.  \fB=\fP should be used
 .\"O with the \fBtest\fP command for POSIX conformance.
 文字列が同じならば真となります。
-POSIX に適合する形で \fBtest\fP コマンドを使う場合には
+POSIX に準拠する形で \fBtest\fP コマンドを使う場合には
 \fB=\fP を使う必要があります。
 .TP
 \fIstring1\fP \fB!=\fP \fIstring2\fP
@@ -9630,7 +9633,6 @@ yank\-last\-arg (M\-.\^, M\-_\^)
 \fByank\-last\-arg\fP を繰り返して呼び出すと、
 履歴リストを遡って参照が行われ、
 それぞれの行の最後の引き数が順番に挿入されます。
-
 繰り返して呼び出すときの引き数は、履歴の中を動く方向を決めます。
 負の引き数は、履歴の中を動く方向 (後方または前方) を反転します。
 履歴の展開での "!$" の指定のように、
@@ -9710,7 +9712,7 @@ yank\-last\-arg (M\-.\^, M\-_\^)
 .\"O and \fIemacs\fP as the editor, in that order.
 エディタを起動して現在のコマンドラインの内容を開き、
 その結果をシェルのコマンドとして実行します。
-\fBBash\fP はエディタとして
+\fBbash\fP はエディタとして
 .SM
 .BR $VISUAL ,
 .SM
@@ -15490,7 +15492,7 @@ version 3.1 の動作に変更します。
 は、条件コマンド \fB[[\fP の \fB<\fP 演算子と \fB>\fP
 演算子によるロケール固有の文字列比較に関して、
 version 3.2 の動作に変更します。
-Bash の bash-4.1 より前のバージョンでは、ASCII コードの照合と
+bash の bash-4.1 より前のバージョンでは、ASCII コードの照合と
 .IR strcmp (3)
 を使います。
 bash-4.1 およびそれ以後のバージョンでは、
@@ -17187,11 +17189,11 @@ chet.ramey@case.edu
 .\"O It suffices to place the sequence of commands between
 .\"O parentheses to force it into a subshell, which may be stopped as
 .\"O a unit.
-複合コマンドや `a ; b ; c' の形式のコマンド列は、
+複合コマンドや `a ; b ; c' の形式のコマンドの並びは、
 プロセスのサスペンドを行う際に綺麗に扱うことができません。
 プロセスを停止すると、
-シェルはコマンド列の次のコマンドを即座に実行するからです。
-この問題はコマンド列を括弧の中に置いて
+シェルはコマンドの並びの次のコマンドを即座に実行するからです。
+この問題はコマンドの並びを括弧の中に置いて
 サブシェルに実行させることで解決できます。
 こうすれば、ひとまとまりのものとして停止できます。
 .PP
