@@ -114,8 +114,8 @@ bash \- GNU Bourne-Again SHell
 .\"O Shell and Utilities portion of the IEEE POSIX specification
 .\"O (IEEE Standard 1003.1).
 .B bash
-は IEEE POSIX Shell and Tools specification (IEEE Working Group 1003\.1)
-に準拠する実装を目指しています。
+は IEEE POSIX specification (IEEE Working Group 1003\.1)
+の Shell and Utilities に準拠する実装を目指しています。
 .\"O .B Bash
 .\"O can be configured to be POSIX-conformant by default.
 .B bash
@@ -390,7 +390,7 @@ bash \- GNU Bourne-Again SHell
 .\"O Change the behavior of \fBbash\fP where the default operation differs
 .\"O from the POSIX standard to match the standard (\fIposix mode\fP).
 \fBbash\fP の動作のうち、
-デフォルトの振舞いが POSIX 1003.2 の標準と異なる部分を、
+デフォルトの振舞いが POSIX 標準と異なる部分を、
 標準に準拠するように変更します (\fIposix モード\fP)。
 .TP
 .B \-\-restricted
@@ -398,7 +398,7 @@ bash \- GNU Bourne-Again SHell
 .\"O .SM
 .\"O .B "RESTRICTED SHELL"
 .\"O below).
-シェルの動作を制限します (後述の
+シェルを制限された状態にします (後述の
 .SM
 .B 制限付きのシェル
 セクションを参照)。
@@ -486,7 +486,7 @@ bash \- GNU Bourne-Again SHell
 .\"O option.
 \fI対話的な\fPシェルとは、
 オプションでない引き数がなく、
-標準入力と標準出力がいずれも端末に接続されていて (これは
+標準入力と標準エラー出力がいずれも端末に接続されていて (これは
 .IR isatty (3)
 で調べられます)、
 .B \-c
@@ -937,7 +937,7 @@ bash \- GNU Bourne-Again SHell
 .\"O one of the control operators
 .\"O .B |
 .\"O or \fB|&\fP.
-\fIパイプライン (pipeline)\fPは、記号
+\fIパイプライン (pipeline)\fPは、制御演算子
 .B |
 または \fB|&\fP で区切った 1 つ以上のコマンドの並びです。
 .\"O The format for a pipeline is:
@@ -959,7 +959,7 @@ bash \- GNU Bourne-Again SHell
 .I command
 の標準出力は
 .IR command2
-の標準入力に接続されます。
+の標準入力にパイプで接続されます。
 この接続は、
 コマンドで指定したどのリダイレクションよりも先に実行されます
 (後述の
@@ -1078,11 +1078,11 @@ bash \- GNU Bourne-Again SHell
 .BR & ,
 .BR && ,
 .BR ||
-のいずれかで区切って並べ、最後に
+のいずれかで区切って並べたものです。パイプラインの最後に
 .BR ; ,
 .BR & ,
 .BR <newline>
-のいずれか (これは省略可能です) を置いたものです。
+のいずれかを置くこともできます。
 .PP
 .\"O Of these list operators,
 .\"O .B &&
@@ -1165,7 +1165,7 @@ AND リストは
 OR リストは
 .RS
 .PP
-\fIcommand1\fP \fB\(bv\(bv\fP \fIcommand2\fP
+\fIcommand1\fP \fB||\fP \fIcommand2\fP
 .PP
 .RE
 .PP
@@ -1180,7 +1180,7 @@ OR リストは
 AND リストと OR リストの返却ステータスは、
 リスト中で最後に実行されたコマンドの終了ステータスです。
 .\"O .SS Compound Commands
-.SS 複合コマンド(Compound Commands)
+.SS 複合コマンド (Compound Commands)
 .PP
 .\"O A \fIcompound command\fP is one of the following:
 \fI複合コマンド (compound command)\fP を以下に示します:
@@ -1218,7 +1218,7 @@ AND リストと OR リストの返却ステータスは、
 \fIlist\fP の最後は改行文字かセミコロンでなければなりません。これは
 \fIグループコマンド(group command)\fP と呼ばれます。返却ステータスは
 \fIlist\fP の終了ステータスです。
-メタ文字である \fB(\fP と \fB)\fP の組と違い、 \fB{\fP と \fB}\fP の組は \fI予約語\fP であり、予約語として認識される場所に現われる必要があることに注意してください。
+メタ文字である \fB(\fP や \fB)\fP と違い、 \fB{\fP と \fB}\fP は \fI予約語\fP であり、予約語として認識される場所に現われる必要があることに注意してください。
 これらは単語分割の対象とならないため、
 \fIリスト\fP との間が空白またはシェルのメタ文字で分かれている必要があります。
 .TP
@@ -1266,7 +1266,7 @@ AND リストと OR リストの返却ステータスは、
 .\"O When used with \fB[[\fP, the \fB<\fP and \fB>\fP operators sort
 .\"O lexicographically using the current locale.
 \fB[[\fP においては、\fB<\fP 演算子と \fB>\fP 演算子は、
-現在のロケールにおける辞書順を表します。
+現在のロケールにおける辞書順で比較します。
 .if t .sp 0.5
 .if n .sp 1
 .\"O When the \fB==\fP and \fB!=\fP operators are used, the string to the
@@ -1290,7 +1290,8 @@ AND リストと OR リストの返却ステータスは、
 返り値は、\fB==\fP 演算子では文字列がマッチしたときに、
 \fB!=\fP 演算子では文字列がマッチしなかったときに 0 となり、
 そうでない場合に 1 となります。
-パターン中のどの部分でもただの文字列としてマッチングさせるにはクォートします。
+パターン中のどの部分でも、クォートすることで、
+ただの文字列としてマッチングさせることができます。
 .if t .sp 0.5
 .if n .sp 1
 .\"O An additional binary operator, \fB=~\fP, is available, with the same
@@ -1327,7 +1328,8 @@ AND リストと OR リストの返却ステータスは、
 .\"O .B BASH_REMATCH
 .\"O with index 0 is the portion of the string
 .\"O matching the entire regular expression.
-パターン中のどの部分でもただの文字列としてマッチングさせるにはクォートします。
+パターン中のどの部分でも、クォートすることで、
+ただの文字列としてマッチングさせることができます。
 正規表現中の括弧による部分式にマッチした部分文字列は、配列変数
 .SM
 .BR BASH_REMATCH
@@ -1484,7 +1486,7 @@ AND リストと OR リストの返却ステータスは、
 .B パラメータ
 を参照)。続いて
 .B PS3
-が表示され、標準入力から 1 行の読み込みが行われます。
+プロンプトが表示され、標準入力から 1 行の読み込みが行われます。
 表示された単語のいずれかに対応する数字がこの行に含まれていれば、
 .I name
 の値としてその単語が設定されます。
@@ -1601,7 +1603,7 @@ EOF を読み込むとコマンドが終了します。
 .\"O .I list-1
 .\"O returns a non-zero exit status.
 \fBwhile\fP コマンドは、\fIlist-1\fP 中の最後のコマンドが終了ステータス
-0 を返す間、繰り返して \fBdo\fP \fIlist-2\fP を実行します。\fBuntil\fP
+0 を返す間、繰り返して \fIlist-2\fP を実行します。\fBuntil\fP
 コマンドは \fBwhile\fP コマンドとほぼ同じですが、
 評価の条件が逆となる点が異なります。
 .I list-2
@@ -1687,7 +1689,7 @@ EOF を読み込むとコマンドが終了します。
 .\"O The \fBwait\fP
 .\"O builtin command may be used to wait for the coprocess to terminate.
 ファイル・ディスクリプターは、標準的な単語展開により、
-シェルのコマンドの引き数やリダイレクションに指定できます
+シェルのコマンドの引き数やリダイレクションに指定できます。
 コプロセスの実行で生成されたシェルのプロセス ID は、変数
 \fINAME\fP_PID の値になります。
 コプロセスの終了を待つには、組み込みコマンド \fBwait\fP を使います。
@@ -1750,7 +1752,7 @@ EOF を読み込むとコマンドが終了します。
 関数を実行したときの終了ステータスは、実体の中で最後に実行されたコマンドの終了ステータスになります (後述の
 .SM
 .B 関数
-を参照)
+を参照)。
 .\"O .SH COMMENTS
 .SH コメント (COMMENTS)
 .\"O In a non-interactive shell, or an interactive shell in which the
