@@ -166,10 +166,11 @@ bash \- GNU Bourne-Again SHell
 .\"O Make
 .\"O .B bash
 .\"O act as if it had been invoked as a login shell (see
-ログインシェル (後述の
-.SM
+.\"O .SM
 .\"O .B INVOCATION
 .\"O below).
+ログインシェル (後述の
+.SM
 .B 起動
 セクションを参照)
 として起動されたかのように
@@ -178,26 +179,29 @@ bash \- GNU Bourne-Again SHell
 .TP
 .B \-r
 .\"O If the
-.B \-r
+.\"O .B \-r
 .\"O option is present, the shell becomes
 .\"O .I restricted
 .\"O (see
+.\"O .SM
+.\"O .B "RESTRICTED SHELL"
+.\"O below).
+.B \-r
 オプションが指定されると、
 .B bash
 は
 .I 制限された状態 (restricted)
 となります (後述の
 .SM
-.\"O .B "RESTRICTED SHELL"
-.\"O below).
 .B 制限付きのシェル
 を参照)。
 .TP
 .B \-s
 .\"O If the
-.B \-s
+.\"O .B \-s
 .\"O option is present, or if no arguments remain after option
 .\"O processing, then commands are read from the standard input.
+.B \-s
 オプションが指定された場合と、
 オプションを全て処理した後に引き数が残っていなかった場合には、
 コマンドは標準入力から読み込まれます。
@@ -254,7 +258,7 @@ bash \- GNU Bourne-Again SHell
 はオプションの終わりを示し、それ以降のオプション処理を行いません。
 .\"O .B \-\-
 .\"O are treated as filenames and arguments.  An argument of
-.\"O .B \-\-
+.\"O .B \-
 .\"O is equivalent to \fB\-\-\fP.
 .B \-\-
 以降の引き数は全て、ファイル名や引き数として扱われます。
@@ -599,6 +603,7 @@ bash \- GNU Bourne-Again SHell
 .\"O .B bash
 .\"O is started non-interactively, to run a shell script, for example, it
 .\"O looks for the variable
+.\"O .SM
 .\"O .B BASH_ENV
 .\"O in the environment, expands its value if it appears there, and uses the
 .\"O expanded value as the name of a file to read and execute.
@@ -778,8 +783,14 @@ bash \- GNU Bourne-Again SHell
 .\"O If the shell is started with the effective user (group) id not equal to the
 .\"O real user (group) id, and the \fB\-p\fP option is not supplied, no startup
 .\"O files are read, shell functions are not inherited from the environment, the
+.\"O .SM
+.\"O .BR SHELLOPTS ,
+.\"O .SM
+.\"O .BR BASHOPTS ,
+.\"O .SM
 .\"O .BR CDPATH ,
 .\"O and
+.\"O .SM
 .\"O .B GLOBIGNORE
 .\"O variables, if they appear in the environment, are ignored,
 .\"O and the effective user id is set to the real user id.
@@ -821,7 +832,7 @@ bash \- GNU Bourne-Again SHell
 .\"O .BR token .
 .B 単語 (word)
 シェルが 1 単位とみなす文字の並び。
-.BR トークン(token)
+.B トークン (token)
 とも言われます。
 .TP
 .\"O .B name
@@ -1007,9 +1018,11 @@ bash \- GNU Bourne-Again SHell
 シェルが \fIposix モード\fP のときには、
 後に続くのが `-' で始まるトークンであれば \fBtime\fP を予約語と認識しません。
 .\"O The
+.\"O .SM
 .\"O .B TIMEFORMAT
 .\"O variable may be set to a format string that specifies how the timing
 .\"O information should be displayed; see the description of
+.\"O .SM
 .\"O .B TIMEFORMAT
 .\"O under
 .\"O .B "Shell Variables"
@@ -1050,10 +1063,13 @@ bash \- GNU Bourne-Again SHell
 .PP
 .\"O A \fIlist\fP is a sequence of one or more pipelines separated by one
 .\"O of the operators
+.\"O .BR ; ,
+.\"O .BR & ,
 .\"O .BR && ,
 .\"O or
 .\"O .BR || ,
 .\"O and optionally terminated by one of
+.\"O .BR ; ,
 .\"O .BR & ,
 .\"O or
 .\"O .BR <newline> .
@@ -1420,13 +1436,13 @@ AND リストと OR リストの返却ステータスは、
 .\"O If any expression is omitted, it behaves as if it evaluates to 1.
 .\"O The return value is the exit status of the last command in \fIlist\fP
 .\"O that is executed, or false if any of the expressions is invalid.
-最初に、算術式\fIexpr1\fPが、後述の
+最初に、算術式 \fIexpr1\fP が、後述の
 .SM
 .BR 算術式評価
 で説明される規則に従って評価されます。
-次に、算術式\fIexpr2\fPがゼロになるまで繰り返し評価されます。
-算術式\fIexpr2\fPの評価結果がゼロでなければ、そのたびごとに\fIlist\fPが実行され、
-算術式\fIexpr3\fPが評価されます。
+次に、算術式 \fIexpr2\fP がゼロになるまで繰り返し評価されます。
+算術式 \fIexpr2\fP の評価結果がゼロでなければ、そのたびごとに\fIlist\fPが実行され、
+算術式 \fIexpr3\fP が評価されます。
 どの算術式も、省略された場合は、
 評価結果が 1 であったものとして振舞います。
 返却ステータスは \fIlist\fP 中で実行された
@@ -1550,6 +1566,7 @@ EOF を読み込むとコマンドが終了します。
 [ \fBelif\fP \fIlist\fP; \fBthen\fP \fIlist\fP; ] ... \
 [ \fBelse\fP \fIlist\fP; ] \fBfi\fP
 .\"O The
+.\"O .B if
 .\"O .I list
 .\"O is executed.  If its exit status is zero, the
 .\"O \fBthen\fP \fIlist\fP is executed.  Otherwise, each \fBelif\fP
