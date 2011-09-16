@@ -10768,8 +10768,9 @@ complete -D -F _completion_loader
 .\"O and
 .\"O .SM
 .\"O .BR HISTCONTROL .
-変数 \fBHISTSIZE\fP の値が、
-履歴リストに保存するコマンドの数になります。
+変数
+.SM HISTSIZE
+の値が、履歴リストに保存するコマンドの数になります。
 過去に入力したコマンドのうち、最新
 .SM
 .B HISTSIZE
@@ -10800,10 +10801,10 @@ complete -D -F _completion_loader
 .\"O the number of lines specified by the value of
 .\"O .SM
 .\"O .BR HISTFILESIZE .
-起動時に、履歴は
+起動時に、履歴は変数
 .SM
 .B HISTFILE
-変数 (デフォルトは \fI~/.bash_history\fP)
+(デフォルトは \fI~/.bash_history\fP)
 が示すファイルの内容で初期化されます。
 .SM
 .B HISTFILE
@@ -10820,7 +10821,7 @@ complete -D -F _completion_loader
 .\"O variable.
 履歴ファイルを読み込むときに、履歴のコメント文字で始まり直後に数字が続く行は、
 直前の履歴行のタイムスタンプとして解釈されます。
-こうしたタイムスタンプを表示するかどうかは変数
+こうしたタイムスタンプを表示するかどうかは、変数
 .SM
 .B HISTTIMEFORMAT
 の値により決まります。
@@ -10832,10 +10833,10 @@ complete -D -F _completion_loader
 .\"O .BR $HISTFILE .
 対話的なシェルが終了する際には、最近の
 .SM
-.B HISTSIZE
+.B $HISTSIZE
 個の行が履歴リストから
 .SM
-.B HISTFILE
+.B $HISTFILE
 にコピーされます。
 .\"O If the
 .\"O .B histappend
@@ -10847,7 +10848,7 @@ complete -D -F _completion_loader
 .\"O .B "SHELL BUILTIN COMMANDS"
 .\"O below), the lines are appended to the history file,
 .\"O otherwise the history file is overwritten.
-シェルオプションの
+シェルオプション
 .B histappend
 (
 .SM
@@ -10855,7 +10856,7 @@ complete -D -F _completion_loader
 の項の
 .B shopt
 の説明を参照) が有効になっていると、
-これらの行は履歴ファイルの末尾に追加されます。
+これらの行が履歴ファイルの末尾に追加されます。
 このオプションが無効ならば、履歴ファイルは上書きされます。
 .\"O If
 .\"O .SM
@@ -10876,8 +10877,8 @@ complete -D -F _completion_loader
 変数
 .SM
 .B HISTTIMEFORMAT
-が設定されている場合、シェルのセッションを超えて保存されるよう、
-タイムスタンプは履歴のコメント文字を付けて履歴ファイルに書き込まれます。
+が設定されている場合、シェルのセッションを越えて保持されるよう、
+タイムスタンプが履歴のコメント文字を付けて履歴ファイルに書き込まれます。
 履歴のコメント文字は、タイムスタンプをほかの履歴行と区別するために使われます。
 .\"O After saving the history, the history file is truncated
 .\"O to contain no more than
@@ -10906,7 +10907,7 @@ complete -D -F _completion_loader
 (後述の
 .SM
 .B シェルの組み込みコマンド
-を参照) を用いると、履歴リストの一部をリスト・編集して再実行できます。
+を参照) を用いると、履歴リストの一部を表示・編集して再実行できます。
 .\"O The
 .\"O .B history
 .\"O builtin may be used to display or modify the history list and
@@ -10918,7 +10919,7 @@ complete -D -F _completion_loader
 .B history
 を用いると、履歴リストを表示・編集したり、
 履歴ファイルを操作したりできます。
-コマンドラインを編集する際には、
+コマンドライン編集を使っている場合には、
 各編集モードでいろいろな検索コマンドが利用でき、
 履歴リストへアクセスできます。
 .PP
@@ -10985,7 +10986,7 @@ complete -D -F _completion_loader
 .\"O by default.
 このシェルは、
 .B csh
-の履歴展開と同じような機能をサポートしています。
+の履歴展開と同じような履歴機能をサポートしています。
 このセクションでは、履歴展開で使用できる記法・機能を説明します。
 この機能は対話的シェルならばデフォルトで有効になっていますが、
 組み込みコマンド
@@ -11025,7 +11026,7 @@ complete -D -F _completion_loader
 .\"O history expansion character, which is \^\fB!\fP\^ by default.
 .\"O Only backslash (\^\fB\e\fP\^) and single quotes can quote
 .\"O the history expansion character.
-履歴展開が実行されるのは入力行全体を読み込んだ直後であり、
+履歴展開が実行されるのは、入力行全体を読み込んだ直後であり、
 シェルが行を単語に分割するよりも前です。
 履歴展開の動作は 2 段階で行われます。
 まず最初に、置換に使う行を履歴リストから選びます。
@@ -11074,9 +11075,9 @@ complete -D -F _completion_loader
 .B shopt
 の説明を参照)、かつ
 .B readline
-.\"O Instead, the expanded line is reloaded into the
 が使われている場合には、
 履歴置換を行った結果はすぐにはシェルのパーザに渡されません。
+.\"O Instead, the expanded line is reloaded into the
 .\"O .B readline
 .\"O editing buffer for further modification.
 .\"O If
@@ -11119,8 +11120,9 @@ complete -D -F _completion_loader
 .B history
 の
 .B \-s
-オプションを使うと、
-コマンドを履歴リストの末尾に (実際の実行はせずに) 追加できます。
+オプションを使うと、実際にコマンドの実行をせずに、
+コマンドを履歴リストの末尾に追加でき、
+それ以降の呼び出しで利用できるようになります。
 .PP
 .\"O The shell allows control of the various characters used by the
 .\"O history expansion mechanism (see the description of
@@ -11136,8 +11138,8 @@ complete -D -F _completion_loader
 .\"O The shell uses
 .\"O the history comment character to mark history timestamps when
 .\"O writing the history file.
-シェルは履歴ファイルに書き込むときに、履歴のタイムスタンプを示す
-のに履歴のコメント文字を使います。
+シェルは、履歴ファイルに書き込むときに、履歴のコメント文字を使って、
+履歴のタイムスタンプであることが分かるようにします。
 .\"O .SS Event Designators
 .SS イベント指示子 (Event Designator)
 .PP
@@ -11147,7 +11149,7 @@ complete -D -F _completion_loader
 .\"O position in the history list.
 イベント指示子は、
 履歴リスト中のコマンドラインエントリを参照するものです。
-絶対位置の参照でない限り、イベントは履歴リスト中で
+絶対位置の参照でない限り、イベントは履歴リスト内の
 現在の位置からの相対的な位置を示します。
 .PP
 .PD 0
@@ -11159,8 +11161,8 @@ complete -D -F _completion_loader
 .\"O or ( (when the \fBextglob\fP shell option is enabled using
 .\"O the \fBshopt\fP builtin).
 履歴置換を開始します。ただし、
-.BR ブランク文字、
-改行文字、=、
+.BR ブランク文字 、
+改行文字、 = 、
 ( (シェルオプション \fBextglob\fP が組み込みコマンド \fBshopt\fP
 によって有効になっている場合) のいずれかが後に続く場合は除きます。
 .TP
@@ -11168,23 +11170,24 @@ complete -D -F _completion_loader
 .\"O Refer to command line
 .\"O .IR n .
 .I n
-行目のコマンドラインを参照します。
+個目のコマンドラインを参照します。
 .TP
 .B !\-\fIn\fR
 .\"O Refer to the current command minus
 .\"O .IR n .
 現在から
 .I n
-行前のコマンドラインを参照します。
+個前のコマンドを参照します。
 .TP
 .B !!
 .\"O Refer to the previous command.  This is a synonym for `!\-1'.
-1 行前のコマンドラインを参照します。`!\-1' と同義です。
+直前のコマンドを参照します。`!\-1' と同義です。
 .TP
 .B !\fIstring\fR
 .\"O Refer to the most recent command preceding the current position in the
 .\"O history list starting with
 .\"O .IR string .
+.\"O motoki: preceding the current positoion in the history list に対応する訳がない。
 .IR string
 で始まるコマンドのうち、一番現在に近いところで実行したものを参照します。
 .TP
@@ -11195,6 +11198,7 @@ complete -D -F _completion_loader
 .\"O The trailing \fB?\fP may be omitted if
 .\"O .I string
 .\"O is followed immediately by a newline.
+.\"O motoki: preceding the current positoion in the history list に対応する訳がない。
 .I string
 を含むコマンドのうち、一番現在に近いところで実行したものを参照します。
 .I string
@@ -11218,7 +11222,7 @@ complete -D -F _completion_loader
 .TP
 .B !#
 .\"O The entire command line typed so far.
-今までのところまでに打ち込んだコマンドライン全体です。
+これまでに打ち込んだコマンドライン全体。
 .PD
 .\"O .SS Word Designators
 .SS 単語指示子 (Word Designators)
@@ -11228,7 +11232,7 @@ complete -D -F _completion_loader
 .\"O .B :
 .\"O separates the event specification from the word designator.
 単語指示子 (word designator) は、
-イベントから欲しい単語を選ぶときに用いられます。
+イベントから所望の欲しい単語を選ぶときに用いられます。
 イベント指定と単語指示子のセパレータには
 .B :
 を用います。
@@ -11249,8 +11253,8 @@ complete -D -F _completion_loader
 .BR \- ,
 .BR %
 のいずれかで始まる場合には、このセパレータは省略できます。
-単語には行の先頭から番号が振られます。
-先頭の単語が 0 番目になります。
+単語には行の先頭から順に番号が振られ、
+先頭の単語が 0 になります。
 単語は現在の行に、空白 1 つで区切られて挿入されます。
 .PP
 .PD 0
@@ -11259,7 +11263,7 @@ complete -D -F _completion_loader
 .\"O The zeroth word.  For the shell, this is the command
 .\"O word.
 .B 0 (ゼロ)
-0 番目の単語。このシェルにとっては、これはコマンドを表す単語です。
+0 番目の単語。シェルにとっては、コマンドを表す単語になります。
 .TP
 .I n
 .\"O The \fIn\fRth word.
@@ -11284,13 +11288,14 @@ complete -D -F _completion_loader
 .B *
 .\"O All of the words but the zeroth.  This is a synonym
 .\"O for `\fI1\-$\fP'.  It is not an error to use
-0 番目を除く全ての単語。これは `\fI1\-$\fP' の別表現です。
-イベント中に 1 つしか単語が現われないときに
-.B *
+.\"O .B *
 .\"O if there is just one
 .\"O word in the event; the empty string is returned in that case.
+0 番目を除く全ての単語。これは `\fI1\-$\fP' の別表現です。
+イベント中に単語が 1 つしかない場合に
+.B *
 を使ってもエラーにはなりません。
-このような場合には空文字列が返されます。
+この場合には空文字列が返されます。
 .TP
 .B x*
 .\"O Abbreviates \fIx\-$\fP.
@@ -11312,7 +11317,7 @@ complete -D -F _completion_loader
 .\"O After the optional word designator, there may appear a sequence of
 .\"O one or more of the following modifiers, each preceded by a `:'.
 単語指示子 (省略可能) の後には、
-以下に示す修飾子を、1 個以上のシーケンスの形で置けます。
+1 個以上の以下に示す修飾子を並べて置くことができます。
 それぞれの修飾子の前には `:' を付けます。
 .PP
 .PD 0
@@ -11389,18 +11394,18 @@ complete -D -F _completion_loader
 に置き換えます。/ の代わりに任意の区切り文字を使うこともできます。
 最後の区切り文字がイベント行の最後の文字ならば、
 これは省略できます。
+バックスラッシュ 1 つでクォートすれば、
 .I old
 と
 .I new
-の中では、
-バックスラッシュ 1 つでクォートすれば区切り文字も使えます。
+の中で区切り文字も使えます。
 .I new 
-に & が含まれている場合には、これは
+に & が含まれている場合には、 & は
 .I old
 に置き換えられます。
 バックスラッシュ 1 つを前に置けば & をクォートできます。
 .I old
-が空文字列ならば、これには前回に置換された
+が空文字列ならば、最後に置換された
 .I old
 が設定されます。
 以前に履歴置換が全く行われていない場合には、現在に一番近い
@@ -11422,17 +11427,18 @@ complete -D -F _completion_loader
 .\"O if it is the last character of the event line.
 .\"O An \fBa\fP may be used as a synonym for \fBg\fP.
 変更をイベント行全体に適用します。
-これは `\fB:s\fP' と組み合わせて使われます
-(例:`\fB:gs/\fIold\fP/\fInew\fP/\fR') or `\fB:&\fP'.
+これは `\fB:s\fP'
+(例:`\fB:gs/\fIold\fP/\fInew\fP/\fR') や `\fB:&\fP'
+と組み合わせて使われます。
 `\fB:s\fP' と一緒に使った場合には、
 / の代わりに任意の区切り文字を使えます。
-また最後の区切り文字がイベント行の最後の文字ならば、
+また、最後の区切り文字がイベント行の最後の文字ならば、
 これは省略できます。
-\fBa\fP は \fBg\fP の別名です。
+\fBg\fP の別名として \fBa\fP を使うこともできます。
 .TP
 .B G
 .\"O Apply the following `\fBs\fP' modifier once to each word in the event line.
-続く `\fBs\fP' 修飾子をイベント行の各単語に 1 回ずつ適用します。
+この修飾子に続く `\fBs\fP' 修飾子をイベント行の各単語に 1 回ずつ適用します。
 .PD
 .\"O .SH "SHELL BUILTIN COMMANDS"
 .SH シェルの組み込みコマンド
