@@ -16923,14 +16923,14 @@ wait していた最後のプロセスまたはジョブの終了ステータス
 .\"O A restricted shell is used to
 .\"O set up an environment more controlled than the standard shell.
 制限付きのシェルは、
-標準のシェルよりも細かく制御された環境を設定したいときに用います。
+標準のシェルよりも細かく制御された環境を用意したいときに使われます。
 .\"O It behaves identically to
 .\"O .B bash
 .\"O with the exception that the following are disallowed or not performed:
 制限付きのシェルは
 .B bash
 と全く同じように動作しますが、
-以下のようなことが許可されなかったり実行されなかったりします:
+以下のようなことが許可されなかったり実行されなかったりします。
 .IP \(bu
 .\"O changing directories with \fBcd\fP
 \fBcd\fP を使ってディレクトリを変更すること
@@ -16974,12 +16974,11 @@ wait していた最後のプロセスまたはジョブの終了ステータス
 .\"O specifying a filename containing a slash as an argument to the
 .\"O .B \-p
 .\"O option to the
-.\" motoki: -p オプション自体が使用できないはずでは。
 .\"O .B hash
 .\"O builtin command
 組み込みコマンド
 .B hash
-に対するオプション
+のオプション
 .B \-p
 の引き数として
 .B /
@@ -16995,7 +16994,7 @@ wait していた最後のプロセスまたはジョブの終了ステータス
 起動時にシェル環境から
 .SM
 .B SHELLOPTS
-の値を展開すること
+の値を解釈すること
 .IP \(bu
 .\"O redirecting output using the >, >|, <>, >&, &>, and >> redirection operators
 リダイレクション演算子 >, >|, <>, >&, &>, >> を使ってリダイレクトを行
@@ -17017,14 +17016,14 @@ wait していた最後のプロセスまたはジョブの終了ステータス
 .\"O builtin command
 組み込みコマンド
 .B enable
-に対する
+の
 .B \-f
 オプションと
 .B \-d
 オプションを使って、組み込みコマンドを追加・削除すること
 .IP \(bu
 .\"O using the \fBenable\fP builtin command to enable disabled shell builtins
-組み込みコマンド \fBenable\fP を使って、無効な組み込みコマンドを有効にすること
+組み込みコマンド \fBenable\fP を使って、無効になっている組み込みコマンドを有効にすること
 .IP \(bu
 .\"O specifying the
 .\"O .B \-p
@@ -17050,15 +17049,16 @@ wait していた最後のプロセスまたはジョブの終了ステータス
 .\"O .SM
 .\"O .B "COMMAND EXECUTION"
 .\"O above),
+.\"O \}
 .\"O .B rbash
 .\"O turns off any restrictions in the shell spawned to execute the
 .\"O script.
-.ie \n(zY=1 シェルスクリプトであると判明したファイルが実行されたとき
-.el \{ シェルスクリプトであると判明したファイルが実行されたとき
+.ie \n(zY=1 シェルスクリプトであると判明したファイルが実行されるとき
+.el \{ シェルスクリプトであると判明したファイルが実行されるとき
 (前述の
 .SM
 .B コマンドの実行
-を参照) には、
+を参照)、
 \}
 .B rbash
 はスクリプト実行用に立ち上げたシェルでは制限を全て無効にします。
@@ -17112,7 +17112,7 @@ wait していた最後のプロセスまたはジョブの終了ステータス
 個人用の \fIreadline\fP 初期化ファイル。
 .PD
 .\"O .SH AUTHORS
-.SH 著者
+.SH 作者
 Brian Fox, Free Software Foundation
 .br
 bfox@gnu.org
@@ -17174,7 +17174,7 @@ chet.ramey@case.edu
 バグ動作の説明
 .TP
 .\"O A short script or `recipe' which exercises the bug
-バグを再現できる簡単なシェルスクリプトまたは「レシピ」
+バグを再現できる「レシピ」 (簡単なシェルスクリプト)
 .PD
 .PP
 .\"O .I bashbug
@@ -17217,7 +17217,7 @@ chet.ramey@case.edu
 使い方によっては、エイリアスは混乱の元になります。
 .PP
 .\"O Shell builtin commands and functions are not stoppable/restartable.
-シェル組み込みコマンドとシェル関数は停止・再実行できません。
+シェル組み込みコマンドとシェル関数は、停止したり、実行を再開したりできません。
 .PP
 .\"O Compound commands and command sequences of the form `a ; b ; c'
 .\"O are not handled gracefully when process suspension is attempted.
@@ -17226,11 +17226,11 @@ chet.ramey@case.edu
 .\"O It suffices to place the sequence of commands between
 .\"O parentheses to force it into a subshell, which may be stopped as
 .\"O a unit.
-複合コマンドや `a ; b ; c' の形式のコマンドの並びは、
+複合コマンドや `a ; b ; c' の形式のコマンド列は、
 プロセスのサスペンドを行う際に綺麗に扱うことができません。
-プロセスを停止すると、
-シェルはコマンドの並びの次のコマンドを即座に実行するからです。
-この問題はコマンドの並びを括弧の中に置いて
+あるプロセスを停止すると、
+シェルはコマンド列の次のコマンドを即座に実行するからです。
+この問題はコマンド列を括弧の中に置いて
 サブシェルに実行させることで解決できます。
 こうすれば、ひとまとまりのものとして停止できます。
 .PP
@@ -17238,6 +17238,6 @@ chet.ramey@case.edu
 配列変数は (まだ) エクスポートできません。
 .PP
 .\"O There may be only one active coprocess at a time.
-おそらく一度に 1 つのコプロセスしかアクティブにできません。
+一度に 1 つのコプロセスしかアクティブにできません。
 .zZ
 .zY
