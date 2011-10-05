@@ -11490,10 +11490,10 @@ complete -D -F _completion_loader
 .\"O options interpret arguments beginning with \fB\-\fP as invalid options and
 .\"O require \fB\-\-\fP to prevent this interpretation.
 組み込みコマンド \fB:\fP, \fBtrue\fP, \fBfalse\fP, \fBtest\fP
-はオプションを持たず、\fB\-\-\fP を特別に扱いません。
+はオプションを持たず、\fB\-\-\fP を特別扱いしません。
 組み込みコマンド \fBexit\fP, \fBlogout\fP, \fBbreak\fP, \fBcontinue\fP,
-\fBlet\fP, \fBshift\fP は、\fB\-\fP で始まる引き数を \fB\-\-\fP なしで
-受け取り処理します。
+\fBlet\fP, \fBshift\fP は、\fB\-\fP で始まる引き数として受け取るのに、
+\fB\-\-\fP を必要としません。
 そのほかの組み込みコマンドは、
 受け取ると明記されているオプション以外を引き数として受け取り、
 \fB\-\fP で始まる引き数を不正なオプションをとて解釈します。
@@ -11524,9 +11524,9 @@ complete -D -F _completion_loader
 .\"O executed from
 .\"O .IR filename .
 .I filename
-からコマンドを読み込み、現在のシェル環境の元で実行します。そして
+からコマンドを読み込み、現在のシェル環境の下で実行します。
 .I filename
-中で最後に実行したコマンドの終了ステータスを返します。
+内の最後に実行したコマンドの終了ステータスを返します。
 .\"O If
 .\"O .I filename
 .\"O does not contain a slash, file names in
@@ -11555,16 +11555,17 @@ complete -D -F _completion_loader
 .B bash
 が
 .I posix モード
-以外で動作していれば、
+以外で動作しているときは、
 .SM
 .B PATH
-中でファイルを見つけられなかった場合には、
+中でファイルを見つけられなかった場合に、
 カレントディレクトリが検索されます。
 .\"O If the
 .\"O .B sourcepath
 .\"O option to the
 .\"O .B shopt
 .\"O builtin command is turned off, the
+.\"O .SM
 .\"O .B PATH
 .\"O is not searched.
 組み込みコマンド
@@ -11578,15 +11579,15 @@ complete -D -F _completion_loader
 .\"O If any \fIarguments\fP are supplied, they become the positional
 .\"O parameters when \fIfilename\fP is executed.  Otherwise the positional
 .\"O parameters are unchanged.
-何らかの \fIarguments\fP が与えられている場合、これらの引き数は
+何らかの \fIarguments\fP が指定された場合、これらの引き数は
 \fIfilename\fP を実行したときの位置パラメータとなります。
-そうでない場合は、位置パラメータは変更されません。
+指定されなかった場合は、位置パラメータは変更されません。
 .\"O The return status is the status of the last command exited within
 .\"O the script (0 if no commands are executed), and false if
 .\"O .I filename
 .\"O is not found or cannot be read.
 返却ステータスはスクリプト内で最後に実行したコマンドのステータスです
-(コマンドが全く実行されなければ 0 です)。また
+(コマンドが全く実行されなければ 0 です)。
 .I filename
 が見つからない場合や読み込めない場合には偽となります。
 .TP
@@ -11614,7 +11615,7 @@ complete -D -F _completion_loader
 引き数リスト中に
 \fIvalue\fP が与えられていない \fIname\fP があった場合は、
 それぞれに対して名前とエイリアスの値が出力されます。
-エイリアスが定義されていない \fIname\fP が与えられなければ、
+エイリアスが定義されていない \fIname\fP が指定された場合以外は、
 \fBalias\fP は真を返します。
 .TP
 \fBbg\fP [\fIjobspec\fP ...]
@@ -11643,7 +11644,7 @@ complete -D -F _completion_loader
 .I jobspec
 が有効なジョブを指定していない場合や
 .I jobspec
-がジョブ制御なしで実行したジョブを指定している場合は異なる値を返します。
+がジョブ制御なしで開始したジョブを指定している場合は異なる値を返します。
 .TP
 \fBbind\fP [\fB\-m\fP \fIkeymap\fP] [\fB\-lpsvPSV\fP]
 .PD 0
@@ -11666,18 +11667,21 @@ complete -D -F _completion_loader
 .\"O .B readline
 .\"O variable.
 .B readline
-の現在のキー割り当てと関数割り当てを表示します。
-あるいはキーシーケンスを
+の現在のキー割り当てと関数割り当てを表示したり、
+キーシーケンスを
 .B readline
-の関数やマクロに割り当てます。
-あるいは
+の関数やマクロに割り当てたり、
 .B readline
-の変数を設定します。
+の変数を設定したりします。
 .\"O Each non-option argument is a command as it would appear in
 .\"O .IR .inputrc ,
 .\"O but each binding or command must be passed as a separate argument;
 .\"O e.g., '"\eC\-x\eC\-r": re\-read\-init\-file'.
 .\"O Options, if supplied, have the following meanings:
+.\"O motoki: 少し意訳しすぎか。
+.\"O motoki: binging or command の command に対応する訳がない。
+.\"O motoki: bing の書式では keyseq:function-name のように続いているが
+.\"O motoki: 本当は keyseq: function-name にしないといけないのかな？
 受け付ける割り当ての記法は
 .I .inputrc
 と全く同じですが、
@@ -11697,6 +11701,7 @@ complete -D -F _completion_loader
 .\"O Acceptable
 .\"O .I keymap
 .\"O names are
+.\"O \fIemacs, emacs\-standard, emacs\-meta, emacs\-ctlx, vi,
 .\"O vi\-move, vi\-command\fP, and
 .\"O .IR vi\-insert .
 指定できる
@@ -11728,14 +11733,14 @@ vi\-move, vi\-command\fP,
 .B \-s
 .\"O Display \fBreadline\fP key sequences bound to macros and the strings
 .\"O they output in such a way that they can be re-read.
-\fBreadline\fP のマクロに割り当てられたキーシーケンスと、
+マクロに割り当てられた \fBreadline\fP のキーシーケンスと、
 マクロが出力する文字列を表示します。
 表示は、再び読み込みできる形式で出力されます。
 .TP
 .B \-S
 .\"O Display \fBreadline\fP key sequences bound to macros and the strings
 .\"O they output.
-\fBreadline\fP のマクロに割り当てられたキーシーケンスと、
+マクロに割り当てられた \fBreadline\fP のキーシーケンスと、
 マクロが出力する文字列を表示します。
 .TP
 .B \-v
@@ -11768,22 +11773,25 @@ vi\-move, vi\-command\fP,
 .B \-x \fIkeyseq\fP:\fIshell\-command\fP
 .\"O Cause \fIshell\-command\fP to be executed whenever \fIkeyseq\fP is
 .\"O entered.
+.\"O motoki: 「たびごと」となっていますが、「度」と「毎」は同じ意味なので、一方でよいと思います。
+\fIkeyseq\fP が押されるたびに、
+\fIshell\-command\fP が実行されるようにします。
 .\"O When \fIshell\-command\fP is executed, the shell sets the
 .\"O .SM
 .\"O .B READLINE_LINE
 .\"O variable to the contents of the \fBreadline\fP line buffer and the
-\fIkeyseq\fP が押されるたびごとに、
-\fIshell\-command\fP が実行されるようにします。
-\fIshell\-command\fP を実行するとき、シェルは変数
 .\"O .SM
 .\"O .B READLINE_POINT
 .\"O variable to the current location of the insertion point.
 .\"O If the executed command changes the value of
+.\"O .SM
 .\"O .B READLINE_LINE
 .\"O or
 .\"O .SM
 .\"O .BR READLINE_POINT ,
 .\"O those new values will be reflected in the editing state.
+.\"O motoki: line buffer = 編集バッファ で訳されているがよいか。
+\fIshell\-command\fP を実行するとき、シェルは変数
 .SM
 .B READLINE_LINE
 に \fBreadline\fP の編集バッファの内容を設定し、変数
@@ -11791,7 +11799,6 @@ vi\-move, vi\-command\fP,
 .B READLINE_POINT
 に現在の挿入ポイントの位置を設定します。
 実行したコマンドが
- changes the value of
 .SM
 .B READLINE_LINE
 や
@@ -11802,8 +11809,8 @@ vi\-move, vi\-command\fP,
 .PP
 .\"O The return value is 0 unless an unrecognized option is given or an
 .\"O error occurred.
-認識できないオプションが与えられた場合やエラーが起きた場合を除けば、
-返り値は 0 です。
+認識できないオプションが与えられた場合やエラーが起きた場合以外は、
+返り値は 0 になります。
 .RE
 .TP
 \fBbreak\fP [\fIn\fP]
@@ -11818,8 +11825,8 @@ vi\-move, vi\-command\fP,
 .BR while ,
 .BR until ,
 .B select
-のループから抜けます。\fIn\fP が指定されていれば、\fIn\fP レベル分 
-break します。
+のループから抜けます。\fIn\fP が指定されていれば、\fIn\fP レベル分
+のループを break します。
 .\"O .I n
 .\"O must be \(>= 1.  If
 .\"O .I n
@@ -11847,7 +11854,7 @@ break します。
 .I arguments
 を引き数として渡し、このコマンドの終了ステータスを返します。
 これはシェル組み込みコマンドと同じ名前の関数を定義するときに便利で、
-その関数内で組み込みコマンドを使ったときに、その機能を損ないません。
+その関数内で組み込みコマンドの機能を使うことができます。
 組み込みコマンド 
 \fBcd\fP は普通、これを使って再定義されます。
 .I shell\-builtin
@@ -11886,6 +11893,7 @@ break します。
 .\"O is the
 .\"O default
 .\"O .IR dir .
+.\"O The variable
 .\"O .SM
 .\"O .B CDPATH
 .\"O defines the search path for the directory containing
@@ -11894,16 +11902,15 @@ break します。
 変数
 .SM
 .B HOME
-.\"O The variable
 の値が
 .I dir
 のデフォルト値です。変数
 .SM
 .B CDPATH
-.\"O Alternative directory names in
 は、
 .I dir
 を含むディレクトリの検索パスを定義します。
+.\"O Alternative directory names in
 .\"O .SM
 .\"O .B CDPATH
 .\"O are separated by a colon (:).  A null directory name in
@@ -11934,7 +11941,7 @@ break します。
 .\"O status.
 .SM
 .B CDPATH
-内ではディレクトリ名はコロン (:) で区切ります。
+内では候補ディレクトリ名はコロン (:) で区切ります。
 .SM
 .B CDPATH
 中に空のディレクトリ名がある場合、これはカレントディレクトリ
@@ -11956,8 +11963,8 @@ break します。
 .B \-e
 オプションを
 .BR \-P
-オプションと同時に指定したとき、ディレクトリの変更が成功した後に
-カレントディレクトリが判定できないと、\fBcd\fP は失敗のステータスを返します。
+オプションと同時に指定すると、ディレクトリの変更が成功した後に
+カレントディレクトリが判定できない場合、\fBcd\fP は失敗のステータスを返します。
 .\"O An argument of
 .\"O .B \-
 .\"O is equivalent to
@@ -11976,14 +11983,14 @@ break します。
 .\"O \fB\-\fP is the first argument, and the directory change is
 .\"O successful, the absolute pathname of the new working directory is
 .\"O written to the standard output.
-.SM
-.B CDPATH
 .\"O The return value is true if the directory was successfully changed;
 .\"O false otherwise.
-にある空でないディレクトリ名が使われたときや、
+.SM
+.B CDPATH
+内の空以外のディレクトリ名が使われたときや、
 \fB\-\fP が最初の引き数のときに、ディレクトリの変更が成功すると、
 新しいディレクトリの絶対パス名が標準出力に書かれます。
-ディレクトリの変更が成功した場合には返り値は真になります。
+ディレクトリの変更が成功した場合には返り値は真になり、
 そうでない場合には偽になります。
 .TP
 \fBcommand\fP [\fB\-pVv\fP] \fIcommand\fP [\fIarg\fP ...]
@@ -12006,7 +12013,7 @@ break します。
 .I command
 に引き数
 .I args
-を付けて実行します。シェル関数の通常の参照は行いません。
+を付けて実行します。ただし、シェル関数の通常の参照は行いません。
 組み込みコマンドと
 .SM
 .B PATH
@@ -12017,7 +12024,7 @@ break します。
 の検索を行う際に
 .B PATH
 のデフォルト値が使われます。これにより、
-標準ユーティリティを全て確実に見つけられます。
+全ての標準ユーティリティを確実に見つけられます。
 .\"O If either the
 .\"O .B \-V
 .\"O or
@@ -12063,7 +12070,7 @@ break します。
 オプションを与えた場合、終了ステータスは
 .I command
 が見つかれば 0 となり、見つからなければ 1 となります。
-どちらのオプションも与えなかった場合に、エラーが起きたり
+どちらのオプションも与えなかった場合に、エラーが起きたり、
 .I command
 を見つけられなかったりすると、終了ステータスは 127 になります。
 それ以外の場合には、組み込みコマンド
@@ -12081,6 +12088,7 @@ break します。
 .\"O When using the \fB\-F\fP or \fB\-C\fP options, the various shell variables
 .\"O set by the programmable completion facilities, while available, will not
 .\"O have useful values.
+.\"O motoki: programmable completion の訳はプログラム補完でよいか。ちょっと変？
 \fIoption\fP に従って、\fIword\fP の補完マッチのリストを生成します。
 オプションには \fBcomplete\fP 組み込みコマンドと同じものが指定できますが、
 \fB\-p\fP と \fB\-r\fP は指定できません。
@@ -12094,6 +12102,7 @@ break します。
 .\"O with the same flags.
 .\"O If \fIword\fP is specified, only those completions matching \fIword\fP
 .\"O will be displayed.
+.\"O motoki: 少し訳を工夫した方がいいかも。completion specification が適切に訳せていないような気がする。
 マッチは、同じフラグで指定されたプログラム補完コードが
 直接補完を生成するのと同じ方法で生成されます。
 \fIword\fP が指定されると、\fIword\fP にマッチする補完だけが表示されます。
@@ -12124,23 +12133,25 @@ break します。
 .\"O The \fB\-E\fP option indicates that the remaining options and actions should
 .\"O apply to ``empty'' command completion; that is, completion attempted on a
 .\"O blank line.
-\fIname\fP 引き数それぞれを、どのように補完するのかを指定します。
+.\"O motoki: arguments to each name なので、各 name の引き数をどのように補完するか、だと思います。
+.\"O motoki: readline のセクションでは、completion specifications は補完仕様になっている。
+各 \fIname\fP の引き数を、どのように補完するのかを指定します。
 \fB\-p\fP オプションが指定された場合や、
 何もオプションが指定されなかった場合は、
-既存の補完指定が (入力として再利用できる形で) 出力されます。
+現在の補完仕様が (入力として再利用できる形で) 出力されます。
 \fB\-r\fP オプションは、それぞれの \fIname\fP の補完指定を削除します。
 \fIname\fP が指定されなかった場合は全ての補完指定を削除します。
 \fB\-D\fP オプションは、残りのオプションと動作を
-``デフォルトの'' コマンド補完に適用することを示します。
-つまり、補完があらかじめ定義されていないコマンドに試みられる補完です。
+``デフォルトの'' コマンド補完 (補完が定義されていないコマンドに対して
+試みられる補完) に適用することを示します。
+.\"O motoki: 「つまり」以下は「デフォルトのコマンド補完」の説明なので括弧書きで書いた方が分かりやすいと思います。
 \fB\-E\fP オプションは、残りのオプションと動作を
-``空の'' コマンド補完に適用することを示します。
-つまに、空行に試みられる補完です。
+``空の'' コマンド補完 (空行に対して試みられる補完) に適用することを示します。
 .sp 1
 .\"O The process of applying these completion specifications when word completion
 .\"O is attempted is described above under \fBProgrammable Completion\fP.
-単語補完が試みられたときにこれらの補完指定に加えられる処理は、
-前述の \fBプログラム補完\fP で示しています。
+単語補完が試みられたときに、補完指定が適用される流れは、
+前述の \fBプログラム補完\fP で説明されています。
 .sp 1
 .\"O Other options, if specified, have the following meanings.
 .\"O The arguments to the \fB\-G\fP, \fB\-W\fP, and \fB\-X\fP options
@@ -12148,11 +12159,12 @@ break します。
 .\"O should be quoted to protect them from expansion before the
 .\"O .B complete
 .\"O builtin is invoked.
-他のオプションが指定されたときは、以下のような意味を持ちます。
+他のオプションは、指定された場合、以下のような意味を持ちます。
 \fB\-G\fP, \fB\-W\fP, \fB\-X\fP オプションの引き数 (必要ならば
 \fB\-P\fP と \fB\-S\fP オプションの場合も) はクォートして、
+組み込みコマンド
 .B complete
-組み込みコマンドが呼び出される前に展開されないようにすべきです。
+が呼び出される前に展開されないようにすべきです。
 .RS
 .PD 0
 .TP 8
@@ -12161,7 +12173,7 @@ break します。
 .\"O beyond the simple generation of completions.
 .\"O \fIcomp-option\fP may be one of:
 .I comp\-option
-は補完仕様の動作をいくつかの点から制御し、
+は補完仕様の動作をいくつかの観点から制御し、
 単純な補完生成以外ができるようにします。
 .I comp\-option
 には以下のどれかひとつを指定できます。
@@ -12198,22 +12210,25 @@ readline がファイル名特有の処理
 .B nospace
 .\"O Tell readline not to append a space (the default) to words completed at
 .\"O the end of the line.
-行末で単語を補完したときに空白を付け加える (デフォルト) のを
+行末で単語を補完したときに空白を付け加える動作 (デフォルトの動作) を
 やめるように readline に伝えます。
 .TP 8
 .B plusdirs
 .\"O After any matches defined by the compspec are generated, 
 .\"O directory name completion is attempted and any
 .\"O matches are added to the results of the other actions.
-補完仕様で定義されたマッチにより候補が生成された後に、
-ディレクトリ名の補完を試み、マッチした候補が全てほかの
-動作の結果に付け加えられます。
+補完仕様で定義されたマッチした候補が生成された後に、
+ディレクトリ名の補完を試み、ほかの動作の結果にマッチした候補が
+全て追加されます。
 .RE
 .TP 8
 \fB\-A\fP \fIaction\fP
 .\"O The \fIaction\fP may be one of the following to generate a list of possible
 .\"O completions:
-\fIaction\fP は補完対象リストの生成動作で、
+.\"O motoki: possible completions, completion match などの訳語を統一する必要がある。
+.\"O motoki: (bash.1 全体に通じる話)
+.\"O motoki: possible completion = 補完候補 としてみた。
+\fIaction\fP は補完候補リストの生成動作で、
 以下のどれかひとつを指定します。
 .RS
 .TP 8
@@ -12268,7 +12283,9 @@ readline がファイル名特有の処理
 .TP 8
 .B helptopic
 .\"O Help topics as accepted by the \fBhelp\fP builtin.
-\fBhelp\fP 組み込みコマンドで許可されたヘルプトピック。
+.\"O motoki: accepted は help に指定できるトピック名くらいの意味で、
+.\"O motoki: 「許可する」というほどおおげさではないと思います。
+組み込みコマンド \fBhelp\fP に指定できるヘルプのトピック名。
 .TP 8
 .B hostname
 .\"O Hostnames, as taken from the file specified by the
@@ -12281,7 +12298,7 @@ readline がファイル名特有の処理
 .TP 8
 .B job
 .\"O Job names, if job control is active.  May also be specified as \fB\-j\fP.
-ジョブ制御が有効であれば、ジョブ名。\fB\-j\fP でも指定できます。
+ジョブ名 (ジョブ制御が有効な場合)。\fB\-j\fP でも指定できます。
 .TP 8
 .B keyword
 .\"O Shell reserved words.  May also be specified as \fB\-k\fP.
@@ -12297,11 +12314,12 @@ readline がファイル名特有の処理
 .TP 8
 .B setopt
 .\"O Valid arguments for the \fB\-o\fP option to the \fBset\fP builtin.
-\fBset\fP 組み込みコマンドの \fB\-o\fP オプションで有効な引き数。
+組み込みコマンド \fBset\fP の \fB\-o\fP オプションで有効な引き数。
 .TP 8
 .B shopt
 .\"O Shell option names as accepted by the \fBshopt\fP builtin.
-\fBshopt\fP 組み込みコマンドで許可されたシェルオプション名。
+.\"O motoki: これも help topic と同様。
+組み込みコマンド \fBshopt\fP に指定できるシェルオプション名。
 .TP 8
 .B signal
 .\"O Signal names.
@@ -12309,7 +12327,8 @@ readline がファイル名特有の処理
 .TP 8
 .B stopped
 .\"O Names of stopped jobs, if job control is active.
-ジョブ制御が有効であれば、停止中のジョブ名。
+.\"O motoki: 括弧書きの方が分かりやすい。
+停止しているジョブ名 (ジョブ制御が有効な場合)。
 .TP 8
 .B user
 .\"O User names.  May also be specified as \fB\-u\fP.
@@ -12324,7 +12343,7 @@ readline がファイル名特有の処理
 .\"O \fIcommand\fP is executed in a subshell environment, and its output is
 .\"O used as the possible completions.
 \fIcommand\fP がサブシェル環境で実行され、
-その出力が補完対象として使用されます。
+その出力が補完候補として使用されます。
 .TP 8
 \fB\-F\fP \fIfunction\fP
 .\"O The shell function \fIfunction\fP is executed in the current shell
@@ -12335,7 +12354,7 @@ readline がファイル名特有の処理
 .\"O .B COMPREPLY
 .\"O array variable.
 シェル関数 \fIfunction\fP は現在のシェル環境で実行されます。
-関数が終了したときに、補完対象が
+関数が終了したときに、補完候補が
 .SM
 .B COMPREPLY
 配列変数から取得されます。
@@ -12343,8 +12362,9 @@ readline がファイル名特有の処理
 \fB\-G\fP \fIglobpat\fP
 .\"O The pathname expansion pattern \fIglobpat\fP is expanded to generate
 .\"O the possible completions.
-ファイル名展開パターン \fIglobpat\fP
-が展開されて補完対象のリストを生成します。
+.\"O motoki: pathname expansion は他では「パス名展開」です。
+パス名展開パターン \fIglobpat\fP を展開し、
+補完候補のリストを生成します。
 .TP 8
 \fB\-P\fP \fIprefix\fP
 .\"O \fIprefix\fP is added at the beginning of each possible completion
@@ -12365,13 +12385,14 @@ readline がファイル名特有の処理
 .\"O special variable as delimiters, and each resultant word is expanded.
 .\"O The possible completions are the members of the resultant list which
 .\"O match the word being completed.
+.\"O IFS には複数の文字が含まれる可能性があります。
 \fIwordlist\fP は
 .SM
 .B IFS
-特殊変数を区切り文字として分割され、
-それぞれの分割された単語は展開されます。
-補完対象は、展開結果のリストのメンバのうち、
-補完中の単語がマッチするものです。
+特殊変数に含まれる文字を区切り文字として分割され、
+分割された単語がそれぞれ展開されます。
+展開結果のリストのメンバのうち、補完中の単語がマッチするものが、
+補完候補となります。
 .TP 8
 \fB\-X\fP \fIfilterpat\fP
 .\"O \fIfilterpat\fP is a pattern as used for pathname expansion.
@@ -12380,11 +12401,12 @@ readline がファイル名特有の処理
 .\"O \fIfilterpat\fP is removed from the list.
 .\"O A leading \fB!\fP in \fIfilterpat\fP negates the pattern; in this
 .\"O case, any completion not matching \fIfilterpat\fP is removed.
-\fIfilterpat\fP はファイル名展開として使用されるパターンです。
-先行するオプション・引き数によって生成された補完対象リストに適用され、
-\fIfilterpat\fP とマッチするそれぞれの補完がリストから削除されます。
-\fIfilterpat\fP の前に \fB!\fP を置くとパターンを否定します。
-この場合、\fIfilterpat\fP にマッチしない補完が削除されます。
+\fIfilterpat\fP がパス名展開のパターンとして使用されます。
+先行するオプション・引き数によって生成された補完候補のリストに適用され、
+.\"O motoki: 原文は completion だが possible completion の意味なので、「補完候補」とした。
+\fIfilterpat\fP とマッチするそれぞれの補完候補がリストから削除されます。
+\fIfilterpat\fP が \fB!\fP で始まる場合、パターンの否定の意味になります。
+つまり、\fIfilterpat\fP にマッチしない補完対象が削除されます。
 .PD
 .PP
 .\"O The return value is true unless an invalid option is supplied, an option
@@ -12419,18 +12441,17 @@ readline がファイル名特有の処理
 \fIoption\fP に指定できる値は、前述の組み込みコマンド
 \fBcomplete\fP で有効なものです。
 \fB\-D\fP オプションは、残りのオプションを ``デフォルトの''
-コマンド補完に適用することを示します。
-つまり、補完があらかじめ定義されていないコマンドに試みられる補完です。
+コマンド補完 (補完が定義されていないコマンドに対して
+試みられる補完) に適用することを示します。
 \fB\-E\fP オプションは、残りのオプションを ``空の''
-コマンド補完に適用することを示します。
-つまに、空行に試みられる補完です。
+コマンド補完  (空行に対して試みられる補完) に適用することを示します。
 .sp 1
 .\"O The return value is true unless an invalid option is supplied, an attempt
 .\"O is made to modify the options for a \fIname\fP for which no completion
 .\"O specification exists, or an output error occurs.
 不正なオプションが指定された場合、
 補完仕様が定義されていない \fIname\fP のオプションを変更しようとした場合、
-出力エラーが起こったとき、を除いては、返り値は真になります。
+出力エラーが起こった場合、を除いては、返り値は真になります。
 .TP
 \fBcontinue\fP [\fIn\fP]
 .\"O Resume the next iteration of the enclosing
@@ -12440,6 +12461,7 @@ readline がファイル名特有の処理
 .\"O or
 .\"O .B select
 .\"O loop.
+.\"O motoki: resume なので、「再開」の方がいいかな。
 .BR for ,
 .BR while ,
 .BR until ,
@@ -12477,14 +12499,14 @@ readline がファイル名特有の処理
 .\"O option will display the attributes and values of each
 .\"O .IR name .
 .B \-p
-オプションを指定すると、
+オプションを指定すると、各
 .I name
-それぞれの属性と値が表示されます。
+の属性と値が表示されます。
 .\"O When
 .\"O .B \-p
 .\"O is used with \fIname\fP arguments, additional options are ignored.
 .B \-p
-に \fIname\fP を指定すると、他のオプションは無視されます。
+に \fIname\fP 引き数を指定すると、他のオプションは無視されます。
 .\"O When
 .\"O .B \-p
 .\"O is supplied without \fIname\fP arguments, it will display the attributes
@@ -12495,11 +12517,11 @@ readline がファイル名特有の処理
 .\"O will restrict the display to shell functions.
 .B \-p
 オプションが \fIname\fP 引き数なしで指定されると、
-ほかのオプションで指定された属性を持っている
+他のオプションで指定された属性を持っている
 全ての変数の属性と値を表示します。
-\fB\-p\fP のほかのオプションが指定されない場合、
+\fB\-p\fP 以外のオプションが指定されない場合、
 \fBdeclare\fP は全てのシェル変数の属性と値を表示します。
-\fB\-f\fP オプションは表示をシェル関数に制限します。
+\fB\-f\fP オプションは表示をシェル関数に限定します。
 .\"O The
 .\"O .B \-F
 .\"O option inhibits the display of function definitions; only the
@@ -12525,14 +12547,15 @@ readline がファイル名特有の処理
 .\"O even when \fBdeclare\fP is executed in a shell function.
 .\"O It is ignored in all other cases.
 .B \-g
-オプションは、\fBdeclare\fP がシェル関数の中で実行されたときでも、
-変数がグローバルスコープに作られ変更されるようにします。
+オプションを指定すると、\fBdeclare\fP がシェル関数の中で実行されたときであっても、
+グローバルスコープで変数の作成、変更を行います。
+.\"O motoki: "even when..." といっておいて、「他の場合」って何だろう？？？
 ほかの場合には無視されます。
 .\"O The following options can
 .\"O be used to restrict output to variables with the specified attribute or
 .\"O to give variables attributes:
 以下のオプションを使うと、
-指定した属性を持つ変数の出力を制限したり、
+指定した属性を持つ変数の出力を限定したり、
 変数に属性を与えたりできます:
 .RS
 .PD 0
@@ -12541,17 +12564,17 @@ readline がファイル名特有の処理
 .\"O Each \fIname\fP is an indexed array variable (see
 .\"O .B Arrays
 .\"O above).
-\fIname\fP はそれぞれ配列変数 (前述の
+各 \fIname\fP は配列変数です (前述の
 .B 配列
-を参照) です。
+を参照)。
 .TP
 .B \-A
 .\"O Each \fIname\fP is an associative array variable (see
 .\"O .B Arrays
 .\"O above).
-\fIname\fP はそれぞれ連想配列変数 (前述の
+各 \fIname\fP は連想配列変数です (前述の
 .B 配列
-を参照) です。
+を参照)。
 .TP
 .B \-f
 .\"O Use function names only.
@@ -12585,8 +12608,8 @@ readline がファイル名特有の処理
 .\"O Traced functions inherit the \fBDEBUG\fP and \fBRETURN\fP traps from
 .\"O the calling shell.
 .\"O The trace attribute has no special meaning for variables.
-\fIname\fP にそれぞれ \fItrace\fP 属性を与えます。
-traced 属性の関数は \fBDEBUG\fP と \fBRETURN\fP のトラップを
+各 \fIname\fP に \fItrace\fP 属性を与えます。
+trace 属性を付与された関数は \fBDEBUG\fP と \fBRETURN\fP のトラップを
 呼び出したシェルから受け継ぎます
 trace 属性は変数には意味を持ちません。
 .TP
@@ -12617,11 +12640,11 @@ trace 属性は変数には意味を持ちません。
 .\"O command,
 .\"O unless the \fB\-g\fP option is supplied,
 関数内で使った場合、
+\fB\-g\fP オプションが与えられなかった場合、
 .B local
-コマンドを使った場合と同様に \fIname\fP はローカルとなります。
+コマンドを使った場合と同様に \fIname\fP はローカル変数となります。
 .\"O If a variable name is followed by =\fIvalue\fP, the value of
 .\"O the variable is set to \fIvalue\fP.
-\fB\-g\fP オプションが与えられなければ、
 変数名に =\fIvalue\fP が続く場合、
 変数の値として \fIvalue\fP が設定されます。
 .\"O The return value is 0 unless an invalid option is encountered,
@@ -12718,7 +12741,7 @@ trace 属性は変数には意味を持ちません。
 .\"O invalid option is supplied or \fIn\fP indexes beyond the end
 .\"O of the directory stack.
 不正なオプションが与えられた場合とインデックス
-\fIn\fP がディレクトリスタックの終端を越えている場合を除き、
+\fIn\fP がディレクトリスタックの末尾を越えている場合を除き、
 返り値は 0 となります。
 .RE
 .TP
@@ -12768,6 +12791,7 @@ trace 属性は変数には意味を持ちません。
 .B \-r
 オプションも与えられていない場合には、\fIカレントジョブ\fPが使われます。
 \" emasaka: 上の文章は重複している。
+.\"O motoki: コメントアウトしてはいかがでしょうか。
 .\"O If no
 .\"O .I jobspec
 .\"O is supplied, the
@@ -12791,8 +12815,9 @@ trace 属性は変数には意味を持ちません。
 .\"O The return value is 0 unless a
 .\"O .I jobspec
 .\"O does not specify a valid job.
+,\"O motoki: 「不正なジョブを指定していなければ」は分かりにくいと思います。
 .I jobspec
-が不正なジョブを指定していなければ、返り値は 0 となります。
+が有効なジョブを指定していない場合を除き、返り値は 0 となります。
 .TP
 \fBecho\fP [\fB\-neE\fP] [\fIarg\fP ...]
 .\"O Output the \fIarg\fPs, separated by spaces, followed by a newline.
@@ -12833,7 +12858,7 @@ trace 属性は変数には意味を持ちません。
 .TP
 .B \ea
 .\"O alert (bell)
-警告(ベル)
+警告 (ベル)
 .TP
 .B \eb
 .\"O backspace
@@ -12876,22 +12901,22 @@ trace 属性は変数には意味を持ちません。
 .B \e0\fInnn\fP
 .\"O the eight-bit character whose value is the octal value \fInnn\fP
 .\"O (zero to three octal digits)
-ASCII コードの 8 進値が \fInnn\fP である文字 (1 文字につき数字 0〜3 桁)。
+8 進値で \fInnn\fP である 8 ビット文字 (8 進数で 0〜3 桁)。
 .TP
 .B \ex\fIHH\fP
 .\"O the eight-bit character whose value is the hexadecimal value \fIHH\fP
 .\"O (one or two hex digits)
-ASCII コードの 16 進値が \fInnn\fP である文字 (1 文字につき数字 1 または 2 桁)。
+16 進値が \fIHH\fP である 8 ビット文字 (16 進で 1〜2 桁)。
 .TP
 .B \eu\fIHHHH\fP
 .\"O the Unicode (ISO/IEC 10646) character whose value is the hexadecimal value
 .\"O \fIHHHH\fP (one to four hex digits)
-ユニコード (ISO/IEC 10646) の16 進値が \fIHHHH\fP である文字 (16 進 1〜4 桁)。
+ユニコード (ISO/IEC 10646) の 16 進値が \fIHHHH\fP である文字 (16 進 1〜4 桁)。
 .TP
 .B \eU\fIHHHHHHHH\fP
 .\"O the Unicode (ISO/IEC 10646) character whose value is the hexadecimal value
 .\"O \fIHHHHHHHH\fP (one to eight hex digits)
-ユニコード (ISO/IEC 10646) の16 進値が \fIHHHHHHHH\fP である文字 (16 進 1〜8 桁)。
+ユニコード (ISO/IEC 10646) の 16 進値が \fIHHHHHHHH\fP である文字 (16 進 1〜8 桁)。
 .PD
 .RE
 .TP
@@ -12987,8 +13012,8 @@ POSIX の\fI特殊\fP組み込みコマンドだけに制限されます。
 .\"O or only null arguments,
 .\"O .B eval
 .\"O returns 0.
-\fIarg\fP を読み込み、結合して 1 つのコマンドにします。
-次にシェルはこのコマンドを読み込んで実行し、
+\fIarg\fP を読み込み、1 つのコマンドに結合し、
+このコマンドを読み込んで実行します。
 その終了ステータスが
 .B eval
 の値として返されます。
@@ -13058,7 +13083,7 @@ POSIX の\fI特殊\fP組み込みコマンドだけに制限されます。
 .\"O and the return status is 0.  If there is a redirection error, the
 .\"O return status is 1.
 .I command
-が指定されていない場合、任意のリダイレクトはカレントシェルで効果を表し、
+が指定されていない場合、任意のリダイレクトはカレントシェルで効果を持ち、
 終了ステータスは 0 となります。
 リダイレクトのエラーが起きた場合には、終了ステータスは 1 となります。
 .TP
@@ -13095,7 +13120,10 @@ POSIX の\fI特殊\fP組み込みコマンドだけに制限されます。
 .\"O the 
 .\"O .I names
 .\"O refer to functions.
-与えられた
+.\"O motoki: 他の箇所もそうですが、supplied は「与えられた」ではなく
+.\"O motoki: 「指定された」の方がしっくり来る気がします。
+.\"O motoki: オプションは与えるでも問題ないと思いますが、与えられた name というのは違和感を感じます。
+指定された
 .I name
 には印が付けられ、
 これ以降に実行するコマンドの環境に
@@ -13150,6 +13178,8 @@ POSIX の\fI特殊\fP組み込みコマンドだけに制限されます。
 .\"O to
 .\"O .I last
 .\"O is selected from the history list.
+.\"O motoki: "Fix Command" ですが、Fix は動詞で、「コマンドを修正する」ではないでしょうか。
+.\"O motoki: Command も大文字の理由はよく分かりません。単に、fc なので、頭文字を大文字にしただけ？
 フィックスコマンド (Fix Command)。
 最初の形式では、
 .I first
@@ -13166,18 +13196,24 @@ POSIX の\fI特殊\fP組み込みコマンドだけに制限されます。
 .\"O .I last
 .\"O is not specified it is set to
 .\"O the current command for listing (so that
+.\"O .if n ``fc \-l \-10''
+.\"O .if t \f(CWfc \-l \-10\fP
 .\"O prints the last 10 commands) and to
 .\"O .I first
 .\"O otherwise.
+.\"O motoki: "may be specified" なので、「〜としても」はおかしい。
 .I first
 と
 .I last
-は文字列 (その文字列で始まる最後のコマンド) や
-数値 (履歴リスト中でのインデックス。
-負の値は現在のコマンド番号からのオフセットとして扱われます)
-としても指定できます。
+には文字列か数値が指定します。
+文字列はその文字列で始まる最後のコマンドを表し、
+数値は履歴リスト中でのインデックスを表します
+(負の値は現在のコマンド番号からのオフセットとして扱われます)。
 .I last
-が指定されていなければ、リスト表示の場合には現在のコマンドが設定され
+が指定されていない場合、リスト表示の場合には
+現在のコマンドが
+.I last
+に設定され
 (したがって
 .if n ``fc \-l \-10''
 .if t \f(CWfc \-l \-10\fP
@@ -13189,7 +13225,9 @@ POSIX の\fI特殊\fP組み込みコマンドだけに制限されます。
 .\"O is not specified it is set to the previous
 .\"O command for editing and \-16 for listing.
 .I first
-が指定されていなければ、編集の場合には前のコマンドが設定され、
+が指定されていなければ、編集の場合には前のコマンドが
+.I first
+に設定され、
 リスト表示の場合には \-16 が設定されます。
 .sp 1
 .\"O The
@@ -13222,8 +13260,9 @@ POSIX の\fI特殊\fP組み込みコマンドだけに制限されます。
 .\"O .FN vi
 .\"O is used.  When editing is complete, the edited commands are
 .\"O echoed and executed.
+.\"O motoki: 他の箇所は「リスト表示」なので、ここも「リスト表示で」にした方がよいと思います。
 .B \-n
-オプションを与えるとリストにコマンド番号が付きません。
+オプションを与えるとリスト表示でコマンド番号が付きません。
 .B \-r
 オプションを与えるとコマンドの順序が逆になります。
 .B \-l
@@ -13245,11 +13284,11 @@ POSIX の\fI特殊\fP組み込みコマンドだけに制限されます。
 どちらの変数も設定されていなければ、
 .FN vi
 が使われます。
-編集が終了すると、編集されたコマンドがエコー表示され、実行されます。
+編集が終了すると、編集後のコマンドがエコー表示され、実行されます。
 .sp 1
 .\"O In the second form, \fIcommand\fP is re-executed after each instance
 .\"O of \fIpat\fP is replaced by \fIrep\fP.
-2 番目の形式では、\fIpat\fP の部分をそれぞれ \fIrep\fP で置き換えた後に
+2 番目の形式では、\fIpat\fP の部分をそれぞれ \fIrep\fP で置き換えてから
 \fIcommand\fP が再実行されます。
 .\"O A useful alias to use with this is
 .\"O .if n ``r="fc -s"'',
@@ -13264,7 +13303,8 @@ POSIX の\fI特殊\fP組み込みコマンドだけに制限されます。
 .\"O .if n ``r''
 .\"O .if t \f(CWr\fP
 .\"O re-executes the last command.
-これを利用している便利なエイリアスに
+.\"O motoki: 原文にはありませんが「の例として」とした方が分かりやすいと思います。
+これを利用している便利なエイリアスの例として
 .if n ``r="fc -s"''
 .if t \f(CWr='fc \-s'\fP
 があります。
@@ -13300,17 +13340,19 @@ POSIX の\fI特殊\fP組み込みコマンドだけに制限されます。
 .\"O does not specify a valid history line, in which case
 .\"O .B fc
 .\"O returns failure.
+.\"O motoki: returns failure の場合、failure = 「偽」というのは正しいでしょうか。
+.\"O motoki: 正常時の返り値の説明を書いてから、「ただし」で特殊ケースを説明する方が読みやすいと思います。
 .B \-e
 オプションが与えられた場合、
-返り値は最後に実行されたコマンドの返り値となるか、
-あるいはコマンドの一時ファイルでエラーが起きた場合には偽となります。
+返り値は最後に実行されたコマンドの返り値となります。
+ただし、コマンドの一時ファイルでエラーが起きた場合には返り値は偽 (失敗) となります。
 2 番目の形式を用いた場合、
 終了ステータスは再実行されたコマンドの終了ステータスとなります。
 ただし、
 .I cmd
-が有効な履歴行を指定していない場合は別で、この場合には
+が有効な履歴行を指定していない場合は、
 .B fc
-は偽を返します。
+は偽 (失敗) を返します。
 .TP
 \fBfg\fP [\fIjobspec\fP]
 .\"O Resume
@@ -13341,6 +13383,9 @@ POSIX の\fI特殊\fP組み込みコマンドだけに制限されます。
 \fBgetopts\fP \fIoptstring\fP \fIname\fP [\fIargs\fP]
 .\"O .B getopts
 .\"O is used by shell procedures to parse positional parameters.
+.\"O motoki: "procedure" はこのマニュアルでここだけで登場するので何を指すのでしょうか。
+.\"O motoki: 「手続き」というよりは、その後ろの to 以降とくみ合わさって
+.\"O motoki: 「位置パラメータを解釈するシェルの処理」などでもいいかもしれません。
 .B getopts
 はシェルの手続きが位置パラメータを解釈するために使います。
 .\"O .I optstring
@@ -13352,7 +13397,7 @@ POSIX の\fI特殊\fP組み込みコマンドだけに制限されます。
 .I optstring
 は識別の対象であるオプション文字列です。
 ある文字の後にコロンがある場合、
-そのオプションは引き数を取ることが期待されます。
+そのオプションは引き数を一つ取ることが期待されます。
 引き数は空白でオプション文字と区切られていなければなりません。
 コロンと疑問符はオプション文字として使えません。
 .\"O Each time it is invoked,
@@ -13406,9 +13451,13 @@ POSIX の\fI特殊\fP組み込みコマンドだけに制限されます。
 .SM
 .B OPTIND
 を自動的に再設定することはありません。
+.\"O motoki: 「〜の間」とそのまま訳すより、「次に getopt を呼び出す前に」の方が分かりやすいかも。
 1 つのシェルが呼び出されている間に別のパラメータの組み合わせを使う場合には、
+再度
 .B getopts
-の呼び出しの間に手動で再設定を行わなければなりません。
+を呼び出す前に手動で
+.B OPTIND
+の再設定を行わなければなりません。
 .sp 1
 .\"O When the end of options is encountered, \fBgetopts\fP exits with a
 .\"O return value greater than zero.
@@ -13429,12 +13478,13 @@ POSIX の\fI特殊\fP組み込みコマンドだけに制限されます。
 .\"O .IR args ,
 .\"O .B getopts
 .\"O parses those instead.
+.\"O motoki: "parse" は「解析」や「解釈」の方が適切ではないでしょうか
 .B getopts
 は通常位置パラメータを展開しますが、他の引き数が
 .I args
 に指定されている場合には、
 .B getopts
-は位置パラメータでなくこれらを展開します。
+は位置パラメータでなくこれらの引き数を解釈対象とします。
 .sp 1
 .\"O .B getopts
 .\"O can report errors in two ways.  If the first character of
@@ -13444,13 +13494,15 @@ POSIX の\fI特殊\fP組み込みコマンドだけに制限されます。
 .\"O error reporting is used.  In normal operation diagnostic messages
 .\"O are printed when invalid options or missing option arguments are
 .\"O encountered.
+.\"O motoki: 「報告できます」ではなく「報告します」だと思います。silent に報告される場合とメッセージが表示される場合の二通りの方法がエラーによって使い分けられていることを説明していますので。
 .B getopts
-は 2 通りの方法でエラーを報告できます。
+は 2 通りの方法でエラーを報告します。
 .I optstring
 の最初の文字がコロンならば、
 .I 静かな (silent)
 エラー報告が行われます。
-通常の操作では、不正なオプションがある場合や
+.\"O motoki: normal operation の opeartion は「操作」というよりは「動作」ではないでしょうか。getopts の通常の動作という意味だと思います。
+通常の動作では、不正なオプションがある場合や
 オプションの引き数が足りない場合に診断メッセージが出力されます。
 .\"O If the variable
 .\"O .SM
@@ -13462,10 +13514,10 @@ POSIX の\fI特殊\fP組み込みコマンドだけに制限されます。
 変数
 .SM
 .B OPTERR
-に 0 が設定されている場合、エラーメッセージは全く出力されません。
-これは、
+に 0 が設定されている場合、
 .I optstring
-の最初の文字がコロンでなくても同じです。
+の最初の文字がコロンでない場合であっても、
+エラーメッセージは全く出力されません。
 .sp 1
 .\"O If an invalid option is seen,
 .\"O .B getopts
@@ -13476,6 +13528,7 @@ POSIX の\fI特殊\fP組み込みコマンドだけに制限されます。
 .\"O .SM
 .\"O .BR OPTARG .
 不正なオプションがあった場合、
+.B getopts
 は ? を
 .I name
 に設定します。
@@ -13546,13 +13599,15 @@ POSIX の\fI特殊\fP組み込みコマンドだけに制限されます。
 .\"O the directories in
 .\"O .B $PATH
 .\"O and remembered.  Any previously-remembered pathname is discarded.
-\fBhash\fP が実行されると、
-.I name
-それぞれに対して、
+.\"O motoki: Each time は副詞句の方なので、「name それぞれに対して」ではなく、
+.\"O motoki: 「hash が呼び出されるたびに」ではないでしょうか。
+\fBhash\fP が実行される度に、
 .B $PATH
-内のディレクトリの検索を行ってコマンドの完全なファイル名を調べ、
+に含まれるディレクトリの検索を行ってコマンド
+.I name
+の完全なパス名を調べ、
 その結果を記憶します。
-それまでに記憶されていたファイル名は捨てられます。
+それまでに記憶されていたパス名は捨てられます。
 .\"O If the
 .\"O .B \-p
 .\"O option is supplied, no path search is performed, and
@@ -13566,13 +13621,14 @@ POSIX の\fI特殊\fP組み込みコマンドだけに制限されます。
 .\"O .B \-r
 .\"O option causes the shell to forget all
 .\"O remembered locations.
+.\"O motoki: ここでは location はパス名なので、位置は少しそぐわないように思います。パス名、でいいかも。
 .B \-r
-オプションを与えると、シェルは記憶している位置を全て忘れます。
+オプションを与えると、シェルは記憶しているパス名を全て忘れます。
 .\"O The
 .\"O .B \-d
 .\"O option causes the shell to forget the remembered location of each \fIname\fP.
 .B \-d
-オプションを与えると、シェルは \fIname\fP の記憶している位置を忘れます。
+オプションを与えると、シェルは各 \fIname\fP について記憶しているパス名を忘れます。
 .\"O If the
 .\"O .B \-t
 .\"O option is supplied, the full pathname to which each \fIname\fP corresponds
@@ -13611,25 +13667,25 @@ POSIX の\fI特殊\fP組み込みコマンドだけに制限されます。
 .I pattern
 が指定された場合には、
 .B help
-はこの
+は
 .I pattern
 にマッチする全てのコマンドに関する詳しいヘルプを出力します。
-それ以外の場合には、
+指定されなかった場合には、
 全ての組み込みコマンドと制御構造についての説明が出力されます。
 .RS
 .PD 0
 .TP
 .B \-d
 .\"O Display a short description of each \fIpattern\fP
-\fIpattern\fP の短い説明を表示します。
+\fIpattern\fP それぞれの短い説明を表示します。
 .TP
 .B \-m
 .\"O Display the description of each \fIpattern\fP in a manpage-like format
-\fIpattern\fP の説明を manpage 風のフォーマットで表示します。
+\fIpattern\fP それぞれの説明を manpage 風のフォーマットで表示します。
 .TP
 .B \-s
 .\"O Display only a short usage synopsis for each \fIpattern\fP
-\fIpattern\fP の短い書式のみを表示します。
+\fIpattern\fP それぞれの短い書式のみを表示します。
 .PD
 .PP
 .\"O The return status is 0 unless no command matches
@@ -13687,18 +13743,18 @@ POSIX の\fI特殊\fP組み込みコマンドだけに制限されます。
 .\"O .SM
 .\"O .B HISTFILE
 .\"O is used.  Options, if supplied, have the following meanings:
-\fIfilename\fP が与えられている場合、
-これは履歴ファイルの名前として使われます。
-これが与えられていない場合には
+\fIfilename\fP が指定されている場合、
+履歴ファイルの名前として使われます。
+指定されていない場合には
 .SM
 .B HISTFILE
-の値が使われます。(指定されていれば) オプションは以下の意味を持ちます:
+の値が使われます。指定された場合、オプションは以下の意味を持ちます:
 .RS
 .PD 0
 .TP
 .B \-c
 .\"O Clear the history list by deleting all the entries.
-履歴リストの全てのエントリを削除し、クリアします。
+全てのエントリを削除し、履歴リストをクリアします。
 .TP
 \fB\-d\fP \fIoffset\fP
 .\"O Delete the history entry at position \fIoffset\fP.
@@ -13708,7 +13764,7 @@ POSIX の\fI特殊\fP組み込みコマンドだけに制限されます。
 .\"O Append the ``new'' history lines (history lines entered since the
 .\"O beginning of the current \fBbash\fP session) to the history file.
 「新しい」履歴行
-(\fBbash\fP の現在のセッションの開始以来入力された履歴行)
+(\fBbash\fP の現在のセッションの開始以降に入力された履歴行)
 を履歴ファイルに追加します。
 .TP
 .B \-n
@@ -13718,7 +13774,7 @@ POSIX の\fI特殊\fP組み込みコマンドだけに制限されます。
 .\"O current \fBbash\fP session.
 まだ履歴ファイルから読み込んでいない履歴行を
 現在の履歴リストに読み込みます。
-これらは、\fBbash\fP の現在のセッションの開始以降に
+読み込まれるのは、\fBbash\fP の現在のセッションの開始以降に
 履歴ファイルに追加された行です。
 .TP
 .B \-r
@@ -13776,7 +13832,7 @@ POSIX の\fI特殊\fP組み込みコマンドだけに制限されます。
 履歴ファイルを読み込むときに、履歴のコメント文字で始まり直後に数字が続く行は、
 直前の履歴行のタイムスタンプとして解釈されます。
 不正なオプションがある場合、
-履歴ファイルの読み書きの間にエラーが起きた場合、
+履歴ファイルの読み書き時にエラーが起きた場合、
 \fB\-d\fP オプションの引き数として不正な \fIoffset\fP の値が与えられた場合、
 \fB\-p\fP オプションの引き数として与えられた履歴展開が失敗した場合を除き、
 返り値は 0 になります。
@@ -13802,7 +13858,7 @@ POSIX の\fI特殊\fP組み込みコマンドだけに制限されます。
 .B \-n
 .\"O Display information only about jobs that have changed status since
 .\"O the user was last notified of their status.
-ユーザがステータスを最後に通知されて以来、
+ユーザがステータスを最後に通知されて以降に、
 ステータスの変更があったジョブに関する情報だけを表示します。
 .TP
 .B \-p
@@ -13826,8 +13882,9 @@ POSIX の\fI特殊\fP組み込みコマンドだけに制限されます。
 .\"O or an invalid
 .\"O .I jobspec
 .\"O is supplied.
+.\"O motoki: invalid は「無効な」の方がしっくり来るように思います。
 .I jobspec
-が与えられている場合、
+が指定された場合、
 そのジョブに関する情報だけが出力されます。
 不正なオプションがある場合や、不正な
 .I jobspec
@@ -13861,7 +13918,7 @@ POSIX の\fI特殊\fP組み込みコマンドだけに制限されます。
 .I command
 に
 .I args
-を与えて実行し、終了ステータスを返します。
+を与えて実行し、その終了ステータスを返します。
 .RE
 .TP
 \fBkill\fP [\fB\-s\fP \fIsigspec\fP | \fB\-n\fP \fIsignum\fP | \fB\-\fP\fIsigspec\fP] [\fIpid\fP | \fIjobspec\fP] ...
@@ -13887,18 +13944,20 @@ POSIX の\fI特殊\fP組み込みコマンドだけに制限されます。
 で指定されたプロセスに送ります。
 .\"O .I sigspec
 .\"O is either a case-insensitive signal name such as
+.\"O .SM
+.\"O .B SIGKILL
+.\"O (with or without the
+.\"O .SM
 .\"O .B SIG
 .\"O prefix) or a signal number;
 .I sigspec
-は
+は、
 .SM
 .B SIGKILL
-のようなシグナル名
-(with or without the
+のようなシグナル名 (先頭の
 .SM
 .B SIG
-prefix)
-、またはシグナルの番号です。
+は省略可能)、またはシグナルの番号です。
 .\"O .I signum
 .\"O is a signal number.
 .I signum
@@ -13910,11 +13969,11 @@ prefix)
 .\"O .B SIGTERM
 .\"O is assumed.
 .I sigspec
-がない場合には、
+が存在しない場合には、
 .SM
 .B SIGTERM
-.\"O An argument of
 が指定されたものとします。
+.\"O An argument of
 .\"O .B \-l
 .\"O lists the signal names.
 .\"O If any arguments are supplied when
@@ -13955,9 +14014,9 @@ prefix)
 .\"O above).
 各
 .I arg
-は評価される算術式です (
+は評価を行う算術式です
 .SM
-.B 算術式展開
+.RB ( 算術式展開
 を参照)。
 .\"O If the last
 .\"O .I arg
@@ -14012,11 +14071,11 @@ prefix)
 .B local
 を使うとエラーになります。
 .B local
-が関数の外部で使われたり、
+が関数の外部で使われた場合、
 不正な
 .I name
-が与えられたり、
-\fIname\fP が読み取り専用であったりしなければ、
+が与えられた場合、
+\fIname\fP が読み取り専用の変数であった場合以外は、
 .B local
 の返却ステータスは 0 となります。
 .TP
@@ -14051,7 +14110,7 @@ prefix)
 変数
 .SM
 .B MAPFILE
-が \fIarray\fP のデフォルトです。
+がデフォルトの \fIarray\fP です。
 オプションが指定された場合、以下の意味を持ちます:
 .RS
 .PD 0
@@ -14073,7 +14132,7 @@ prefix)
 .I array
 のインデックス
 .I origin
-から代入します。デフォルトのインデックスは 0 です。
+から代入を始めます。デフォルトのインデックスは 0 です。
 .TP
 .B \-s
 .\"O Discard the first \fIcount\fP lines read.
@@ -14081,7 +14140,7 @@ prefix)
 .TP
 .B \-t
 .\"O Remove a trailing newline from each line read.
-読み込んだ各行末の改行文字を削除します。
+読み込んだ各行の末尾にある改行文字を削除します。
 .TP
 .B \-u
 .\"O Read lines from file descriptor \fIfd\fP instead of the standard input.
@@ -14203,7 +14262,7 @@ prefix)
 .\"O .B dirs
 .\"O is performed as well, and the return status is 0.
 .B popd
-コマンドが成功すれば、
+コマンドが成功した場合、
 .B dirs
 も実行され、返却ステータスは 0 となります。
 .\"O .B popd
@@ -14211,9 +14270,9 @@ prefix)
 .\"O is empty, a non-existent directory stack entry is specified, or the
 .\"O directory change fails.
 .B popd
-が偽を返すのは、不正なオプションがあった場合・
-ディレクトリスタックが空の場合・
-ディレクトリスタックの存在しないエントリが指定された場合・
+が偽を返すのは、不正なオプションがあった場合、
+ディレクトリスタックが空の場合、
+ディレクトリスタックの存在しないエントリが指定された場合、
 ディレクトリ変更に失敗した場合です。
 .RE
 .TP
@@ -14235,11 +14294,11 @@ prefix)
 .\"O In addition to the standard \fIprintf\fP(1) format specifications,
 .\"O \fBprintf\fP interprets the following extensions:
 \fIformat\fP は 3 つのタイプのオブジェクトを含む文字列です。
-3 つのオブジェクトとは、(そのまま標準出力にコピーされる) プレーン文字・
-(変換されて標準出力にコピーされる) 文字エスケープシーケンス・
-(その後に続く引き数 \fIargument\fP それぞれの表示に用いられる)
-表示フォーマット指定、です。
-\fIprintf\fP(1) 標準のフォーマット以外に、以下のフォーマットが使えます。
+3 つのオブジェクトとは、普通の文字 (そのまま標準出力にコピーされる)、
+文字エスケープシーケンス (変換されて標準出力にコピーされる)、
+表示フォーマット指定 (\fIformat\fP の後に続く各引き数 \fIargument\fP
+の表示を行う)、です。
+\fIprintf\fP(1) 標準のフォーマット指定以外に、以下の拡張フォーマットが使えます。
 .RS
 .PD 0
 .TP
@@ -14252,8 +14311,8 @@ prefix)
 \fBprintf\fP は対応する \fIargument\fP 中の
 バックスラッシュのエスケープシーケンスを展開します。
 ただし、\fB\ec\fP で出力を終了し、\fB\e\(aq\fP, \fB\e"\fP,
-\fB\e?\fP のバックスラッシュは削られ、
- \fB\e0\fP で始まる 8 進数のエスケープシーケンスは 4 桁までです。
+\fB\e?\fP のバックスラッシュは削られず、
+\fB\e0\fP で始まる 8 進数のエスケープシーケンスは 4 桁までです。
 .TP
 .B %q
 .\"O causes \fBprintf\fP to output the corresponding
@@ -14270,7 +14329,7 @@ prefix)
 \fBprintf\fP は \fIdatefmt\fP を \fIstrftime\fP(3)
 の書式文字列として使って日付と時刻の文字列を出力します。
 対応する \fIargument\fP は、紀元 (1970年 1 月 1 日 00:00:00 UTC)
-からの秒数を表す整数値です。argument には 2 つの特別な値が使えます。
+からの秒数を表す整数値です。\fIargument\fP には 2 つの特別な値が使えます。
 -1 は現在時刻を表します。-2 はシェルが起動した時刻を表します。
 .PD
 .PP
@@ -14351,8 +14410,8 @@ prefix)
 .\"O to the directory stack at the top, making it the
 .\"O new current working directory.
 .I dir
-をディレクトリスタックの一番上に追加します。
-また、このディレクトリを新しいカレントの作業ディレクトリにします。
+をディレクトリスタックの一番上に追加し、
+そのディレクトリを新しいカレントの作業ディレクトリにします。
 .PD
 .PP
 .\"O If the
@@ -14374,18 +14433,19 @@ prefix)
 .\"O a non-existent directory stack element is specified,
 .\"O or the directory change to the specified new current directory
 .\"O fails.
-最初の形式を使った場合、
+.\"O motoki: 原文が間違っているが、最初の形式と2番目の形式が逆になっている。
+2 番目の形式を使った場合、
 .I dir
 への cd が失敗しなければ、
 .B pushd
 は 0 を返します。
-2 番目の形式を使った場合にも、
+最初の形式を使った場合には、
+ディレクトリスタックが空の場合、
+ディレクトリスタックの存在しない要素が指定された場合、
+指定された新しいカレントディレクトリへの
+ディレクトリ変更が失敗した場合以外は、
 .B pushd
 は基本的には 0 を返します。
-ただし、ディレクトリスタックが空の場合・
-ディレクトリスタックの存在しない要素が指定された場合・
-指定された新しいカレントディレクトリへの
-ディレクトリ変更が失敗した場合は除きます。
 .RE
 .TP
 \fBpwd\fP [\fB\-LP\fP]
@@ -14397,6 +14457,8 @@ prefix)
 .\"O option to the
 .\"O .B set
 .\"O builtin command is enabled.
+.\"O motoki: symbolic link を含まないということは
+.\"O motoki: symlink が展開されるということ。
 現在の作業ディレクトリの絶対パス名を出力します。
 .B \-P
 オプションが指定された場合や、組み込みコマンド
@@ -14404,7 +14466,7 @@ prefix)
 の
 .B \-o physical
 オプションが有効になっている場合には、
-出力されるパス名にはシンボリックリンクは含まれません。
+シンボリックリンクを展開したパス名が出力されます。
 .\"O If the
 .\"O .B \-L
 .\"O option is used, the pathname printed may contain symbolic links.
@@ -14415,7 +14477,7 @@ prefix)
 オプションを使うと、
 出力されるパス名にはシンボリックリンクが含まれているかもしれません。
 カレントディレクトリの名前を読む際にエラーが起きたり、
-不正なオプションが与えられたりしなければ、返却ステータスは 0 となります。
+不正なオプションが指定されたりしなければ、返却ステータスは 0 となります。
 .TP
 \fBread\fP [\fB\-ers\fP] [\fB\-a\fP \fIaname\fP] [\fB\-d\fP \fIdelim\fP] [\fB\-i\fP \fItext\fP] [\fB\-n\fP \fInchars\fP] [\fB\-N\fP \fInchars\fP] [\fB\-p\fP \fIprompt\fP] [\fB\-t\fP \fItimeout\fP] [\fB\-u\fP \fIfd\fP] [\fIname\fP ...]
 .\"O One line is read from the standard input, or from the file descriptor
@@ -14434,7 +14496,7 @@ prefix)
 .\"O .B IFS
 .\"O are used to split the line into words.
 標準入力、
-または \fB\-u\fP オプションに指定されたファイル・ディスクリプター \fIfd\fP
+または \fB\-u\fP オプションの引き数として指定されたファイル・ディスクリプター \fIfd\fP
 から 1 行を読み込み、最初の単語を最初の
 .I name
 に代入し、2 番目の単語を 2 番目の
@@ -14445,6 +14507,7 @@ prefix)
 に代入されます。
 .I name
 よりも標準入力から読み込んだ単語の方が少ない場合には、
+.\"O motoki: 空の値と空文字列は同じか？
 余っている
 .I name
 には空文字列が値として代入されます。
@@ -14471,6 +14534,8 @@ prefix)
 .\"O .I aname
 .\"O is unset before any new values are assigned.
 .\"O Other \fIname\fP arguments are ignored.
+.\"O motoki: before any ... の訳がない。
+.\"O motoki: unset は「変数を削除する」という意味なので、「設定を消す」というのは違うのではないか。
 .I aname
 の設定は消されます。他の
 \fIname\fP
@@ -14513,9 +14578,10 @@ readline は現在の (行編集がそれまで有効になっていなければ
 .\"O \fBread\fP returns after reading \fInchars\fP characters rather than
 .\"O waiting for a complete line of input, but honor a delimiter if fewer
 .\"O than \fInchars\fP characters are read before the delimiter.
+.\"O motoki: ここだけ「組み込みコマンド」があるが、不要だと思います。
 組み込みコマンド \fBread\fP は、
 入力行全体が読み込まれるのを待たず、
-文字 \fInchars\fP を読み込んだときに戻ります。
+\fInchars\fP 文字を読み込んだ時点で戻ります。
 ただし、\fInchars\fP 文字が読み込まれる前に区切り文字が現われたときは、
 区切り文字を優先します。
 .TP
@@ -14527,17 +14593,18 @@ readline は現在の (行編集がそれまで有効になっていなければ
 .\"O not treated specially and do not cause \fBread\fP to return until
 .\"O \fInchars\fP characters are read.
 入力行全体が読み込まれるのを待たず、
-文字 \fInchars\fP を読み込んだときに戻ります。
-ただし、EOF に遭遇したときや、
+\fInchars\fP 文字を読み込んだ時点で戻ります。
+ただし、入力に EOF が現れたときや、
 \fBread\fP がタイムアウトになったときを除きます。
-入力で区切り文字に遭遇しても特別扱いはせず、
+入力に区切り文字が現れても特別扱いはせず、
 \fInchars\fP 文字を読み込むまでは \fBread\fP が戻ることはありません。
 .TP
 .B \-p \fIprompt\fP
 .\"O Display \fIprompt\fP on standard error, without a
 .\"O trailing newline, before attempting to read any input.  The prompt
 .\"O is displayed only if input is coming from a terminal.
-入力を読み込もうとする前に標準エラー出力に\fIプロンプト\fPを表示します。
+.\"O motoki: prompt は引き数なので、訳さずにそのままにした方がよい。
+入力を読み込もうとする前に標準エラー出力に \fIprompt\fP を表示します。
 末尾に改行は付きません。
 プロンプトが表示されるのは、入力を端末から読み込む場合だけです。
 .TP
@@ -14567,6 +14634,7 @@ readline は現在の (行編集がそれまで有効になっていなければ
 .\"O If \fItimeout\fP is 0, \fBread\fP returns success if input is available on
 .\"O the specified file descriptor, failure otherwise.
 .\"O The exit status is greater than 128 if the timeout is exceeded.
+.\"O motoki: special files は「スペシャルファイル」でよいのでは。
 入力行全体が \fItimeout\fP 秒以内で読み込まれない場合、
 \fBread\fP をタイムアウトさせて、失敗の状態を返します。
 \fItimeout\fP は小数部を持つ十進数でもかまいません。
@@ -14596,10 +14664,10 @@ readline は現在の (行編集がそれまで有効になっていなければ
 .\"O The return code is zero, unless end-of-file is encountered, \fBread\fP
 .\"O times out (in which case the return code is greater than 128), or an
 .\"O invalid file descriptor is supplied as the argument to \fB\-u\fP.
-ファイル末尾に到達したり
-\fBread\fP がタイムアウトしたり
-(この場合には終了ステータスは 128 より大きい値になります)
-不正なファイル・ディスクリプターが指定されたりしなければ、
+ファイル末尾に到達した場合、
+\fBread\fP がタイムアウトした場合
+(この場合には終了ステータスは 128 より大きい値になります)、
+\fB\-u\fP の引き数として不正なファイル・ディスクリプターが指定した場合以外は、
 終了コードは 0 です。
 .RE
 .TP
@@ -14610,7 +14678,7 @@ readline は現在の (行編集がそれまで有効になっていなければ
 .\"O .I names
 .\"O may not be changed by subsequent assignment.
 指定された \fIname\fP に読み込み専用の印を付けます。
-それ以降は、このような
+それ以降は、これらの
 .I name
 の値を変更することはできません。
 .\"O If the
@@ -14646,7 +14714,8 @@ readline は現在の (行編集がそれまで有効になっていなければ
 引き数が全く与えられてない場合、または
 .B \-p
 オプションが与えられた場合、読み込み専用の名前全ての一覧が出力されます。
-ほかのオプションを指定すると、出力を読み込み専用の名前の一部に限定します。
+.\"O -p と他のオプションを組み合わせて使うというニュアンスがあった方が分かりやすい。
+ほかのオプションを合わせて指定すると、出力を読み込み専用の名前の一部に限定します。
 .\"O The
 .\"O .B \-p
 .\"O option causes output to be displayed in a format that
@@ -14665,22 +14734,24 @@ readline は現在の (行編集がそれまで有効になっていなければ
 .\"O is supplied with a
 .\"O .I name
 .\"O that is not a function.
+.\"O motoki: valid の訳は「有効な」なので、invalid は「無効な」の方が自然か。
 返却ステータスは基本的に 0 ですが、
 不正なオプションがあった場合、
 .I name
 のいずれかが有効なシェル変数名でなかった場合、
+.\"O motoki: name は -f オプションの引き数ではないので、-f が指定された場合に name が... の方がよい。
 .B \-f
-オプションに関数でない
+オプションの際に関数でない
 .I name
 を与えた場合は除きます。
 .TP
 \fBreturn\fP [\fIn\fP]
 .\"O Causes a function to exit with the return value specified by
 .\"O .IR n .
+.\"O motoki: 文章が前後してしまっていました。
 指定した返り値
-.I n
-を省略すると、返却ステータスは
-関数内で最後に実行したコマンドの返却ステータスになります。
+.IR n
+で関数を終了させます。
 .\"O If 
 .\"O .I n
 .\"O is omitted, the return status is that of the last command
@@ -14695,7 +14766,8 @@ readline は現在の (行編集がそれまで有効になっていなければ
 .\"O function and not during execution of a script by \fB.\fP\^,
 .\"O the return status is false.
 .I n
-で関数を終了させます。
+を省略すると、返却ステータスは
+関数内で最後に実行したコマンドの返却ステータスになります。
 関数の外側で使われているが、
 .B .
 (\fBsource\fP) コマンドによるスクリプトの実行中である場合、
@@ -14751,9 +14823,10 @@ readline は現在の (行編集がそれまで有効になっていなければ
 .B \-a
 .\"O Automatically mark variables and functions which are modified or
 .\"O created for export to the environment of subsequent commands.
+.\"O motoki: 「されるようになります」と言わなくても「されます」でよいと思います。
 値を変更したり新規に設定したりした変数および関数が、
-自動的に (後に実行するコマンドの) 環境として
-エクスポートされるようになります。
+(これ以降に実行するコマンドの) 環境として
+自動的にエクスポートされます。
 .TP 8
 .B \-b
 .\"O Report the status of terminated background jobs
@@ -14776,7 +14849,7 @@ readline は現在の (行編集がそれまで有効になっていなければ
 ブレース (前述の
 .SM
 .B シェルの文法
-を参照) で囲まれたコマンドのリストから実行されたコマンドの 1 つ
+を参照) で囲まれたコマンドのリストの一部として実行されたコマンドの 1 つ
 が 0 でないステータスで終了した場合、即座に終了します。
 .\"O The shell does not exit if the
 .\"O command that fails is part of the command list immediately following a
@@ -14797,23 +14870,24 @@ readline は現在の (行編集がそれまで有効になっていなければ
 .\"O or if the command's return value is
 .\"O being inverted with
 .\"O .BR ! .
-ただし失敗したコマンドが
+.\"O motoki: 文が長いので、「場合」で区切ると、区切りが分かりやすくなると思います。
+ただし、失敗したコマンドが、キーワード
 .B while
 または
 .B until
-の直後のコマンドの一部である、
+の直後のコマンドの一部である場合、予約語
 .B if
 または
 .B elif
-の条件式の一部である、
+に続く条件式の一部である場合、
 .B &&
 または
 .B ||
-リストの一部である (最後の \fB&&\fP や \fB||\fP の後のコマンドを除く)、
+によるコマンドのリストの一部である場合 (最後の \fB&&\fP や \fB||\fP の後のコマンドを除く)、
 パイプラインの中の最後のコマンド以外である、
 コマンドの返り値が
 .B !
-で反転されている、のいずれかの場合にはシェルは終了しません。
+で反転されている場合、のいずれかであれば、シェルは終了しません。
 .\"O A trap on \fBERR\fP, if set, is executed before the shell exits.
 .\"O This option applies to the shell environment and each subshell environment
 .\"O separately (see
@@ -14821,13 +14895,13 @@ readline は現在の (行編集がそれまで有効になっていなければ
 .\"O .B "COMMAND EXECUTION ENVIRONMENT"
 .\"O above), and may cause
 .\"O subshells to exit before executing all the commands in the subshell.
-\fBERR\fP のトラップが設定されていれば、シェルが終了する前に実行されます。
-このオプションはシェルの環境とサブシェルの環境に別々に適用され
+\fBERR\fP に対するトラップが設定されていれば、シェルが終了する前に実行されます。
+このオプションはシェルの環境と各サブシェルの環境に別々に適用され
 (前述の
 .SM
 .B "コマンド実行環境"
 を参照)、
-サブシェルは全てのコマンドを実行する前に終了するかもしれません。
+サブシェルはサブシェル内の全てのコマンドを実行する前に終了するかもしれません。
 .TP 8
 .B \-f
 .\"O Disable pathname expansion.
@@ -14836,13 +14910,19 @@ readline は現在の (行編集がそれまで有効になっていなければ
 .B \-h
 .\"O Remember the location of commands as they are looked up for execution.
 .\"O This is enabled by default.
-コマンドの位置を記憶し、実行時にこれを引きます。
+.\"O motoki: 実行時に参照できるように記憶するのと、実行時に参照する、では意味が違う。
+.\"O motoki: 何ができるようになるのかは理解できず。
+実行時に参照できるようにコマンドの位置を記憶します。
 これはデフォルトで有効になっています。
 .TP 8
 .B \-k
 .\"O All arguments in the form of assignment statements
 .\"O are placed in the environment for a command, not just
 .\"O those that precede the command name.
+.\"O motoki: "placed" なので、追加するではなく、反映させる、といった方が正しいか。
+.\"O すでにある場合は上書きすることになるはず。
+.\"O motoki: "for a command" ということは、ある一つのコマンドの実行環境だけが変更されるということか？
+.\"O motoki: 全体の書式が書かれていないので、詳しいことは分からないが。
 代入文の形式を持つ全ての引き数を、コマンドに対する環境に追加します。
 環境変数となるのは、コマンド名の前にあるものに限りません。
 .TP 8
@@ -14951,10 +15031,10 @@ emacs 形式のコマンド行編集インタフェースを使います。
 .\"O (see
 .\"O .B Shell Variables
 .\"O above).
-効果は、シェルコマンドの
+シェルコマンドの
 .if t \f(CWIGNOREEOF=10\fP
 .if n ``IGNOREEOF=10''
-を実行した場合と同様です
+を実行した場合と同じ効果を持ちます
 (前述の
 .B シェル変数
 を参照)。
@@ -14991,7 +15071,7 @@ emacs 形式のコマンド行編集インタフェースを使います。
 .TP 8
 .B nolog
 .\"O Currently ignored.
-現在では無視されます。
+現在は無視されます。
 .TP 8
 .B notify
 .\"O Same as
@@ -15034,7 +15114,8 @@ emacs 形式のコマンド行編集インタフェースを使います。
 .\"O from the POSIX standard to match the standard (\fIposix mode\fP).
 .B bash
 の動作を変えます。
-デフォルトの操作は POSIX 標準と異なりますが、
+.B bash
+のデフォルトの操作は POSIX 標準と異なりますが、
 これを標準に準拠するようにします (\fIposix モード\fP)。
 .TP 8
 .B privileged
@@ -15113,7 +15194,6 @@ vi 形式のコマンド行編集インタフェースを使います。
 .B $BASH_ENV
 ファイルは処理されず、シェル関数は環境から継承されず、
 .SM
-.SM
 .BR SHELLOPTS ,
 .SM
 .BR BASHOPTS ,
@@ -15129,14 +15209,13 @@ vi 形式のコマンド行編集インタフェースを使います。
 .\"O not reset.
 .\"O Turning this option off causes the effective user
 .\"O and group ids to be set to the real user and group ids.
-シェルを起動したときに実効ユーザ (グループ) ID が
-実ユーザ (グループ) ID と異なり、
+実ユーザ (グループ) ID と異なる実効ユーザ (グループ) ID でシェルが起動され、
 かつ \fB\-p\fP オプションが与えられていない場合、
 これらの動作が行われ、実効ユーザ ID には実ユーザ ID が設定されます。
 起動時に \fB\-p\fP オプションが与えられた場合、
 実効ユーザ ID は再設定されません。
 このオプションを無効にすると、
-実効ユーザ ID と実効グループ ID には
+実効ユーザ ID と実効グループ ID には、
 実ユーザ ID と 実グループ ID が設定されます。
 .TP 8
 .B \-t
@@ -15149,6 +15228,7 @@ vi 形式のコマンド行編集インタフェースを使います。
 .\"O parameter expansion.  If expansion is attempted on an
 .\"O unset variable or parameter, the shell prints an error message, and,
 .\"O if not interactive, exits with a non-zero status.
+.\"O motoki: "unset" は「削除された」と訳した方がしっくり来る気がする。
 パラメータ展開の実行中に、特殊パラメータ "@" と "*" 以外で
 設定が取り消されている変数やパラメータをエラーとして扱います。
 設定が取り消されている変数やパラメータを展開しようとした場合、
@@ -15167,6 +15247,9 @@ vi 形式のコマンド行編集インタフェースを使います。
 .\"O .BR PS4 ,
 .\"O followed by the command and its expanded arguments
 .\"O or associated word list.
+.\"O motoki: "or associated word list" に対応する訳がない。
+.\"O motoki: 各コマンドの展開を行うたびに表示を行うのか、コマンドの一つ一つを展開した後で、
+.\"O motoki: 一回表示を行うのかが、よく分からなかった。原文でもよく分からないが。
 \fI単純なコマンド\fP、\fBfor\fP コマンド、\fBcase\fP コマンド、
 \fBselect\fP コマンド、算術 \fBfor\fP コマンドをそれぞれ展開した後、
 .SM
@@ -15214,7 +15297,7 @@ vi 形式のコマンド行編集インタフェースを使います。
 シェル関数、コマンド置換、サブシェル環境で実行されるコマンド
 に継承されます。
 .\"O The \fBERR\fP trap is normally not inherited in such cases.
-\fBERR\fP のトラップは、通常はそのような場合に継承されません。
+通常、このような場面では \fBERR\fP のトラップは継承されません。
 .TP 8
 .B \-H
 .\"O Enable
@@ -15253,7 +15336,8 @@ vi 形式のコマンド行編集インタフェースを使います。
 設定されている場合、\fBDEBUG\fP と \fBRETURN\fP のトラップは、
 シェル関数、コマンド置換、サブシェル環境で実行されるコマンド
 に継承されます。
-\fBDEBUG\fP と \fBRETURN\fP のトラップは、通常はそのような場合に継承されません。
+通常、このような場面では
+\fBDEBUG\fP と \fBRETURN\fP のトラップは継承されません。
 .TP 8
 .B \-\-
 .\"O If no arguments follow this option, then the positional parameters are
@@ -15262,8 +15346,8 @@ vi 形式のコマンド行編集インタフェースを使います。
 .\"O .BR \- .
 このオプションの後に引き数が続いていない場合には、
 位置パラメータの設定が取り消されます。
-それ以外の場合には、位置パラメータに \fIarg\fP の残りが設定されます。
-これらに
+引き数が続いている場合には、位置パラメータに \fIarg\fP が設定されます。
+\fIarg\fP に
 .B \-
 で始まるものが含まれていても、
 オプションではなく位置パラメータとして扱われます。
@@ -15411,8 +15495,8 @@ vi 形式のコマンド行編集インタフェースを使います。
 .B \-s
 オプションまたは
 .B \-u
-オプションを使った場合、表示されるものは設定されているもの、
-または設定されていないものにそれぞれ制限されます。
+オプションを使った場合、それぞれ設定されているもの、
+または設定されていないものだけに表示が限定されます。
 .\"O Unless otherwise noted, the \fBshopt\fP options are disabled (unset)
 .\"O by default.
 特に断らない限り、\fBshopt\fP オプションは
@@ -15494,7 +15578,7 @@ vi 形式のコマンド行編集インタフェースを使います。
 設定されている場合、\fBbash\fP は対話的シェルが終了する前に、
 停止中のジョブや実行中のジョブの状態を一覧します。
 実行中のジョブがあれば、シェルの終了は、
-間にほかのコマンドを挟まずに 2 回目に終了が試みられるまで延期されます
+間にほかのコマンドを挟まずに 2 回目の終了が試みられるまで延期されます
 (前述の
 .SM
 .B "ジョブ制御"
@@ -15536,6 +15620,7 @@ vi 形式のコマンド行編集インタフェースを使います。
 .\"O .B bash
 .\"O changes its behavior to that of version 3.1 with respect to quoted
 .\"O arguments to the \fB[[\fP conditional command's \fB=~\fP operator.
+.\"O motoki: version 3.1 の直前に bash を置いた方が読みやすい。
 設定されている場合、
 .B bash
 は、条件コマンド \fB[[\fP の \fB=~\fP 演算子のクォートされた引き数に関して
@@ -15561,7 +15646,7 @@ bash の bash-4.1 より前のバージョンでは、ASCII コードの照合�
 .IR strcmp (3)
 を使います。
 bash-4.1 およびそれ以後のバージョンでは、
-現在のロケールの照合と
+現在のロケールの照合順序と
 .IR strcoll (3)
 を使います。
 .TP 8
@@ -15605,9 +15690,8 @@ bash のデフォルトの動作は前のバージョンのままです。
 設定されている場合、
 .B bash
 は
-attempts  during 
-単語補完のときに指定されたディレクトリ名が存在しなければ、
-ディレクトリ名のスペルの訂正を試みます。
+指定されたディレクトリ名が存在しなければ、
+単語補完のときにディレクトリ名のスペルの訂正を試みます。
 .TP 8
 .B dotglob
 .\"O If set, 
@@ -15654,23 +15738,23 @@ attempts  during
 .\"O The \fB\-F\fP option to the \fBdeclare\fP builtin displays the source
 .\"O file name and line number corresponding to each function name supplied
 .\"O as an argument.
-組み込みコマンド \fBdeclare\fP の \fB\-F\fP オプション
-引き数で指定された関数のソースファイル名と行番号を表示します。
+組み込みコマンド \fBdeclare\fP の \fB\-F\fP オプションが、
+引き数で指定された各関数のソースファイル名と行番号を表示します。
 .TP
 .B 2.
 .\"O If the command run by the \fBDEBUG\fP trap returns a non-zero value, the
 .\"O next command is skipped and not executed.
 \fBDEBUG\fP のトラップで実行されたコマンドが 0 以外を返したとき、
-次のコマンドはスキップされ実行されません。
+次のコマンドはスキップされ実行もされません。
 .TP
 .B 3.
 .\"O If the command run by the \fBDEBUG\fP trap returns a value of 2, and the
 .\"O shell is executing in a subroutine (a shell function or a shell script
 .\"O executed by the \fB.\fP or \fBsource\fP builtins), a call to
 .\"O \fBreturn\fP is simulated.
-\fBDEBUG\fP のトラップで実行されたコマンドが 2 を返し、
+\fBDEBUG\fP のトラップで実行されたコマンドが 2 を返し、かつ、
 シェルがサブルーチン (シェル関数や、組み込みコマンドの
-\fB.\fP や \fBsource\fP で実行されたシェルスクリプト)
+\fB.\fP や \fBsource\fP により実行されたシェルスクリプト)
 を実行しているとき、\fBreturn\fP の呼び出しがシミュレートされます。
 .TP
 .B 4.
@@ -15680,12 +15764,13 @@ attempts  during
 .\"O .SM
 .\"O .B BASH_ARGV
 .\"O are updated as described in their descriptions above.
+上記のシェル変数の説明で述べたように、
 .SM
 .B BASH_ARGC
 と
 .SM
 .B BASH_ARGV
-が、それぞれの説明で前述したように設定されます。
+が更新されます。
 .TP
 .B 5.
 .\"O Function tracing is enabled:  command substitution, shell functions, and
@@ -15693,7 +15778,7 @@ attempts  during
 .\"O \fBDEBUG\fP and \fBRETURN\fP traps.
 関数のトレースが有効になります。
 コマンド置換、シェル関数、\fB(\fP \fIcommand\fP \fB)\fP
-から起動されたサブシェルは、
+で起動されたサブシェルは、
 \fBDEBUG\fP と \fBRETURN\fP のトラップを継承します。
 .TP
 .B 6.
@@ -15729,13 +15814,16 @@ attempts  during
 .TP 8
 .B force_fignore
 .\"O If set, the suffixes specified by the
-設定されている場合、単語補完において、シェル変数
-.SM
-.B FIGNORE
+.\"O .SM
+.\"O .B FIGNORE
 .\"O shell variable
 .\"O cause words to be ignored when performing word completion even if
 .\"O the ignored words are the only possible completions.
-で指定されたサフィックスの単語は、その単語が唯一の補完候補でも除外されます。
+設定されている場合、単語補完において、シェル変数
+.SM
+.B FIGNORE
+で指定されたサフィックスの単語は無視されます。
+無視された単語が唯一の補完候補であったとしても無視されます。
 .\"O See
 .\"O .SM
 .\"O \fBSHELL VARIABLES\fP
@@ -15758,7 +15846,7 @@ attempts  during
 .\"O If the pattern is followed by a \fB/\fP, only directories and
 .\"O subdirectories match.
 設定されている場合、\fB**\fP というパターンがパス名展開で使われると、
-0 レベル以上のディレクトリやサブディレクトリの全てのファイルにマッチします。
+深さ 0 以上のディレクトリやサブディレクトリの全てのファイルにマッチします。
 直後に \fB/\fP が続く場合には、
 ディレクトリとサブディレクトリのみにマッチします。
 .TP 8
@@ -15774,10 +15862,10 @@ GNU 標準のエラーメッセージの形式で出力されます。
 .\"O .SM
 .\"O .B HISTFILE
 .\"O variable when the shell exits, rather than overwriting the file.
-設定されている場合、シェルの終了時に履歴リストが変数
+設定されている場合、シェルの終了時に変数
 .SM
 .B HISTFILE
-の値で指定しているファイルに追加されます。
+の値で指定しているファイルに履歴リストが追加されます。
 ファイルへの上書きは行われなくなります。
 .TP 8
 .B histreedit
@@ -15888,7 +15976,7 @@ GNU 標準のエラーメッセージの形式で出力されます。
 .\"O If set, and a file that \fBbash\fP is checking for mail has been  
 .\"O accessed since the last time it was checked, the message ``The mail in
 .\"O \fImailfile\fP has been read'' is displayed.
-設定されており、かつ \fBbash\fP がメールをチェックするファイルが
+設定されており、かつ \fBbash\fP がメールのチェックに使うファイルが
 前回のチェック以降にアクセスされている場合、
 メッセージ ``The mail in \fImailfile\fP has been read'' が表示されます。
 .TP 8
@@ -15931,10 +16019,12 @@ GNU 標準のエラーメッセージの形式で出力されます。
 .\"O .B bash
 .\"O matches patterns in a case\-insensitive fashion when performing matching
 .\"O while executing \fBcase\fP or \fB[[\fP conditional commands.
+.\"O motoki: conditiona commands のように複数形なので、case と [[ の両方が
+.\"O motoki: 条件コマンドだと思います。
 設定されている場合、
 .B bash
-は \fBcase\fP や条件コマンド \fB[[\fP のパターンマッチで
-大文字小文字を区別せずにパターンをマッチさせます。
+は条件コマンド \fBcase\fP や \fB[[\fP 実行時のパターンマッチで
+大文字小文字を区別せずにパターンマッチを行います。
 .TP 8
 .B nullglob
 .\"O If set,
@@ -16012,7 +16102,7 @@ GNU 標準のエラーメッセージの形式で出力されます。
 設定されている場合、組み込みコマンド \fBsource\fP (\fB.\fP) は
 .SM
 .B PATH
-の値を使って、引き数として与えられたファイルを含むディレクトリを見つけます。
+の値を使って、引き数として与えられたファイルを含むディレクトリを探します。
 このオプションはデフォルトで有効です。
 .TP 8
 .B xpg_echo
@@ -16036,7 +16126,8 @@ GNU 標準のエラーメッセージの形式で出力されます。
 シグナルを受け取るまで、シェルの実行をサスペンドします。
 ログインシェルはサスペンドできません。
 .B \-f
-オプションを与えると、これに優先してサスペンドします。
+オプションを与えると、この動作が上書きされ、ログインシェルがサスペンド
+できるようになります。
 .\"O The return status is 0 unless the shell is a login shell and
 .\"O .B \-f
 .\"O is not supplied, or if job control is not enabled.
@@ -16062,12 +16153,13 @@ GNU 標準のエラーメッセージの形式で出力されます。
 演算子とオペランドそれぞれは別々の引き数でなければなりません。
 式は前述の
 .SM
-.\"O \fBtest\fP does not accept any options, nor does it accept and ignore
-.\"O an argument of \fB\-\-\fP as signifying the end of options.
 .BR 条件式
 セクションで説明したプライマリで構成されます。
+.\"O \fBtest\fP does not accept any options, nor does it accept and ignore
+.\"O an argument of \fB\-\-\fP as signifying the end of options.
+.\"O motoki: もう少し分かりやすい文にならないものか。
 \fBtest\fP はオプションを受け取らず、
-\fB\-\-\fP をオプションの終わりを示すものとして受け取りも無視もしません。
+引き数 \fB\-\-\fP をオプションの終わりを示すものとして受け取りも無視もしません。
 .if t .sp 0.5
 .if n .sp 1
 .\"O Expressions may be combined using the following operators, listed
@@ -16076,7 +16168,7 @@ GNU 標準のエラーメッセージの形式で出力されます。
 .\"O Operator precedence is used when there are five or more arguments.
 式は次に示す演算子を使って結合できます。
 優先度の高い順に示します。
-式の評価は以下のように引き数の数に依存します。
+式の評価は後で述べるように引き数の数に依存します。
 引き数が 5 つ以上のときは演算子の優先度に従います。
 .RS
 .PD 0
@@ -16126,19 +16218,19 @@ GNU 標準のエラーメッセージの形式で出力されます。
 .PD 0
 .TP
 .\"O 0 arguments
-.\"O The expression is false.
 引き数が 0 個
+.\"O The expression is false.
 この式は偽です。
 .TP
 .\"O 1 argument
-.\"O The expression is true if and only if the argument is not null.
 引き数が 1 個
+.\"O The expression is true if and only if the argument is not null.
 引き数が空でない場合に限り真になります。
 .TP
 .\"O 2 arguments
+引き数が 2 個
 .\"O If the first argument is \fB!\fP, the expression is true if and
 .\"O only if the second argument is null.
-引き数が 2 個
 最初の引き数が \fB!\fP ならば、
 2 番目の引き数が空の場合に限り真になります。
 .\"O If the first argument is one of the unary conditional operators listed above
@@ -16156,6 +16248,7 @@ GNU 標準のエラーメッセージの形式で出力されます。
 最初の引き数が正しい単項条件演算子でなければ、式は偽となります。
 .TP
 .\"O 3 arguments
+引き数が 3 個
 .\"O The following conditions are applied in the order listed.
 .\"O If the second argument is one of the binary conditional operators listed above
 .\"O under
@@ -16163,12 +16256,12 @@ GNU 標準のエラーメッセージの形式で出力されます。
 .\"O .BR "CONDITIONAL EXPRESSIONS" ,
 .\"O the result of the expression is the result of the binary test using
 .\"O the first and third arguments as operands.
-引き数が 3 個
+.\"O motoki: 最初の文 (The following ...) に対応する訳がない。
 2 番目の引き数が、既に
 .SM
 .BR 条件式
 セクションで説明した二値条件演算子のいずれかであれば、
-最初と 3 番目の引き数をオペランドとして使った
+最初の引き数と 3 番目の引き数をオペランドとして使った
 二値評価の結果が式の結果となります。
 .\"O The \fB\-a\fP and \fB\-o\fP operators are considered binary operators
 .\"O when there are three arguments.  
@@ -16178,7 +16271,7 @@ GNU 標準のエラーメッセージの形式で出力されます。
 .\"O exactly \fB)\fP, the result is the one-argument test of the second
 .\"O argument.
 .\"O Otherwise, the expression is false.
-引き数が 3 個の場合においては、
+引き数が 3 個の場合、
 \fB\-a\fP と \fB\-o\fP は二値演算子として扱われます。
 最初の引き数が \fB!\fP であれば、2 番目と 3 番目の引き数を使った、
 引き数 2 つの評価の結果を否定したものが値となります。
@@ -16187,20 +16280,20 @@ GNU 標準のエラーメッセージの形式で出力されます。
 これら以外の場合には、式は偽となります。
 .TP
 .\"O 4 arguments
+引き数が 4 個
 .\"O If the first argument is \fB!\fP, the result is the negation of
 .\"O the three-argument expression composed of the remaining arguments.
 .\"O Otherwise, the expression is parsed and evaluated according to 
 .\"O precedence using the rules listed above.
-引き数が 4 個
 最初の引き数が \fB!\fP ならば、
 残りの引き数で作った引き数 3 つの式の値を否定したものが結果となります。
 それ以外の場合には、先に挙げた規則を使った優先度に従って
 式が展開・評価されます。
 .TP
 .\"O 5 or more arguments
+引き数が 5 個以上
 .\"O The expression is parsed and evaluated according to precedence
 .\"O using the rules listed above.
-引き数が 5 個以上
 先に挙げた規則を使った優先度に従って式が展開・評価されます。
 .if t .sp 0.5
 .if n .sp 1
@@ -16215,8 +16308,8 @@ ASCII コードに基づき辞書順にソートします
 .B times
 .\"O Print the accumulated user and system times for the shell and
 .\"O for processes run from the shell.  The return status is 0.
-シェルとシェルから実行したプロセスについて、
-ユーザ時間とシステム時間を加えたものを出力します。
+シェルとシェルから実行したプロセスのそれぞれについて、
+累積のユーザ時間とシステム時間を加えたものを出力します。
 返却ステータスは 0 です。
 .TP
 \fBtrap\fP [\fB\-lp\fP] [[\fIarg\fP] \fIsigspec\fP ...]
@@ -16238,12 +16331,12 @@ ASCII コードに基づき辞書順にソートします
 .\"O reset to its original disposition (the value it had
 .\"O upon entrance to the shell).
 .I arg
-が存在しない
- (and there is a single \fIsigspec\fP)
-か、
+が存在しない (かつ \fIsigspec\fP が一つ指定された) 場合か、
+.I arg
+が
 .B \-
-である場合、
-指定されているシグナルは全て最初の値
+の場合、
+指定されたシグナルは全てオリジナルの動作
 (シェルの起動時に設定されていた値) にリセットされます。
 .\"O If 
 .\"O .I arg
@@ -16253,7 +16346,7 @@ ASCII コードに基づき辞書順にソートします
 .I arg
 が空文字列である場合、それぞれの
 .I sigspec
-で指定されているシグナルは、
+で指定されたシグナルは、
 シェルとシェルが起動したコマンドから無視されます。
 .\"O If
 .\"O .I arg
@@ -16268,7 +16361,7 @@ ASCII コードに基づき辞書順にソートします
 オプションが与えられた場合、
 各
 .I sigspec
-に対応する trap コマンドが表示されます。
+に関連付けられた trap コマンドが表示されます。
 .\"O If no arguments are supplied or if only
 .\"O .B \-p
 .\"O is given,
@@ -16278,21 +16371,21 @@ ASCII コードに基づき辞書順にソートします
 .B \-p
 だけが与えられた場合、
 .B trap
-は各シグナル番号に対応するコマンドのリストを出力します。
+は各シグナルに関連付けられたコマンドのリストを出力します。
 .\"O The
 .\"O .B \-l
 .\"O option causes the shell to print a list of signal names and
 .\"O their corresponding numbers.
 .B \-l
 オプションを与えると、
-シェルはシグナル名とこれに対応する番号のリストを出力します。
+シェルはシグナル名と対応する番号のリストを出力します。
 .\"O Each
 .\"O .I sigspec
 .\"O is either
 .\"O a signal name defined in <\fIsignal.h\fP>, or a signal number.
 それぞれの
 .I sigspec
-は、<\fIsignal.h\fP> で定義されているシグナル名またはシグナル番号です。
+は、<\fIsignal.h\fP> で定義されているシグナル名、またはシグナル番号です。
 .\"O Signal names are case insensitive and the
 .\"O .SM
 .\"O .B SIG
@@ -16335,18 +16428,18 @@ ASCII コードに基づき辞書順にソートします
 が
 .SM
 .BR DEBUG
-であれば、\fI単純なコマンド\fP、\fIfor\fP コマンド、
+であれば、各々の \fI単純なコマンド\fP、\fIfor\fP コマンド、
 \fIcase\fP コマンド、\fIselect\fP コマンド、
-算術 \fIfor\fP コマンド、シェル関数の最初のコマンドの実行前
+各々の算術 \fIfor\fP コマンドの前、およびシェル関数の最初のコマンドの実行前
  (前述の
 .SM
 .B シェルの文法
-セクションを参照) が終わるたびにコマンド
+セクションを参照) に、コマンド
 .I arg
 が実行されます。
 .\"O Refer to the description of the \fBextdebug\fP option to the
 .\"O \fBshopt\fP builtin for details of its effect on the \fBDEBUG\fP trap.
-\fBDEBUG\fP のトラップの効果について、詳しくは
+\fBDEBUG\fP のトラップの影響についての詳細は
 組み込みコマンド \fBshopt\fP の \fBextdebug\fP
 オプションの説明を参照してください。
 .\"O If a
@@ -16362,8 +16455,8 @@ ASCII コードに基づき辞書順にソートします
 が
 .SM
 .BR RETURN
-であれば、組み込みコマンドの \fB.\fP または \fBsource\fP
-から実行されたスクリプトが終わるたびにコマンド
+であれば、シェル関数の実行、または組み込みコマンドの \fB.\fP や \fBsource\fP で
+実行されたスクリプトの実行が終わるたびにコマンド
 .I arg
 が実行されます。
 .if t .sp 0.5
@@ -16384,7 +16477,8 @@ ASCII コードに基づき辞書順にソートします
 であれば、
 単純なコマンドが 0 以外の終了ステータスのときにコマンド
 .I arg
-が実行されます。これは以下の条件によります。
+が実行されます。
+.\"O "subject to ..." の部分は、次の文を「ただし」で始めるくらいでよいのでは？
 .\"O The
 .\"O .SM
 .\"O .B ERR
@@ -16401,9 +16495,10 @@ ASCII コードに基づき辞書順にソートします
 .\"O or
 .\"O .B ||
 .\"O list, or if the command's return value is
+.\"O being inverted via
 .\"O .BR ! .
 .\"O These are the same conditions obeyed by the \fBerrexit\fP option.
-失敗したコマンドが
+ただし、失敗したコマンドが、
 .B while
 または
 .B until
@@ -16414,26 +16509,25 @@ ASCII コードに基づき辞書順にソートします
 や
 .B ||
 のリスト中で実行するコマンドに含まれる場合、
-or if the command's return value is
-being inverted via
-コマンドの戻り値が
+および、コマンドの戻り値が
 .BR !
 で反転されている場合には、
 .SM
 .B ERR
 のトラップは実行されません。
-これは \fBerrexit\fP オプションと同じ条件です。
+これらは \fBerrexit\fP オプションが従う条件と同じです。
 .if t .sp 0.5
 .if n .sp 1
 .\"O Signals ignored upon entry to the shell cannot be trapped or reset.
 .\"O Trapped signals that are not being ignored are reset to their original
 .\"O values in a subshell or subshell environment when one is created.
-.\"O The return status is false if any
-シェルのエントリで無視されるシグナルは、
+シェルに入る際に無視されるシグナルは、
 トラップもリセットもできません。
-無視されなかったトラップのシグナルは、
+.\"O motoki: シグナルのトラップの方が正しいのではないか。
+無視されなかったシグナルのトラップは、
 サブシェルやサブシェル環境では作られたときに
 元の値にリセットされます。
+.\"O The return status is false if any
 .\"O .I sigspec
 .\"O is invalid; otherwise
 .\"O .B trap
@@ -16470,10 +16564,10 @@ being inverted via
 .B \-t
 オプションを使うと、
 .I name
-が、エイリアス・シェルの予約語・関数・
-組み込みコマンド・ディスク上のファイルのいずれかの場合、
+がエイリアス、シェルの予約語、関数、
+組み込みコマンド、ディスク上のファイルのいずれかの場合、
 .B type
-はそれぞれに応じて
+はそれぞれ
 .IR alias ,
 .IR keyword ,
 .IR function ,
@@ -16504,14 +16598,13 @@ being inverted via
 .B type
 は
 .I name
-をコマンド名として指定した場合に実行されるディスクファイルの名前、
-または空文字列を返します。
-空文字列が返されるのは、
+をコマンド名として指定した場合に実行されるディスクファイルの名前を返します。
+ただし、
 .if t \f(CWtype -t name\fP
 .if n ``type -t name''
 が
-.I file
-を返さない場合です。
+.IR file
+を返さない場合は、何も返しません。
 .\"O The
 .\"O .B \-P
 .\"O option forces a
@@ -16545,7 +16638,7 @@ being inverted via
 や
 .B \-P
 はハッシュされている値を表示します。
-表示されるのは、必ずしも
+この場合、表示されるのは、必ずしも
 .SM
 .BR PATH
 中で最初に現われるファイルとは限りません。
@@ -16561,7 +16654,7 @@ being inverted via
 .B type
 は
 .I name
-が示す実行ファイルがある場所を全て出力します。
+という名前の実行ファイルがある場所を全て出力します。
 .\"O This includes aliases and functions,
 .\"O if and only if the 
 .\"O .B \-p
@@ -16584,8 +16677,8 @@ being inverted via
 .\"O returns true if all of the arguments are found, false if
 .\"O any are not found.
 .B type
-は、引き数のいずれかが見つかれば真を返し、
-どれも見つからなければ偽を返します。
+は、すべての引き数が見つかれば真を返し、
+いずれかが見つからなければ偽を返します。
 .TP
 \fBulimit\fP [\fB\-HSTabcdefilmnpqrstuvx\fP [\fIlimit\fP]]
 .\"O Provides control over the resources available to the shell and to
@@ -16600,12 +16693,12 @@ being inverted via
 利用できるリソースを制御できます。
 ただし、このような制御ができるシステムの場合に限ります。
 \fB\-H\fP オプションと \fB\-S\fP オプションは、
-それぞれ与えられたリソースに対する
-強い (hard) 制限と弱い (soft) 制限を設定します。
-強い制限は一度設定すると増やせません。
+それぞれ指定されたリソースに対する
+強い制限 (hard limit) と弱い制限 (soft limit) を設定します。
+強い制限は一度設定すると、root 以外のユーザが増やすことはできません。
 弱い制限は強い制限の値までは増やせます。
 \fB\-H\fP と \fB\-S\fP がどちらも指定されていない場合、
-強い制限と弱い制限がどちらも設定されます。
+強い制限と弱い制限が両方が設定されます。
 .\"O The value of
 .\"O .I limit
 .\"O can be a number in the unit specified for the resource
@@ -16617,11 +16710,15 @@ being inverted via
 .\"O which stand for the current hard limit, the current soft limit, and
 .\"O no limit, respectively.
 .I limit
-の値はリソースに対して指定されている単位の数、または
+の値には、数字 (単位はリソースに応じて規定)、または
 .BR hard ,
 .BR soft ,
 .BR unlimited
-で、それぞれ現在の強い制限、現在の弱い制限、制限なしを表します。
+が指定できます。
+.BR hard ,
+.BR soft ,
+.BR unlimited
+は、それぞれ現在の強い制限、現在の弱い制限、制限なしを表します。
 .\"O If
 .\"O .I limit
 .\"O is omitted, the current value of the soft limit of the resource is
@@ -16638,7 +16735,7 @@ being inverted via
 .TP
 .B \-a
 .\"O All current limits are reported
-現在の制限を全て報告する
+現在の制限を全て表示する
 .TP
 .B \-b
 .\"O The maximum socket buffer size
@@ -16646,7 +16743,7 @@ being inverted via
 .TP
 .B \-c
 .\"O The maximum size of core files created
-生成されるコアファイル (core) の最大サイズ
+生成されるコア (core) ファイルの最大サイズ
 .TP
 .B \-d
 .\"O The maximum size of a process's data segment
@@ -16658,7 +16755,7 @@ being inverted via
 .TP
 .B \-f
 .\"O The maximum size of files written by the shell and its children
-シェルとその子プロセスのシェルが生成できるファイルの最大サイズ
+シェルとその子プロセスが生成できるファイルの最大サイズ
 .TP
 .B \-i
 .\"O The maximum number of pending signals
@@ -16670,7 +16767,7 @@ being inverted via
 .TP
 .B \-m
 .\"O The maximum resident set size (many systems do not honor this limit)
-常駐セットサイズの最大値
+常駐セットサイズ (resident set size) の最大値
 (多くのシステムはこの制限を守りません)
 .TP
 .B \-n
@@ -16707,7 +16804,8 @@ CPU 時間の最大量 (秒単位)
 .B \-v
 .\"O The maximum amount of virtual memory available to the shell and, on
 .\"O some systems, to its children
-シェルと、システムによってはその子プロセスのシェルが使用できる最大の仮想メモリ量
+そのシェルが使用できる最大の仮想メモリ量
+(システムによっては、子プロセスも含まれる)
 .TP
 .B \-x
 .\"O The maximum number of file locks
@@ -16724,7 +16822,7 @@ CPU 時間の最大量 (秒単位)
 .\"O .B \-a
 .\"O option is display only).
 .I limit
-が与えられている場合、これは指定されたリソースの新しい値となります
+が指定された場合、その値が指定されたリソースの新しい値となります
 .RB ( \-a
 は表示専用です)。
 .\"O If no option is given, then
@@ -16742,7 +16840,7 @@ CPU 時間の最大量 (秒単位)
 .\"O and
 .\"O .BR \-u ,
 .\"O which are unscaled values.
-オプションが全く与えられなかった場合は、
+オプションが全く指定されなかった場合は、
 .B \-f
 が指定されたものとみなされます。
 値は 1024 バイト単位で増えますが、例外として
@@ -16759,8 +16857,7 @@ CPU 時間の最大量 (秒単位)
 .\"O The return status is 0 unless an invalid option or argument is supplied,
 .\"O or an error occurs while setting a new limit.
 返却ステータスは基本的に 0 ですが、
-不正なオプションがある場合、
-\fBunlimited\fP 以外の数字でない引き数が \fIlimit\fP に指定された場合、
+不正なオプションや引き数が渡された場合、
 新しい制限を設定する際にエラーが起きた場合は除きます。
 .RE
 .TP
@@ -16778,7 +16875,7 @@ CPU 時間の最大量 (秒単位)
 .\"O to that accepted by
 .\"O .IR chmod (1).
 .I mode
-が数字で始まる場合には、これは 10 進数と解釈されます。
+が数字で始まる場合には、これは 8 進数と解釈されます。
 それ以外の場合には、
 .IR chmod (1)
 に指定するのと同様のシンボリックなモードマスクと解釈されます。
@@ -16793,7 +16890,7 @@ CPU 時間の最大量 (秒単位)
 .\"O default output is an octal number.
 .B \-S
 オプションを指定すると、マスクはシンボリックな形式で表示されます。
-デフォルトの出力は 10 進の数値です。
+デフォルトの出力は 8 進の数値です。
 .\"O If the
 .\"O .B \-p
 .\"O option is supplied, and
@@ -16817,12 +16914,12 @@ CPU 時間の最大量 (秒単位)
 .\"O value is true unless a supplied
 .\"O .I name
 .\"O is not a defined alias.
-\fIname\fP を定義されているエイリアスのリストから削除します。
+定義されているエイリアスのリストから \fIname\fP を削除します。
 .B \-a
 が与えられている場合には、エイリアス定義は全て削除されます。
 与えられた
 .I name
-が定義されているエイリアスであれば、返却ステータスは真になります。
+が定義されているエイリアスでない場合以外は、返却ステータスは真になります。
 .TP
 \fBunset\fP [\-\fBfv\fP] [\fIname\fP ...]
 .\"O For each
@@ -16836,9 +16933,9 @@ CPU 時間の最大量 (秒単位)
 .\"O Read-only variables may not be unset.
 .I name
 それぞれについて、対応する変数や関数を削除します。
-オプションが全く与えられていない場合や、
+オプションが全く指定されていない場合や、
 .B \-v
-オプションが与えられた場合は、各
+オプションが指定された場合は、各
 .I name
 はシェル変数を参照します。
 読み込み専用の変数の設定を消すことはできません。
@@ -16894,10 +16991,10 @@ CPU 時間の最大量 (秒単位)
 .BR GROUPS ,
 .SM
 .B DIRSTACK
-のいずれかの設定を消した場合、これらの特殊な特性もなくなります。
+のいずれかの設定を消した場合、これらが持つ特別な特性もなくなります。
 これは後で再設定しても元に戻ることはありません。
 .I name
-が存在しないか、読み込み専用の場合以外には、
+が読み込み専用の場合以外は、
 終了ステータスは真となります。
 .TP
 \fBwait\fP [\fIn ...\fP]
@@ -16907,7 +17004,8 @@ CPU 時間の最大量 (秒単位)
 .\"O may be a process
 .\"O ID or a job specification; if a job spec is given, all processes
 .\"O in that job's pipeline are waited for.  If
-指定されたプロセスを wait し、その終了ステータスを返します。
+指定された各プロセスを wait し、その終了ステータスを返します。
+各
 .I n
 はプロセス ID またはジョブ指定です。
 ジョブ指定を与えた場合、そのジョブのパイプラインに含まれる
