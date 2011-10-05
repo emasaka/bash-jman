@@ -6987,6 +6987,8 @@ and
 .\"O Operators are evaluated in order of precedence.  Sub-expressions in
 .\"O parentheses are evaluated first and may override the precedence
 .\"O rules above.
+演算子は優先度の順に評価されます。括弧内にある部分式は最初に評価され、
+前述の優先規則よりも優先させることができます。
 .\"O .SH "CONDITIONAL EXPRESSIONS"
 .\"O Conditional expressions are used by the \fB[[\fP compound command and
 .\"O the \fBtest\fP and \fB[\fP builtin commands to test file attributes
@@ -6997,8 +6999,6 @@ and
 .\"O If the \fIfile\fP argument to one of the primaries is one of
 .\"O \fI/dev/stdin\fP, \fI/dev/stdout\fP, or \fI/dev/stderr\fP, file
 .\"O descriptor 0, 1, or 2, respectively, is checked.
-演算子は優先度の順に評価されます。括弧内にある部分式は最初に評価され、
-前述の優先規則よりも優先させることができます。
 .SH 条件式
 条件式は複合コマンド \fB[[\fP と組み込みコマンドの \fBtest\fP および
 \fB[\fP によって使用でき、ファイルの属性を調べたり、
