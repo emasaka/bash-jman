@@ -328,7 +328,7 @@ bash \- GNU Bourne-Again SHell
 .\"O .B INVOCATION
 .\"O below).
 対話的シェルとして起動された場合、
-個人用の初期化ファイル
+個人用の標準の初期化ファイル
 .I ~/.bashrc
 の代わりに
 .I file
@@ -2443,7 +2443,7 @@ control-\fIx\fP の文字
 もし
 .B bash
 を起動したときに、この変数が環境変数に設定されていれば、
-初期化ファイルを読み込む前に、リストにある全てのシェルオプションが
+起動ファイルを読み込む前に、リストにある全てのシェルオプションが
 有効に設定されます。
 この変数は読み込み専用です。
 .TP
@@ -2460,8 +2460,8 @@ control-\fIx\fP の文字
 .\"O list of aliases as maintained by the \fBalias\fP builtin.
 .\"O Elements added to this array appear in the alias list; unsetting array
 .\"O elements cause aliases to be removed from the alias list.
-組み込みコマンド \fBalias\fP で扱うエイリアスの内部的なリストに
-対応する連想配列変数です。
+エイリアスの内部的なリストに対応する連想配列変数です。
+エイリアスは組み込みコマンド \fBalias\fP で操作します。
 この配列に要素を追加すると、エイリアスのリストにも追加されます。
 配列から要素を削除すると、エイリアスがリストから削除されます。
 .TP
@@ -2474,7 +2474,7 @@ control-\fIx\fP の文字
 .\"O When a subroutine is executed, the number of parameters passed is pushed onto
 .\"O .SM
 .\"O .BR BASH_ARGC .
-現在の \fBbash\fP が実行している呼び出しスタックについて、
+\fBbash\fP の現在の呼び出しスタックについて、
 フレームごとの引き数の数が並んだ配列変数です。
 現在のサブルーチン (シェル関数や、\fB.\fP か \fBsource\fP で実行された
 スクリプト) の引き数の数が、スタックの一番上に置かれます。
@@ -2507,7 +2507,7 @@ control-\fIx\fP の文字
 .\"O are pushed onto
 .\"O .SM
 .\"O .BR BASH_ARGV .
-現在の \fBbash\fP が実行している呼び出しスタックについて、
+\fBbash\fP の現在の呼び出しスタックについて、
 全ての引き数が並んだ配列変数です。
 一連の呼び出しのうち、最後に呼ばれたサブルーチンの最後の引き数が、
 スタックの一番上に置かれます。
@@ -2540,8 +2540,9 @@ control-\fIx\fP の文字
 .\"O hash table of commands as maintained by the \fBhash\fP builtin.
 .\"O Elements added to this array appear in the hash table; unsetting array
 .\"O elements cause commands to be removed from the hash table.
-組み込みコマンド \fBhash\fP で扱うコマンドの内部的なハッシュテーブルに
-対応する連想配列変数です。
+\fBbash\fP が内部に持つ、コマンドのハッシュテーブルに対応する
+連想配列変数です。
+ハッシュテーブルは組み込みコマンド hash で操作します。
 この配列に要素を追加すると、ハッシュテーブルにも追加されます。
 配列から要素を削除すると、ハッシュテーブルから削除されます。
 .TP
@@ -2562,7 +2563,7 @@ control-\fIx\fP の文字
 .\"O .SM
 .\"O .B FUNCNAME
 .\"O was invoked.
-ソースファイル中の行番号に対応する要素からなる配列変数で、
+ソースファイル中の行番号からなる配列変数で、
 それぞれの要素は
 .SM
 .B FUNCNAME
@@ -2572,7 +2573,7 @@ control-\fIx\fP の文字
 .\"O \fB${FUNCNAME[\fP\fI$i\fP\fB]}\fP was called
 .\"O (or \fB${BASH_LINENO[\fP\fI$i-1\fP\fB]}\fP if referenced within another
 .\"O shell function).
-\fB${BASH_LINENO[\fP\fI$i\fP\fB]}\fP がソースファイル
+つまり、\fB${BASH_LINENO[\fP\fI$i\fP\fB]}\fP はソースファイル
 (\fB${BASH_SOURCE[\fP\fI$i+1\fP\fB]}\fP)
 中で\fB${FUNCNAME[\fP\fI$i\fP\fB]}\fP が呼び出された行番号です。
 別のシェル関数から参照されると \fB${BASH_LINENO[\fP\fI$i-1\fP\fB]}\fP
@@ -2584,7 +2585,7 @@ control-\fIx\fP の文字
 現在の行番号は
 .SM
 .B LINENO
-です。
+で取得できます。
 .TP
 .B BASH_REMATCH
 .\"O An array variable whose members are assigned by the \fB=~\fP binary
@@ -2607,8 +2608,7 @@ control-\fIx\fP の文字
 .\"O .B FUNCNAME
 .\"O array variable are defined.
 .\"O The shell function
-ソースファイル名に対応する要素からなる配列変数で、
-それぞれの要素は配列変数
+ソースファイル名からなる配列変数で、それぞれの要素は配列変数
 .SM
 .B FUNCNAME
 の要素のシェル関数がそれぞれ定義されたファイル名に対応します。
@@ -2679,8 +2679,8 @@ control-\fIx\fP の文字
 .\"O This variable is available only in shell functions invoked by the
 .\"O programmable completion facilities (see \fBProgrammable Completion\fP
 .\"O below).
-現在カーソル位置が置かれている単語の
-\fB${COMP_WORDS}\fP におけるインデックスです。
+現在カーソル位置がある単語の
+配列変数 \fB${COMP_WORDS}\fP におけるインデックスです。
 この変数はプログラム補完機能 (後述の \fBプログラム補完\fP を参照)
 から呼ばれたシェル関数においてのみ有効です。
 .TP
@@ -2697,7 +2697,7 @@ control-\fIx\fP の文字
 .\"O below).
 現在のコマンドラインです。
 この変数はプログラム補完機能 (後述の \fBプログラム補完\fP を参照)
-から呼ばれたシェル関数においてのみ有効です。
+から呼ばれたシェル関数や外部コマンドにおいてのみ有効です。
 .TP
 .B COMP_POINT
 .\"O The index of the current cursor position relative to the beginning of
@@ -2713,7 +2713,7 @@ control-\fIx\fP の文字
 現在のカーソル位置が現在の現在のコマンドの最後にある場合、
 この変数の値は \fB${#COMP_LINE}\fP と等しくなります。
 この変数はプログラム補完機能 (後述の \fBプログラム補完\fP を参照)
-から呼ばれたシェル関数においてのみ有効です。
+から呼ばれたシェル関数や外部コマンドにおいてのみ有効です。
 .TP
 .B COMP_TYPE
 .\"O Set to an integer value corresponding to the type of completion attempted
@@ -2844,7 +2844,7 @@ set しても元には戻りません。
 .\"O .B FUNCNAME
 .\"O is unset, it loses its special properties, even if it is
 .\"O subsequently reset.
-現在実行している呼び出しスタックにある全てのシェル関数名が
+現在の呼び出しスタックにある全てのシェル関数名が
 入った配列変数です。
 インデックス 0 の要素は、実行中のシェル関数の名前です。
 最も下の要素 (最大のインデックスの要素) は
@@ -2946,7 +2946,7 @@ set しても元には戻りません。
 .\"O subsequently reset.
 この変数が参照されると、
 シェルはスクリプトや関数における現在の行番号 (1から始まります) を表す
-10 進値を代入します。スクリプトや関数の内部でない場合には、
+10 進値になります。スクリプトや関数の内部でない場合には、
 意味のある値が代入されることは保証されません。
 .SM
 .B LINENO
@@ -3026,7 +3026,7 @@ GNU 標準の \fIcpu-company-system\fP の形式で設定されます。
 .\"O below) containing a list of exit status values from the processes
 .\"O in the most-recently-executed foreground pipeline (which may
 .\"O contain only a single command).
-フォアグラウンドのパイプラインで最後に実行されたプロセスの
+フォアグラウンドで最後に実行したパイプラインの各プロセスの
 終了ステータスのリストを含む配列変数です (後述の
 .B 配列
 を参照)。
@@ -3182,7 +3182,7 @@ GNU 標準の \fIcpu-company-system\fP の形式で設定されます。
 .\"O .B bash
 .\"O is started.
 .B bash
-の実体が起動されるたびに 1 ずつ増えます。
+が起動されるたびに 1 ずつ増えます。
 .TP
 .B UID
 .\"O Expands to the user ID of the current user, initialized at shell startup.
