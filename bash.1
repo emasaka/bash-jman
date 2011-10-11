@@ -8492,7 +8492,7 @@ readline は対話シェルを使うときに入力の読み込みを処理す�
 指定したときにも使われます。
 デフォルトでは、行編集に使うコマンドは emacs のコマンドに似ています。
 vi 形式の行編集インタフェースも使えます。
-行編集はいつでも、組み込みコマンド
+行編集は、組み込みコマンド
 .B set
 (後述の
 .SM
@@ -8501,7 +8501,7 @@ vi 形式の行編集インタフェースも使えます。
 .B \-o emacs
 や
 .B \-o vi
-オプションを指定して有効にできます。
+オプションを指定することで、いつでも有効にできます。
 .\"O To turn off line editing after the shell is running, use the
 .\"O .B +o emacs
 .\"O or
@@ -8517,7 +8517,7 @@ vi 形式の行編集インタフェースも使えます。
 .B +o vi
 オプションを設定してください。
 .\"O .SS "Readline Notation"
-.SS "Readline セクションにおける記法"
+.SS "Readline の記法"
 .PP
 .\"O In this section, the Emacs-style notation is used to denote
 .\"O keystrokes.  Control keys are denoted by C\-\fIkey\fR, e.g., C\-n
@@ -8547,9 +8547,9 @@ vi 形式の行編集インタフェースも使えます。
 キーを押します。これは ESC を
 \fIメタプレフィックス (meta prefix)\fP にする操作です。
 M\-C\-\fIx\fP の組み合わせは、ESC\-Control\-\fIx\fP
-あるいはエスケープキーを押した後に、コントロールキーを押したまま
+つまり、エスケープキーを押した後に、コントロールキーを押したまま
 .I x
-を押すことを示します。)
+を押すことを意味します。)
 .PP
 .\"O Readline commands may be given numeric
 .\"O .IR arguments ,
@@ -8563,10 +8563,10 @@ M\-C\-\fIx\fP の組み合わせは、ESC\-Control\-\fIx\fP
 Readline のコマンドには数値の
 .I 引き数
 を指定できます。通常これは繰り返しの回数として作用します。
-ただし場合によっては、引き数の符号が意味を持つこともあります。
-前方に作用するコマンド (例: \fBkill\-line\fP) に負の引き数を渡すと、
-コマンドは後方に作用します。
-引き数に対する動作がこの説明と異なるコマンドについては後で説明します。
+ただし、場合によっては、引き数の符号が意味を持つこともあります。
+順方向に作用するコマンド (例: \fBkill\-line\fP) に負の引き数を渡すと、
+コマンドは逆方向に作用します。
+引き数を指定した場合の動作がこの説明と異なるコマンドについては後で説明します。
 .PP
 .\"O When a command is described as \fIkilling\fP text, the text
 .\"O deleted is saved for possible future retrieval
@@ -8592,12 +8592,15 @@ Readline のコマンドには数値の
 .\"O .B INPUTRC
 .\"O variable.  If that variable is unset, the default is
 .\"O .IR ~/.inputrc .
-コマンドを初期化ファイル (\fIinputrc\fP ファイル) に追加すると、
-readline をカスタマイズできます。
+readline をカスタマイズするには、
+コマンドを初期化ファイル (\fIinputrc\fP ファイル) に追加します。
 このファイルの名前は、変数
 .SM
 .B INPUTRC
 の値から決まります。
+この変数が設定されていない場合のデフォルト値は
+.I ~/.inputrc
+です。
 .\"O When a program which uses the readline library starts up, the
 .\"O initialization file is read, and the key bindings and variables
 .\"O are set.
@@ -8607,9 +8610,6 @@ readline をカスタマイズできます。
 .\"O Lines beginning with a \fB#\fP are comments.
 .\"O Lines beginning with a \fB$\fP indicate conditional constructs.
 .\"O Other lines denote key bindings and variable settings.
-この変数が設定されていない場合のデフォルト値は
-.I ~/.inputrc
-です。
 readline ライブラリを使うプログラムが起動する際には、
 この初期化ファイルが読み込まれ、キー割り当てと変数が設定されます。
 readline の初期化ファイル中で使用できる基本的構文は、
@@ -8631,30 +8631,36 @@ readline の初期化ファイル中で使用できる基本的構文は、
 独自のコマンドとキー割り当てを追加できます。
 .PP
 .\"O For example, placing
+.\"O .RS
+.\"O .PP
+.\"O M\-Control\-u: universal\-argument
+.\"O .RE
+.\"O or
+.\"O .RS
+.\"O C\-Meta\-u: universal\-argument
+.\"O .RE
+.\"O into the
+.\"O .I inputrc
+.\"O would make M\-C\-u execute the readline command
+.\"O .IR universal\-argument .
 例えば、
 .RS
 .PP
 M\-Control\-u: universal\-argument
 .RE
-.\"O .RE
-.\"O or
 や
 .RS
 C\-Meta\-u: universal\-argument
 .RE
-.\"O .RE
-.\"O into the 
 を
 .I inputrc
-.\"O .I inputrc
-.\"O would make M\-C\-u execute the readline command
-.\"O .IR universal\-argument .
 ファイルに書くと、M\-C\-u で readline の
 .I universal\-argument
 コマンドが実行されるようになります。
 .PP
 .\"O The following symbolic character names are recognized:
-認識されるシンボリックな文字名を以下に示します:
+.\"O motoki: 分かりにくいと思いました。
+以下に示すシンボル名を使うことができます:
 .IR RUBOUT ,
 .IR DEL ,
 .IR ESC ,
@@ -8670,9 +8676,9 @@ C\-Meta\-u: universal\-argument
 .PP
 .\"O In addition to command names, readline allows keys to be bound
 .\"O to a string that is inserted when the key is pressed (a \fImacro\fP).
-readline では、コマンド名だけでなくキーにも文字列を割り当てできます。
-つまり、そのキーが押されると文字列が挿入されます
-(\fIマクロ\fP, \fImacro\fP)。
+readline では、キーにはコマンド名だけでなく文字列を割り当てることもでき、
+その場合には、そのキーが押されると割り当てられた文字列が挿入されます
+(\fIマクロ\fP)。
 .\"O .SS "Readline Key Bindings"
 .SS "Readline のキー割り当て"
 .PP
@@ -8685,12 +8691,12 @@ readline では、コマンド名だけでなくキーにも文字列を割り�
 .\"O prefixes, or as a key sequence.
 .I inputrc
 ファイルにおける制御キーの割り当て方は単純です。
-必要なものは、コマンドの名前あるいはマクロのテキストと、
+必要なものは、コマンド名あるいはマクロの文字列と、
 これらが割り当てられるキーシーケンスだけです。
 名前は 2 通りの方法で指定できます。
 つまり、シンボリックなキーの名前
-(たぶん、これに \fIMeta\-\fP や \fIControl\-\fP
-プレフィックスが付いたもの) による指定と、
+(たいていは、\fIMeta\-\fP や \fIControl\-\fP
+プレフィックスと組み合わせて使われる) による指定と、
 キーシーケンスによる指定です。
 .PP
 .\"O When using the form \fBkeyname\fP:\^\fIfunction\-name\fP or \fImacro\fP,
@@ -8720,6 +8726,8 @@ Control-o: "> output"
 .\"O .I C\-o
 .\"O is bound to run the macro
 .\"O expressed on the right hand side (that is, to insert the text
+.\"O .if t \f(CW> output\fP
+.\"O .if n ``> output''
 .\"O into the line).
 この例では、
 .I C\-u
@@ -8774,6 +8782,8 @@ Control-o: "> output"
 .\"O and 
 .\"O .I "ESC [ 1 1 ~"
 .\"O is bound to insert the text
+.\"O .if t \f(CWFunction Key 1\fP.
+.\"O .if n ``Function Key 1''.
 この例でも、
 .I C\-u
 が
@@ -8785,9 +8795,8 @@ Control-o: "> output"
 機能に割り当てられ、
 .I "ESC [ 1 1 ~"
 は
-.B "Function Key 1"
-.if t \f(CWFunction Key 1\fP.
-.if n ``Function Key 1''.
+.if t \f(CWFunction Key 1\fP
+.if n ``Function Key 1''
 という文字列の挿入に割り当てられています。
 .PP
 .\"O The full set of GNU Emacs style escape sequences is
@@ -8817,7 +8826,7 @@ GNU Emacs 形式のエスケープシーケンスを以下に全て示します:
 .TP
 .B \e\(aq
 .\"O literal \(aq
-\' という文字
+\(aq という文字
 .RE
 .PD
 .PP
@@ -8846,11 +8855,11 @@ GNU Emacs 形式のエスケープシーケンスに加えて、
 .TP
 .B \en
 .\"O newline
-改行
+改行 (newline)
 .TP
 .B \er
 .\"O carriage return
-復帰
+復帰 (carriage return)
 .TP
 .B \et
 .\"O horizontal tab
@@ -8863,12 +8872,12 @@ GNU Emacs 形式のエスケープシーケンスに加えて、
 .B \e\fInnn\fP
 .\"O the eight-bit character whose value is the octal value \fInnn\fP
 .\"O (one to three digits)
-ASCII コードの 8 進値が \fInnn\fP である文字  (1 文字につき数字 0〜3 桁)
+ASCII コードの 8 進値が \fInnn\fP である文字  (1 文字につき数字 1〜3 桁)
 .TP
 .B \ex\fIHH\fP
 .\"O the eight-bit character whose value is the hexadecimal value \fIHH\fP
 .\"O (one or two hex digits)
-ASCII コードの 16 進値が \fInnn\fP である文字 (1 文字につき数字 1 または 2 桁)。
+ASCII コードの 16 進値が \fIHH\fP である文字 (1 文字につき数字 1 または 2 桁)。
 .RE
 .PD
 .PP
@@ -8883,7 +8892,7 @@ ASCII コードの 16 進値が \fInnn\fP である文字 (1 文字につき数�
 クォートされていないテキストは関数名とみなされます。
 マクロ本体では、前述のバックスラッシュによるエスケープは展開されます。
 バックスラッシュはマクロのテキスト内の他の文字を全てエスケープします。
-これには " や ' も含まれます。
+これには " や \(aq も含まれます。
 .PP
 .\"O .B Bash
 .\"O allows the current readline key bindings to be displayed or modified
@@ -8902,7 +8911,7 @@ ASCII コードの 16 進値が \fInnn\fP である文字 (1 文字につき数�
 では、組み込みコマンドの
 .B bind
 を使って、readline の現在の キー割り当ての表示と変更を行えます。
-また組み込みコマンド
+また、組み込みコマンド
 .B set
 に対して
 .B \-o
@@ -8923,7 +8932,7 @@ ASCII コードの 16 進値が \fInnn\fP である文字 (1 文字につき数�
 .\"O \fBset\fP \fIvariable\-name\fP \fIvalue\fP
 .\"O .RE
 .\"O .PP
-Readline の動作をもっとカスタマイズするために変数があります。
+Readline には、動作を細かくカスタマイズするために変数があります。
 変数は
 .I inputrc
 ファイル中に
@@ -8939,16 +8948,19 @@ Readline の動作をもっとカスタマイズするために変数があり�
 .\"O .B Off
 .\"O (without regard to case).
 .\"O Unrecognized variable names are ignored.
-特に断らない限り、readline の変数は
+特に断らない限り、readline の変数がとる値は
 .B On
-または
+か
 .B Off
 のいずれかです。大文字と小文字の違いは考慮しません。
-用意されていない変数名は無視されます。
+認識できない変数名は無視されます。
 .\"O When a variable value is read, empty or null values, "on" (case-insensitive),
 .\"O and "1" are equivalent to \fBOn\fP.  All other values are equivalent to
 .\"O \fBOff\fP.
 .\"O The variables and their default values are:
+.\"O motoki: null value というのは具体的にどういうことなのだろう???
+.\"O motoki: emtpy value と null value というのはどう違うのか。
+.\"O motoki: 必要なら元の英語や注釈を加えた方がいいかも。
 変数の値を読み取るとき、空や空白の値、"on" (大文字と小文字は区別しない)、
 "1" は \fBOn\fP とみなされます。それ以外の値は \fBOff\fP とみなされます。
 変数とそのデフォルト値を以下に示します:
@@ -9087,7 +9099,7 @@ readline は端末がサポートを要求するメタ修飾キーを有効に�
 .B expand\-tilde (Off)
 .\"O If set to \fBOn\fP, tilde expansion is performed when readline
 .\"O attempts word completion.
-\fBon\fP を設定すると、
+\fBOn\fP を設定すると、
 readline が単語の補完を試みるときにチルダ展開が行われます。
 .TP
 .B history\-preserve\-point (Off)
@@ -9108,8 +9120,8 @@ readline が単語の補完を試みるときにチルダ展開が行われま�
 .\"O When set to \fBOn\fP, makes readline use a single line for display,
 .\"O scrolling the input horizontally on a single screen line when it
 .\"O becomes longer than the screen width rather than wrapping to a new line.
-\fBon\fP が設定されているとき、readline は表示の際に行を
-1 つしか使わないようになります。つまり行がスクリーンの幅より長くなると、
+\fBOn\fP が設定されていると、readline は表示の際に 1 行しか
+使わないようになります。つまり、行がスクリーンの幅より長くなると、
 新しい行に折り返すのではなく、1 つの入力行の中で横にスクロールします。
 .TP
 .B input\-meta (Off)
@@ -9136,6 +9148,7 @@ readline が単語の補完を試みるときにチルダ展開が行われま�
 .TP
 .B keymap (emacs)
 .\"O Set the current readline keymap.  The set of valid keymap names is
+.\"O \fIemacs, emacs\-standard, emacs\-meta, emacs\-ctlx, vi,
 .\"O vi\-command\fP, and
 .\"O .IR vi\-insert .
 .\"O \fIvi\fP is equivalent to \fIvi\-command\fP; \fIemacs\fP is
@@ -9145,9 +9158,9 @@ readline が単語の補完を試みるときにチルダ展開が行われま�
 .\"O .B editing\-mode
 .\"O also affects the default keymap.
 現在の readline のキーマップを設定します。
-正しいキーマップ名を全て挙げると、
+有効なキーマップ名は、
 \fIemacs, emacs\-standard, emacs\-meta, emacs\-ctlx, vi,
-vi\-command\fP, .IR vi\-insert となります。\fIvi\fP は \fIvi\-command\fP
+vi\-command\fP, .IR vi\-insert です。\fIvi\fP は \fIvi\-command\fP
 と等価で、\fIemacs\fP は \fIemacs\-standard\fP と等価です。
 デフォルト値は
 .IR emacs
@@ -9185,8 +9198,8 @@ vi\-command\fP, .IR vi\-insert となります。\fIvi\fP は \fIvi\-command\fP
 \fBOn\fP が設定されていると、
 ファイル名の補完で `.' で始まる名前のファイル
 (隠しファイル) にもマッチします。
-\fBOn\fP が設定されているときには、
-補完されるには先頭の `.' をユーザが入力する必要があります。
+\fBOff\fP が設定されているときには、`.' で始まる名前のファイルを
+補完するには先頭の `.' をユーザが入力する必要があります。
 .TP
 .B menu\-complete\-display\-prefix (Off)
 .\"O If set to \fBOn\fP, menu completion displays the common prefix of the
@@ -9223,6 +9236,7 @@ readline は補完でマッチするものをアルファベット順にして�
 .\"O before returning when \fBaccept\-line\fP is executed.  By default,
 .\"O history lines may be modified and retain individual undo lists across
 .\"O calls to \fBreadline\fP.
+.\"O motoki: もう少しチェックする必要あり
 \fBOn\fP が設定されていると、
 \fBaccept\-line\fP が実行されて readline から戻るときに、
 履歴に加えられた全ての変更を元に戻します。
@@ -9238,7 +9252,7 @@ readline は補完でマッチするものをアルファベット順にして�
 これは補完機能のデフォルトの挙動を変えます。
 .B On
 が設定されている場合、単語に対する補完候補が複数個あると、
-マッチするものが即座にリスト表示されます。ベルは鳴らされません。
+ベルは鳴らされずに、マッチするものが即座にリスト表示されます。
 .TP
 .B show\-all\-if\-unmodified (Off)
 .\"O This alters the default behavior of the completion functions in
@@ -9264,6 +9278,7 @@ readline は補完でマッチするものをアルファベット順にして�
 .\"O does not insert characters from the completion that match characters
 .\"O after point in the word being completed, so portions of the word
 .\"O following the cursor are not duplicated.
+.\"O motoki: もう少しチェックが必要
 \fBOn\fP が設定されていると、
 これは補完機能がマッチしたものを行に挿入するときのデフォルトの挙動を変えます。
 単語の途中で補完を実行したときにだけ意味があります。
@@ -9285,6 +9300,7 @@ readline は補完でマッチするものをアルファベット順にして�
 .\"O compilation features of the C preprocessor which allows key
 .\"O bindings and variable settings to be performed as the result
 .\"O of tests.  There are four parser directives used.
+.\"O motoki: 「評価の結果」というのが分かりにくいかな。
 Readline には、
 C 言語のプリプロセッサの条件付きコンパイル機能と
 似たコンセプトに基づく機能が実装されています。
@@ -9298,9 +9314,10 @@ C 言語のプリプロセッサの条件付きコンパイル機能と
 .\"O readline.  The text of the test extends to the end of the line;
 .\"O no characters are required to isolate it.
 .B $if
-構文を使うと、編集モードや使っている端末、
-readline を使っているアプリケーションに基づいた割り当てを行えます。
-評価文のテキストは行の最後までです。
+構文を使うと、編集モードや使用中の端末、
+readline を使っているアプリケーションに応じた割り当てを行えます。
+行末までの全テキストが評価対象となります。
+.\"O motoki: 意味が理解できませんでした。
 これを分離するには文字は必要ありません。
 .RS
 .IP \fBmode\fP
@@ -9313,7 +9330,7 @@ readline を使っているアプリケーションに基づいた割り当て�
 \fB$if\fP ディレクティブの \fBmode=\fP 形式は、
 readline が emacs モードか
 vi モードのどちらになっているかを調べるために使います。
-例えばこれを \fBset keymap\fP コマンドと一緒に使い、
+例えば、これを \fBset keymap\fP コマンドと一緒に使い、
 readline が emacs モードで始まったときだけ
 キーの割り当てを \fIemacs\-standard\fP や 
 \fIemacs\-ctlx\fP キーマップに設定できます。
@@ -9336,16 +9353,16 @@ readline が emacs モードで始まったときだけ
 .\"O .IR sun\-cmd ,
 .\"O for instance.
 .B =
-の右辺の単語は、
+の右辺の単語の評価は、
 端末の完全な名前および最初の
-\fB\-\fP の前までの部分的な名前の両方に対して評価されます。
-これにより例えば、
+\fB\-\fP の前までの部分的な名前の両方に対して行われます。
+例えば、
 .I sun
 は
 .I sun
 と
 .I sun\-cmd
-の両方にマッチできます。
+の両方にマッチします。
 .IP \fBapplication\fP
 .\"O The \fBapplication\fP construct is used to include
 .\"O application-specific settings.  Each program using the readline
@@ -9358,9 +9375,10 @@ readline が emacs モードで始まったときだけ
 readline ライブラリを使っているプログラムはそれぞれ
 \fIアプリケーション名 (application name)\fP を設定するので、
 初期化ファイルはそれが特定の値かどうかを調べられます。
-これを使って、キーシーケンスを特定のプログラム用の
-便利な機能に割り当てできます。例えば以下のコマンドは、
-\fBbash\fP 内で現在または 1 つ前の単語をクォートするキーシーケンスを追加します:
+これを使って、特定のプログラム用で便利な機能に
+キーシーケンスを割り当てできます。例えば、以下のコマンドは、
+\fBbash\fP の場合に、現在の単語または直前の単語をクォートする
+キーシーケンスを追加します。
 .sp 1
 .RS
 .nf
@@ -9374,11 +9392,13 @@ readline ライブラリを使っているプログラムはそれぞれ
 .IP \fB$endif\fP
 .\"O This command, as seen in the previous example, terminates an
 .\"O \fB$if\fP command.
-このコマンドは上の例で見たように、\fB$if\fP コマンドを終了させます。
+\"O motoki: 「上の例で見たように」は最後に括弧書きくらいの方が読みやすい
+このコマンドは \fB$if\fP コマンドを終了させます (上記の例の通り)。
 .IP \fB$else\fP
 .\"O Commands in this branch of the \fB$if\fP directive are executed if
 .\"O the test fails.
-\fB$if\fP ディレクティブのこの分岐内におけるコマンドは、
+.\"O motoki: 日本語だけ読んだときに意味が分かりにくかったです。
+\fB$if\fP ディレクティブのこの分岐内に書かれたコマンドは、
 評価が失敗したときに実行されます。
 .IP \fB$include\fP
 .\"O This directive takes a single filename as an argument and reads commands
@@ -9411,6 +9431,7 @@ readline には、指定した文字列を含む行をコマンド履歴内か�
 .\"O .I incremental
 .\"O and
 .\"O .IR non-incremental .
+.\"O motoki: incremental search は日本語だと「逐次検索」になるが、どっちいいか。
 検索のモードには、
 .I インクリメンタル (incremental)
 モードと
@@ -9431,15 +9452,15 @@ readline には、指定した文字列を含む行をコマンド履歴内か�
 .\"O line.
 .\"O When the search is terminated, the history entry containing the
 .\"O search string becomes the current line.
-インクリメンタル検索は、
-ユーザが検索文字列の入力を終えるより前に検索を開始します。
+インクリメンタル検索では、
+ユーザが検索文字列全体の入力が終わるより前に検索が開始されます。
 検索文字列に文字が追加されるたびに、
-readline は現在まで入力した文字列にマッチする履歴から
+readline はそれまでに入力した文字列にマッチする履歴から
 次のエントリを表示します。
-インクリメンタル検索で必要なのは、
-探している履歴エントリを見つけるために必要な数の文字だけです。
-インクリメンタル検索を終了させるには、
-\fBisearch-terminators\fP の値に入っている文字を使います。
+インクリメンタル検索では、探している履歴エントリを見つけるために
+必要な数の文字を入力すれば十分です。
+\fBisearch-terminators\fP の値に含まれる文字を入力すると、
+インクリメンタル検索は終了します。
 この変数に値が代入されていない場合には、エスケープ文字または
 Control-J でインクリメンタル検索が終了します。
 Control-G はインクリメンタル検索を異常終了させ、元の行を復元します。
@@ -9457,24 +9478,31 @@ Control-G はインクリメンタル検索を異常終了させ、元の行を�
 Control-R を適宜入力します。これにより、
 今まで入力した検索文字列にマッチする次のエントリを
 履歴の前方または後方に向かって探します。
+.\"O motoki: that command は key sequence に対応するコマンドだと思います。
+.\"O motoki: 元の訳の場合、履歴で得られたコマンド自体が実行されるように読めました。
+.\"O motoki: newline の場合は、入力行を実行することを示すので、いいのですが。
+.\"O motoki: "accept" は shell が「受け取る」ということではないでしょうか。
+.\"O motoki: 「入力する」が type の訳としても使われているので区別が必要。
 readline に割り当てられた他のキーシーケンスを入力すると検索が終わり、
-そのコマンドが実行されます。例えば、\fI改行\fPは検索を終了させて、
-その行を入力します。これにより、履歴リスト中のコマンドが実行されます。
+入力したキーシーケンスに対応するコマンドが実行されます。
+例えば、\fI改行\fPは検索を終了させて、その行を入力します。
+これにより、履歴リスト中のコマンドが実行されます。
 .PP
 .\"O Readline remembers the last incremental search string.  If two
 .\"O Control-Rs are typed without any intervening characters defining a
 .\"O new search string, any remembered search string is used.
 readline は前回のインクリメンタル検索で入力された
 検索文字列を覚えています。
-Control-R が 2 回、新しい検索文字を挟まずに入力されると、
+新しい検索文字を間に挟まずに Control-R を 2 回入力すると、
 覚えている検索文字列が使われます。
 .PP
 .\"O Non-incremental searches read the entire search string before starting
 .\"O to search for matching history lines.  The search string may be
 .\"O typed by the user or be part of the contents of the current line.
-インクリメンタルでない検索の場合には、
-履歴行にマッチするものの検索を始める前に検索する文字列全体を読み込みます。
-検索文字列には、ユーザが入力したものか、現在の行の内容の一部を使えます。
+.\"O motoki: "search string" は他の箇所では「検索文字列」なので、統一。
+インクリメンタルでない検索の場合には、検索文字列全体を読み込んでから、
+履歴行にマッチするものの検索を始めます。
+検索文字列には、ユーザが入力したものか、現在の行の内容の一部が使えます。
 .\"O .SS "Readline Command Names"
 .SS "Readline のコマンド名"
 .PP
@@ -9485,7 +9513,7 @@ Control-R が 2 回、新しい検索文字を挟まずに入力されると、
 .\"O position, and \fImark\fP refers to a cursor position saved by the
 .\"O \fBset\-mark\fP command.
 .\"O The text between the point and mark is referred to as the \fIregion\fP.
-以下に示すのは、
+以下は、
 コマンドの名前およびそれらが割り当てられている
 デフォルトのキーシーケンスの一覧です。
 対応するキーシーケンスがないコマンド名には、
@@ -9493,7 +9521,7 @@ Control-R が 2 回、新しい検索文字を挟まずに入力されると、
 以下の説明では、\fIポイント (point)\fP は現在のカーソルの位置を表し、
 \fIマーク (mark)\fP は
 \fBset\-mark\fP コマンドによって保存されたカーソル位置を表します。
-ポイントとマークの間のテキストは、\fIリージョン (region)\fP で表します。
+ポイントとマークの間のテキストは、\fIリージョン (region)\fP と呼びます。
 .\"O .SS Commands for Moving
 .SS 移動コマンド
 .PP
@@ -9518,13 +9546,14 @@ Control-R が 2 回、新しい検索文字を挟まずに入力されると、
 .B forward\-word (M\-f)
 .\"O Move forward to the end of the next word.  Words are composed of
 .\"O alphanumeric characters (letters and digits).
-次の単語の最後に進みます。単語は英数字 (文字と数字) からなります。
+.\"O motoki: letter は「英字」の方がよいかも。「文字」だと character と区別ができない。
+次の単語の最後に進みます。単語は英数字 (英字と数字) からなります。
 .TP
 .B backward\-word (M\-b)
 .\"O Move back to the start of the current or previous word.
 .\"O Words are composed of alphanumeric characters (letters and digits).
-現在の単語あるいは前の単語の先頭に戻ります。
-単語は英数字 (文字と数字) からなります。
+現在あるいは直前の単語の先頭に戻ります。
+単語は英数字 (英字と数字) からなります。
 .TP
 .B shell\-forward\-word
 .\"O Move forward to the end of the next word.
@@ -9561,6 +9590,8 @@ Control-R が 2 回、新しい検索文字を挟まずに入力されると、
 .\"O .B HISTCONTROL
 .\"O variable.  If the line is a modified history
 .\"O line, then restore the history line to its original state.
+.\"O motoki: accept を入力というと、文字を type するのと区別がつかない
+.\"O motoki: さてどうしたものか？「確定する」というのもありかなぁ。
 カーソルの位置に関わらず、行を入力します。この行が空でなければ、変数
 .SM
 .B HISTCONTROL
@@ -9602,15 +9633,13 @@ Control-R が 2 回、新しい検索文字を挟まずに入力されると、
 .\"O Search backward through the history starting at the current line
 .\"O using a non-incremental search for a string supplied by the user.
 現在の行を開始点にして、履歴リストを後方に向かって検索を行います。
-この際には、ユーザが入力した文字列を
-非インクリメンタルモードで検索します。
+ユーザが入力した文字列を非インクリメンタルモードで検索します。
 .TP
 .B non\-incremental\-forward\-search\-history (M\-n)
 .\"O Search forward through the history using a non-incremental search for
 .\"O a string supplied by the user.
 現在の行を開始点にして、履歴リストを前方に向かって検索を行います。
-この際には、ユーザが入力した文字列を
-非インクリメンタルモードで検索します。
+ユーザが入力した文字列を非インクリメンタルモードで検索します。
 .TP
 .B history\-search\-forward
 .\"O Search forward through the history for the string of characters
@@ -9679,8 +9708,8 @@ yank\-last\-arg (M\-.\^, M\-_\^)
 .\"O .SM
 .\"O .B HISTORY EXPANSION
 .\"O below for a description of history expansion.
-シェルのように行を展開します。
-エイリアスや履歴の展開など、シェルの行う単語展開を行います。
+シェルが行うのと同じように行の展開を行います。
+エイリアスや履歴の展開を含め、シェルの行う全ての単語展開が行われます。
 履歴の展開の説明については、後述の
 .SM
 .B 履歴の展開
@@ -9735,7 +9764,7 @@ yank\-last\-arg (M\-.\^, M\-_\^)
 .\"O relative to the current line from the history for editing.  Any
 .\"O argument is ignored.
 現在の行を実行し、
-現在の行の次の行を編集するために履歴から取得します。
+履歴内の現在の行の次の行を編集用に取得します。
 引き数は全て無視されます。
 .TP
 .B edit\-and\-execute\-command (C\-xC\-e)
@@ -9820,7 +9849,7 @@ yank\-last\-arg (M\-.\^, M\-_\^)
 ポイントの前にある単語を動かし、
 ポイントの後ろにある単語の後ろに持っていきます。
 この際には、ポイントも始めに前にあった単語の後ろまで移動します。
-ポイントが行の最後にある場合は、行の最後の2 単語が交換されます。
+ポイントが行の最後にある場合は、行の最後の 2 単語が交換されます。
 .TP
 .B upcase\-word (M\-u)
 .\"O Uppercase the current (or following) word.  With a negative argument,
@@ -9868,6 +9897,7 @@ yank\-last\-arg (M\-.\^, M\-_\^)
 .PD
 .\"O .SS Killing and Yanking
 .SS キルとヤンク
+.\"O motoki: kill, yank がカタカナで分かるか?
 .PP
 .PD 0
 .TP
@@ -9960,13 +9990,14 @@ yank\-last\-arg (M\-.\^, M\-_\^)
 .TP
 .B yank (C\-y)
 .\"O Yank the top of the kill ring into the buffer at point.
-キルリングの先頭のテキストをポイントのあるバッファにヤンクします。
+キルリングの先頭のテキストをバッファ中のポイントにヤンクします。
 .TP
 .B yank\-pop (M\-y)
 .\"O Rotate the kill ring, and yank the new top.  Only works following
 .\"O .B yank
 .\"O or
 .\"O .BR yank\-pop .
+.\"O motoki: kill ring の rotate って意味が分かるか?
 キルリングをローテートし、新たに先頭になったテキストをヤンクします。
 .B yank
 または
@@ -9981,7 +10012,7 @@ yank\-last\-arg (M\-.\^, M\-_\^)
 .B digit\-argument (M\-0, M\-1, ..., M\-\-)
 .\"O Add this digit to the argument already accumulating, or start a new
 .\"O argument.  M\-\- starts a negative argument.
-既に蓄積中の引き数にこの数字を追加するか、
+すでに入力された引き数にこの数字を追加するか、
 またはこの数字によって新しい引き数を始めます。
 M\-\- を使うと、負の値を指定できます。
 .TP
@@ -9989,8 +10020,8 @@ M\-\- を使うと、負の値を指定できます。
 .\"O This is another way to specify an argument.
 .\"O If this command is followed by one or more digits, optionally with a
 .\"O leading minus sign, those digits define the argument.
-引き数を指定する別法です。
-このコマンドの後に 1 つ以上の数字がある場合
+引き数を指定する別の方法です。
+このコマンドに続けて 1 つ以上の数字が入力された場合
 (頭にマイナス記号を付けることもできます)、
 これらの数字で引き数が定義されます。
 .\"O If the command is followed by digits, executing
@@ -10002,15 +10033,18 @@ M\-\- を使うと、負の値を指定できます。
 .\"O The argument count is initially one, so executing this function the
 .\"O first time makes the argument count four, a second time makes the
 .\"O argument count sixteen, and so on.
-コマンドの後に数字を続けた場合、
+このコマンドの後に数字が続いた場合、
 .B universal\-argument
 を再び実行すると数値の引き数を終了しますが、
 そうでない場合は無視されます。
 特殊なケースとして、
+.\"O motoki: multiplied by four の訳が抜けている。
+.\"O motoki: argument count を引き数カウントで分かるか。
 このコマンドの直後に数字でもマイナス記号でもない文字がある場合には、
-最初は引き数カウントは 1 なので、
+次のコマンドに対する引き数カウントが 4 倍になります。
+引き数カウントは最初は 1 なので、
 この機能を一度実行すると引き数カウントは 4 になり、
-次に実行すると引き数カウントは 16 になります。
+もう一度実行すると引き数カウントは 16 になります。
 それ以降も同様です。
 .PD
 .\"O .SS Completing
@@ -10028,12 +10062,12 @@ M\-\- を使うと、負の値を指定できます。
 .\"O of these produces a match, filename completion is attempted.
 ポイントの前のテキストについて補完を試みます。
 .B bash
-が補完を行う際にはテキストの扱いの種類を順に試しますが、
-その順序は、変数 (テキストが \fB$\fP で始まる場合)、
+が補完を行う際には、
+変数 (テキストが \fB$\fP で始まる場合)、
 ユーザ名 (テキストが \fB~\fP で始まる場合)、
 ホスト名 (テキストが \fB@\fP で始まる場合)、
-コマンド (エイリアスや関数も含みます) です。
-これらのうちいずれにもマッチしない場合には、
+コマンド (エイリアスや関数も含みます) の順序でマッチを行います。
+いずれにもマッチしない場合には、
 ファイル名補完を試みます。
 .TP
 .B possible\-completions (M\-?)
@@ -10095,37 +10129,39 @@ M\-\- を使うと、負の値を指定できます。
 .TP
 .B complete\-filename (M\-/)
 .\"O Attempt filename completion on the text before point.
-ポイントの前のテキストについて、ファイル名の補完を試みます。
+ポイントの前のテキストについてファイル名の補完を試みます。
 .TP
 .B possible\-filename\-completions (C\-x /)
 .\"O List the possible completions of the text before point,
 .\"O treating it as a filename.
-ポイントの前のテキストについて、補完の候補を列挙します。
-テキストはファイル名として扱います。
+.\"O motoki: ポイントの前のテキストをファイル名とみなした場合の
+.\"O         補完の候補を列挙します、はどうかな。以下同様。
+ポイントの前のテキストについて補完の候補を列挙します。
+テキストはファイル名として扱われます。
 .TP
 .B complete\-username (M\-~)
 .\"O Attempt completion on the text before point, treating
 .\"O it as a username.
 ポイントの前のテキストについて補完を試みます。
-テキストはユーザ名として扱います。
+テキストはユーザ名として扱われます。
 .TP
 .B possible\-username\-completions (C\-x ~)
 .\"O List the possible completions of the text before point,
 .\"O treating it as a username.
 ポイントの前のテキストについて補完の候補を列挙します。
-テキストはユーザ名として扱います。
+テキストはユーザ名として扱われます。
 .TP
 .B complete\-variable (M\-$)
 .\"O Attempt completion on the text before point, treating
 .\"O it as a shell variable.
 ポイントの前のテキストについて補完を試みます。
-テキストはシェル変数として扱います。
+テキストはシェル変数として扱われます。
 .TP
 .B possible\-variable\-completions (C\-x $)
 .\"O List the possible completions of the text before point,
 .\"O treating it as a shell variable.
 ポイントの前のテキストについて補完の候補を列挙します。
-テキストはシェル変数として扱います。
+テキストはシェル変数として扱われます。
 .TP
 .B complete\-hostname (M\-@)
 .\"O Attempt completion on the text before point, treating
@@ -10161,17 +10197,19 @@ M\-\- を使うと、負の値を指定できます。
 .\"O Attempt completion on the text before point, comparing
 .\"O the text against lines from the history list for possible
 .\"O completion matches.
+.\"O motoki: for 以下は compare にかかるのではないでしょうか。
 ポイントの前のテキストについて補完を試みます。
-テキストの比較が行われるのは、
-履歴リスト中の行のうち補完の候補となるものです。
+履歴リストの各行に対してテキストの比較が行われ、
+マッチしたものが補完の候補となります。
 .TP
 .B dabbrev\-expand
 .\"O Attempt menu completion on the text before point, comparing
 .\"O the text against lines from the history list for possible
 .\"O completion matches.
+.\"O motoki: dynamic-complete-history と同様。
 ポイントの前のテキストについてメニュー補完を試みます。
-テキストの比較が行われるのは、
-履歴リスト中の行のうち補完の候補となるものです。
+履歴リストの各行に対してテキストの比較が行われ、
+マッチしたものが補完の候補となります。
 .TP
 .B complete\-into\-braces (M\-{)
 .\"O Perform filename completion and insert the list of possible completions
@@ -10197,14 +10235,14 @@ M\-\- を使うと、負の値を指定できます。
 .\"O Stop saving the characters typed into the current keyboard macro
 .\"O and store the definition.
 現在のキーボードマクロに対して入力された文字列の保存を終了し、
-この定義を格納します。
+その定義を格納します。
 .TP
 .B call\-last\-kbd\-macro (C\-x e)
 .\"O Re-execute the last keyboard macro defined, by making the characters
 .\"O in the macro appear as if typed at the keyboard.
+.\"O motoki: characters なので、文字列よりも各文字の方がよいかも。
 最後に定義されたキーボードマクロを再実行します。
-再実行は、
-マクロ中の文字列をキーボードでの入力と同様に出力することによって行います。
+マクロ内の各文字があたかもキーボードから入力されたかのように出力されます。
 .PD
 .\"O .SS Miscellaneous
 .SS その他
@@ -10221,24 +10259,25 @@ M\-\- を使うと、負の値を指定できます。
 .\"O Abort the current editing command and
 .\"O ring the terminal's bell (subject to the setting of
 .\"O .BR bell\-style ).
-現在の編集行を捨て、端末のベルを鳴らします (この動作は
+現在の編集行を捨て、端末のベルを鳴らします (動作は
 .B bell\-style
-の設定に従って行います)。
+の設定に従います)。
 .TP
 .B do\-uppercase\-version (M\-a, M\-b, M\-\fIx\fP, ...)
 .\"O If the metafied character \fIx\fP is lowercase, run the command
 .\"O that is bound to the corresponding uppercase character.
 メタ文字と共に入力された文字 \fIx\fP が小文字であれば、
-これに対応する大文字に割り当てられているコマンドを実行します。
+\fIx\fP に対応する大文字に割り当てられているコマンドを実行します。
 .TP
 .B prefix\-meta (ESC)
 .\"O Metafy the next character typed.
 .\"O .SM
+.\"O .B ESC
 .\"O .B f
 .\"O is equivalent to
 .\"O .BR Meta\-f .
 次に入力される文字を、
-メタプレフィックスされたことにします。
+メタ文字と共に入力されたことにします。
 .SM
 .B ESC
 .B f
@@ -10249,7 +10288,7 @@ M\-\- を使うと、負の値を指定できます。
 .B undo (C\-_, C\-x C\-u)
 .\"O Incremental undo, separately remembered for each line.
 インクリメンタルアンドゥを行います。
-これは行ごとに別々に記憶されています。
+履歴は行ごとに別々に記憶されています。
 .TP
 .B revert\-line (M\-r)
 .\"O Undo all changes made to this line.  This is like executing the
@@ -10269,18 +10308,19 @@ M\-\- を使うと、負の値を指定できます。
 .\"O numeric argument is supplied, the mark is set to that position.
 ポイントにマークを設定します。
 数字の引き数が与えられた場合には、
-マークにはその位置が設定されます。
+マークはその位置に設定されます。
 .TP
 .B exchange\-point\-and\-mark (C\-x C\-x)
 .\"O Swap the point with the mark.  The current cursor position is set to
 .\"O the saved position, and the old cursor position is saved as the mark.
 ポイントをマークと入れ換えます。
-現在のカーソル位置は保存されている位置となり、
+保存されている位置が現在のカーソル位置になり、
 古いカーソル位置がマークとして保存されます。
 .TP
 .B character\-search (C\-])
 .\"O A character is read and point is moved to the next occurrence of that
 .\"O character.  A negative count searches for previous occurrences.
+.\"O motoki: 前方、後方って、どちらがいいのでしょう????
 文字を 1 つ読み込み、
 その文字が次に現われる場所にポイントを移動させます。
 負のカウントを与えると、その文字が前に現われた場所を探します。
@@ -10300,16 +10340,17 @@ M\-\- を使うと、負の値を指定できます。
 .\"O unless explicitly bound to a readline command, instead of inserting
 .\"O stray characters into the editing buffer.  This is unbound by default,
 .\"O but usually bound to ESC\-[.
-Home や End などのキーに定義されるような複数のキーからなるシーケンスを
+.\"O motoki: もう少し分かりやすくならないかなぁ。
+Home や End などのキーに定義されるような複数キーからなるシーケンスを
 使い切るだけの文字を読み込みます。
 これらのシーケンスは、通常 ESC\-[ で表されるコントロールシーケンス (CSI)
 で始まります。
-このシーケンスが "\e[" に割り当てられていると、
+このシーケンスが "\e[" に割り当てられているとすると、
+キーが明示的に readline のコマンドに割り当てられている場合を除き、
 それらのシーケンスを生み出すキーは、
-明示的に readline のコマンドに割り当てられているのでなければ、
-はぐれた文字を編集バッファに挿入するのではなく、何もしません。
+はぐれた文字を編集バッファに挿入されず、何もしません。
 このコマンドはデフォルトではキーに割り当てられていませんが、
-通常 ESC\-[ に割り当てられます。
+多くの場合 ESC\-[ に割り当てられます。
 .TP
 .B insert\-comment (M\-#)
 .\"O Without a numeric argument, the value of the readline
@@ -10326,26 +10367,27 @@ Home や End などのキーに定義されるような複数のキーからな�
 .\"O a shell comment.
 .\"O If a numeric argument causes the comment character to be removed, the line
 .\"O will be executed by the shell.
-引き数を指定しない場合、readline の
+数字の引き数を指定しない場合、readline の
 .B comment\-begin
 変数の値が現在の行の先頭に挿入されます。
-引き数を指定すると、トグル状に動作します。
+数字の引き数を指定すると、トグル状に動作します。
 つまり、行の先頭の文字が \fBcomment\-begin\fP の値にマッチしない場合には、
 その値が挿入されます。マッチする場合には、\fBcomment\-begin\fP
 の文字が行の先頭から削除されます。
+.\"O motoki: ????? 原文がよく分からない。
 いずれの場合も、改行が打ち込まれたのと同じように行の入力が完了します。
 \fBcomment\-begin\fP のデフォルト値によって、
 このコマンドは現在の行をシェルのコメントとします。
-引き数を指定したことでコメントの文字が削除されると、
+数字の引き数を指定したことでコメントの文字が削除されると、
 行はシェルにより実行されます。
 .TP
 .B glob\-complete\-word (M\-g)
 .\"O The word before point is treated as a pattern for pathname expansion,
 .\"O with an asterisk implicitly appended.  This pattern is used to
 .\"O generate a list of matching file names for possible completions.
-ポイントの前の単語がパス名展開のパターンで、
-末尾に暗黙のアスタリスクが付いているものとして扱われます。
-このパターンからファイル名のリストが補完候補として生成されます。
+ポイントの前の単語がパス名展開のパターンとして扱われます。
+末尾に暗黙のアスタリスクが付いているものとみなされます。
+このパターンを使って補完候補のファイル名のリストが生成されます。
 .TP
 .B glob\-expand\-word (C\-x *)
 .\"O The word before point is treated as a pattern for pathname expansion,
@@ -10354,7 +10396,7 @@ Home や End などのキーに定義されるような複数のキーからな�
 .\"O pathname expansion.
 ポイントの前の単語がパス名展開のパターンとして扱われ、
 この単語と置き換えられる形でマッチするファイル名のリストが挿入されます。
-引き数を与えると、パス名展開の前に末尾にアスタリスクを追加します。
+数字の引き数を与えると、パス名展開の前に末尾にアスタリスクを追加します。
 .TP
 .B glob\-list\-expansions (C\-x g)
 .\"O The list of expansions that would have been generated by
@@ -10365,14 +10407,14 @@ Home や End などのキーに定義されるような複数のキーからな�
 .B glob\-expand\-word
 で生成されるのと同じ展開結果のリストが表示され、
 行が再描画されます。
-引き数を与えると、パス名展開の前に末尾にアスタリスクを追加します。
+数字の引き数を与えると、パス名展開の前に末尾にアスタリスクを追加します。
 .TP
 .B dump\-functions
 .\"O Print all of the functions and their key bindings to the
 .\"O readline output stream.  If a numeric argument is supplied,
 .\"O the output is formatted in such a way that it can be made part
 .\"O of an \fIinputrc\fP file.
-機能とそのキー割り当てを全て、
+全ての関数とそのキー割り当てを、
 readline の出力ストリームに出力します。
 数値の引き数を与えると、
 出力は \fIinputrc\fP に書き込める形に整形されます。
@@ -10382,7 +10424,7 @@ readline の出力ストリームに出力します。
 .\"O readline output stream.  If a numeric argument is supplied,
 .\"O the output is formatted in such a way that it can be made part
 .\"O of an \fIinputrc\fP file.
-設定可能な readline の変数とその値を全て
+全ての設定可能な readline の変数とその値を、
 readline の出力ストリームに出力します。
 数値の引き数を与えると、
 出力は \fIinputrc\fP に書き込める形に整形されます。
@@ -10392,8 +10434,8 @@ readline の出力ストリームに出力します。
 .\"O strings they output.  If a numeric argument is supplied,
 .\"O the output is formatted in such a way that it can be made part
 .\"O of an \fIinputrc\fP file.
-マクロとマクロが出力する文字列に割り当てられた
-readline のキーシーケンスを全て出力します。
+マクロに割り当てられた readline のキーシーケンスと
+マクロが出力する文字列を全て出力します。
 数値の引き数を与えると、
 出力は \fIinputrc\fP に書き込める形に整形されます。
 .TP
@@ -10413,11 +10455,12 @@ readline のキーシーケンスを全て出力します。
 .\"O .SM
 .\"O .B "SHELL BUILTIN COMMANDS"
 .\"O below), the programmable completion facilities are invoked.
+.\"O motoki: セクション名では programmable completion は「プログラム補完」
 \fBcomplete\fP 組み込みコマンドで
 補完仕様 (\fIcompspec\fP) が定義されているコマンドに対して
 引き数の単語補完が試みられると、
-プログラム可能な補完の機能が呼び出されます
-(\fBcomplete\fP 組み込みコマンドについては、後述する
+プログラム補完の機能が呼び出されます
+(組み込みコマンド \fBcomplete\fP については、後述する
 .SM
 .B "シェルの組み込みコマンド"
 を参照)。
@@ -10438,10 +10481,10 @@ readline のキーシーケンスを全て出力します。
 コマンド名の単語が空文字列であれば (空の行の先頭で補完しようとしたとき)、
 \fBcomplete\fP の \fB\-E\fP オプションで定義された補完仕様が使われます。
 そのコマンドに対して補完仕様が定義されていれば、
-それがその単語の補完候補のリスト作成に使われます。
+その補完仕様がその単語の補完候補のリスト生成に使われます。
 コマンドの単語がフルパス名であれば、
 最初にフルパス名の補完仕様が検索されます。
-フルパス名の補完仕様が見つからなかった場合は、
+フルパス名に対する補完仕様が見つからなかった場合は、
 最後のスラッシュ以降の部分に対して該当する補完仕様を見つけようとします。
 補完仕様が見つからなかった場合は、
 \fBcomplete\fP の \fB\-D\fP オプションで定義された補完仕様が使われます。
@@ -10450,11 +10493,11 @@ readline のキーシーケンスを全て出力します。
 .\"O matching words.
 .\"O If a compspec is not found, the default \fBbash\fP completion as
 .\"O described above under \fBCompleting\fP is performed.
-補完仕様が見つかると、
-それはマッチする単語のリストを作成するために使用されます。
+補完仕様が見つかると、その補完仕様を使って
+マッチする単語のリストが生成されます。
 補完仕様が見つからなかった場合は、
-前述の \fB補完\fP で説明したようなデフォルトの
-\fBbash\fP の補完が行われます。
+前述の \fB補完\fP の節で説明したような
+\fBbash\fP のデフォルトの補完が行われます。
 .PP
 .\"O First, the actions specified by the compspec are used.
 .\"O Only matches which are prefixed by the word being completed are
