@@ -2461,7 +2461,7 @@ control-\fIx\fP の文字
 .\"O Elements added to this array appear in the alias list; unsetting array
 .\"O elements cause aliases to be removed from the alias list.
 エイリアスの内部的なリストに対応する連想配列変数です。
-エイリアスは組み込みコマンド \fBalias\fP で操作します。
+エイリアスは通常、組み込みコマンド \fBalias\fP で操作します。
 この配列に要素を追加すると、エイリアスのリストにも追加されます。
 配列から要素を削除すると、エイリアスがリストから削除されます。
 .TP
@@ -2542,7 +2542,7 @@ control-\fIx\fP の文字
 .\"O elements cause commands to be removed from the hash table.
 \fBbash\fP が内部に持つ、コマンドのハッシュテーブルに対応する
 連想配列変数です。
-ハッシュテーブルは組み込みコマンド hash で操作します。
+ハッシュテーブルは通常、組み込みコマンド hash で操作します。
 この配列に要素を追加すると、ハッシュテーブルにも追加されます。
 配列から要素を削除すると、ハッシュテーブルから削除されます。
 .TP
@@ -2551,7 +2551,8 @@ control-\fIx\fP の文字
 .\"O shell is executing a command as the result of a trap,
 .\"O in which case it is the command executing at the time of the trap.
 現在実行しているか実行しようとしているコマンドです。
-ただし、トラップによりコマンドを実行しているときのコマンドは除きます。
+ただし、トラップによってシェルが実行しているコマンドは別で、
+その場合は、トラップの発動時に実行していたコマンドになります。
 .TP
 .B BASH_EXECUTION_STRING
 .\"O The command argument to the \fB\-c\fP invocation option.
@@ -2732,7 +2733,7 @@ control-\fIx\fP の文字
 \fITAB\fP は通常の補完です。
 \fI?\fP は連続したタブ入力による候補のリスト表示です。
 \fI!\fP は途中まで補完した後の候補のリスト表示です。
-\fI@\fP は、途中での一致がないときの候補のリスト表示です。
+\fI@\fP は、途中までの一致がないときの候補のリスト表示です。
 \fI%\fP はメニュー補完 (menu completion)です。
 この変数はプログラム補完機能 (後述の \fBプログラム補完\fP を参照)
 から呼ばれたシェル関数と外部コマンドにおいてのみ有効です。
@@ -2874,7 +2875,7 @@ set しても元には戻りません。
 .\"O information.
 この変数は \fBBASH_LINENO\fP や \fBBASH_SOURCE\fP と組になっています。
 \fBFUNCNAME\fP の各要素は \fBBASH_LINENO\fP や \fBBASH_SOURCE\fP
-の各要素に対応し、呼び出しスタックを表します。
+の各要素に対応し、呼び出しスタックを表現します。
 例えば、\fB${FUNCNAME[\fP\fI$i\fP\fB]}\fP はファイル
 \fB${BASH_SOURCE[\fP\fI$i+1\fP\fB]}\fP の行番号
 \fB${BASH_LINENO[\fP\fI$i\fP\fB]}\fP から呼び出されたものです。
@@ -2944,9 +2945,9 @@ set しても元には戻りません。
 .\"O .B LINENO
 .\"O is unset, it loses its special properties, even if it is
 .\"O subsequently reset.
-この変数が参照されると、
-シェルはスクリプトや関数における現在の行番号 (1から始まります) を表す
-10 進値になります。スクリプトや関数の内部でない場合には、
+この変数が参照されると、その場所ごとに、
+スクリプトや関数における現在の行番号 (1 から始まります) を表す
+10 進値に置き変わります。スクリプトや関数の内部でない場合には、
 意味のある値が代入されることは保証されません。
 .SM
 .B LINENO
@@ -3182,7 +3183,8 @@ GNU 標準の \fIcpu-company-system\fP の形式で設定されます。
 .\"O .B bash
 .\"O is started.
 .B bash
-が起動されるたびに 1 ずつ増えます。
+が起動するときに、環境変数で渡された値から 1 増やした値が
+設定されます。
 .TP
 .B UID
 .\"O Expands to the user ID of the current user, initialized at shell startup.
