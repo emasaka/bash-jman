@@ -2733,7 +2733,7 @@ control-\fIx\fP の文字
 \fITAB\fP は通常の補完です。
 \fI?\fP は連続したタブ入力による候補のリスト表示です。
 \fI!\fP は途中まで補完した後の候補のリスト表示です。
-\fI@\fP は、途中までの一致がないときの候補のリスト表示です。
+\fI@\fP は、部分的な補完ができないときの候補のリスト表示です。
 \fI%\fP はメニュー補完 (menu completion)です。
 この変数はプログラム補完機能 (後述の \fBプログラム補完\fP を参照)
 から呼ばれたシェル関数と外部コマンドにおいてのみ有効です。
@@ -2873,9 +2873,10 @@ set しても元には戻りません。
 .\"O \fB${BASH_LINENO[\fP\fI$i\fP\fB]}\fP.
 .\"O The \fBcaller\fP builtin displays the current call stack using this
 .\"O information.
-この変数は \fBBASH_LINENO\fP や \fBBASH_SOURCE\fP と組になっています。
-\fBFUNCNAME\fP の各要素は \fBBASH_LINENO\fP や \fBBASH_SOURCE\fP
-の各要素に対応し、呼び出しスタックを表現します。
+
+この変数の各要素は、\fBBASH_LINENO\fP や \fBBASH_SOURCE\fP の各要素に
+対応します。
+これらを参照することで、呼び出しスタックの状態を確認できます。
 例えば、\fB${FUNCNAME[\fP\fI$i\fP\fB]}\fP はファイル
 \fB${BASH_SOURCE[\fP\fI$i+1\fP\fB]}\fP の行番号
 \fB${BASH_LINENO[\fP\fI$i\fP\fB]}\fP から呼び出されたものです。
@@ -3091,7 +3092,7 @@ GNU 標準の \fIcpu-company-system\fP の形式で設定されます。
 .\"O .B readline
 .\"O line buffer, for use with
 .B readline
-の編集バッファでのポイントの位置です。
+の編集バッファでの挿入ポイントの位置です。
 .if t \f(CWbind -x\fP
 .if n "bind -x"
 .\"O (see
