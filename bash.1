@@ -3201,7 +3201,8 @@ GNU 標準の \fIcpu-company-system\fP の形式で設定されます。
 .\"O below.
 以下の変数はシェルが使用します。場合によっては、
 .B bash
-がデフォルト値を変数に代入します。このような場合については後述します。
+がデフォルト値を変数に代入します。
+そのような場合についてはそれぞれ注記します。
 .PP
 .PD 0
 .TP
@@ -3243,7 +3244,8 @@ GNU 標準の \fIcpu-company-system\fP の形式で設定されます。
 .\"O .SM
 .\"O .B BASH_XTRACEFD
 .\"O is unset or assigned a new value.
-が設定されたときに、トレース出力をそのファイル・ディスクリプターに出力します。
+が設定されたときに、生成されたトレース出力を
+そのファイル・ディスクリプターに出力します。
 .\"O Unsetting
 .\"O .SM
 .\"O .B BASH_XTRACEFD
@@ -3252,7 +3254,7 @@ GNU 標準の \fIcpu-company-system\fP の形式で設定されます。
 .SM
 .B BASH_XTRACEFD
 が unset されるか、新しい値が代入されると、
-ファイル・ディスクリプターはクローズされます。
+それまで設定されていたファイル・ディスクリプターはクローズされます。
 .SM
 .B BASH_XTRACEFD
 を unset するか空文字列を代入すると、
@@ -3381,7 +3383,7 @@ SIGWINCH を受信すると自動的に設定されます。
 .SM
 .BR GLOBIGNORE
 内のパターンのどれかにもマッチする場合、
-これはマッチしたもののリストから削除されます。
+マッチしたもののリストから削除されます。
 .TP
 .B HISTCONTROL
 .\"O A colon-separated list of values controlling how commands are saved on
@@ -3406,7 +3408,7 @@ SIGWINCH を受信すると自動的に設定されます。
 .\"O .I ignoreboth
 .\"O is shorthand for \fIignorespace\fP and \fIignoredups\fP.
 .I ignoreboth
-は \fIignorespace\fP と \fIignoredups\fP の両方を指定します。
+を指定すると \fIignorespace\fP と \fIignoredups\fP の両方が指定されます。
 .\"O A value of
 .\"O .IR erasedups
 .\"O causes all previous lines matching the current line to be removed from
@@ -3415,7 +3417,7 @@ SIGWINCH を受信すると自動的に設定されます。
 .IR erasedups
 の値が設定されていると、行が保存される前に、
 現在の行に一致する過去の行が履歴リストから削除されます。
-これらに該当しない値は無視されます。
+上記以外の値を設定しても無視されます。
 .\"O If
 .\"O .SM
 .\"O .B HISTCONTROL
@@ -3428,10 +3430,13 @@ SIGWINCH を受信すると自動的に設定されます。
 .\"O not tested, and are added to the history regardless of the value of
 .\"O .SM
 .\"O .BR HISTCONTROL .
-パーザが読み込んだ全ての行は
+.SM
+.B HISTCONTROL
+が設定されていない場合や、不正な値が設定されている場合には、
+シェルのパーザが読み込んだ全ての行は
 .BR HISTIGNORE
 の値が示す条件の下で履歴リストに保存されます。
-複数行にまたがる複雑なコマンドの場合は
+複数行にまたがる複合コマンドの場合は
 2 番目以降の行が調べられることはありません。よって、これらは
 .BR HISTCONTROL
 の値に関わらず履歴に追加されます。
@@ -3457,7 +3462,8 @@ SIGWINCH を受信すると自動的に設定されます。
 .\"O value is 500.  The history file is also truncated to this size after
 .\"O writing it when an interactive shell exits.
 履歴ファイルに保持する履歴の最大数です。この変数に値が代入された場合、
-その行数を越えないように、必要に応じて履歴ファイルが切り詰められます。
+その行数を越えないように、必要に応じて古いエントリを削除して履歴ファイルを
+切り詰めます。
 デフォルト値は 500 です。対話シェルが終了するときにも、
 履歴ファイルのサイズはファイル書き込みの後にこのサイズに切り詰められます。
 .TP
@@ -3472,8 +3478,8 @@ SIGWINCH を受信すると自動的に設定されます。
 .\"O are applied.
 どのコマンド行を履歴リストに保存するかを決めるために使うパターンを
 コロンで区切って並べたリストです。
-それぞれのパターンは行の先頭と比較され、
-行全体が完全に一致しなければなりません
+それぞれのパターンは行の先頭から比較され、
+行全体と完全に一致しなければなりません
 (`\fB*\fP' が暗黙的に追加されるこ
 とはありません)。各パターンの評価は
 .B HISTCONTROL
@@ -3489,7 +3495,7 @@ SIGWINCH を受信すると自動的に設定されます。
 `\fB&\fP' が履歴の前の行にマッチします。
 バックスラッシュを使って `\fB&\fP' をエスケープできます。
 マッチングを試みる前にバックスラッシュは取り除かれます。
-複数行にまたがる複雑なコマンドの場合、2 番目以降の行は調べられません。
+複数行にまたがる複合コマンドの場合、2 番目以降の行は調べられません。
 よって、これらは
 .SM
 .BR HISTIGNORE
@@ -3611,7 +3617,7 @@ SIGWINCH を受信すると自動的に設定されます。
 文字を連続して行頭の文字として入力しなければ
 .B bash
 は終了しません。この変数に数値以外の値が設定されている場合や、
-値が設定されていない場合には、デフォルト値として 10 が使われます。
+空の値が設定されている場合には、デフォルト値として 10 が使われます。
 この変数が存在しなければ、
 .SM
 .B EOF
@@ -3637,8 +3643,8 @@ SIGWINCH を受信すると自動的に設定されます。
 .B LANG
 .\"O Used to determine the locale category for any category not specifically
 .\"O selected with a variable starting with \fBLC_\fP.
-\fBLC_\fP で始まる変数で特に選択されない任意のカテゴリに対して、
-ロケールのカテゴリを決めるために使います。
+ロケールカテゴリが \fBLC_\fP で始まる変数によって明示的に指定されて
+いない場合、そうしたカテゴリのロケールを決定するのに使用されます。
 .TP
 .B LC_ALL
 .\"O This variable overrides the value of
@@ -3648,7 +3654,7 @@ SIGWINCH を受信すると自動的に設定されます。
 .\"O \fBLC_\fP variable specifying a locale category.
 この変数はロケールのカテゴリを指定する \fBLC_\fP 変数と
 .B LANG
-の値を全て上書きします。
+の値に優先します。
 .TP
 .B LC_COLLATE
 .\"O This variable determines the collation order used when sorting the
@@ -3657,14 +3663,14 @@ SIGWINCH を受信すると自動的に設定されます。
 .\"O pathname expansion and pattern matching.
 この変数はパス名展開の結果をソートするときに使用される照合順序と、
 パス名展開とパターンマッチングにおける
-範囲展開、同値クラス、照合シーケンスの動作決定します。
+範囲表現、等値クラス、照合順序の動作を決定します。
 .TP
 .B LC_CTYPE
 .\"O This variable determines the interpretation of characters and the
 .\"O behavior of character classes within pathname expansion and pattern
 .\"O matching.
 この変数は、パス名展開とパターンマッチングにおける
-文字の解釈と文字クラスの挙動を決めます。
+文字の解釈と文字クラスに含まれる文字を決めます。
 .TP
 .B LC_MESSAGES
 .\"O This variable determines the locale used to translate double-quoted
@@ -3697,12 +3703,13 @@ SIGWINCH を受信すると自動的に設定されます。
 .\"O .B bash
 .\"O informs the user of the arrival of mail in the specified file or
 .\"O Maildir-format directory.
-このパラメータにファイル名が設定されており、かつ変数
+このパラメータにファイル名またはディレクトリ名が設定されており、かつ変数
 .SM
 .B MAILPATH
 が設定されていなければ、
 .B bash
-は指定されたファイルへのメールの到着をユーザに通知します。
+は指定されたファイルまたはMaildier形式のディレクトリへの
+メールの到着をユーザに通知します。
 .TP
 .B MAILCHECK
 .\"O Specifies how
@@ -3718,7 +3725,7 @@ SIGWINCH を受信すると自動的に設定されます。
 メールをチェックする時間になると、
 シェルはプライマリのプロンプトを表示する前にチェックを行います。
 この変数が unset された場合、
-あるいはこの変数に 0 より大きい数値以外が代入された場合は、
+あるいはこの変数に 0 以上の数値以外が代入された場合は、
 シェルはメールのチェックを行いません。
 .TP
 .B MAILPATH
@@ -4016,10 +4023,10 @@ CPU のパーセンテージ。(%U + %S) / %R で算出されます。
 .SM
 .B TMOUT
 の値が組み込みコマンド \fBread\fP のデフォルトのタイムアウト値となります。
-\fBselect\fP コマンドは、端末からの入力の後に入力がないと
+\fBselect\fP コマンドは、端末からの入力の際に
 .SM
 .B TMOUT
-秒後に終了します。
+秒入力がないと終了します。
 対話シェルではこの値は、プライマリのプロンプトを出してから
 入力を待つ秒数として解釈されます
 この秒数待って入力が来ないと、
@@ -4058,16 +4065,18 @@ CPU のパーセンテージ。(%U + %S) / %R で算出されます。
 .\"O below).  If set to any other value, the supplied string must
 .\"O be a prefix of a stopped job's name; this provides functionality
 .\"O analogous to the \fB%\fP\fIstring\fP job identifier.
-この変数はシェルがユーザとジョブ制御の相互作用をどのように扱うかを決めます。
-この変数を設定した場合、1 語からなるリダイレクトなしの単純なコマンドが、
-停止中ジョブの実行再開候補として扱われます。
+
+.\"O This variable controls how the shell interacts with the user and
+この変数は、ユーザがジョブ制御をするときの方法を変更します。
+この変数を設定した場合、1 語からなるリダイレクトなしの単純なコマンドを
+入力すると、停止中のジョブの実行再開候補として扱われます。
 曖昧な指定は許されません。
 入力された文字列で始まるジョブが複数ある場合には、
 最後にアクセスされたものが選ばれます。
-ここでの
+停止中のジョブの
 .I 名前
 とは、コマンドを起動する際に使ったコマンドラインのことです。
-この値に
+この変数の値に
 .IR exact
 が設定されている場合、
 与えられた文字列は停止しているジョブの名前に
@@ -4085,7 +4094,7 @@ CPU のパーセンテージ。(%U + %S) / %R で算出されます。
 を参照)。
 これ以外の値が設定されている場合、
 与えられた文字列は停止しているジョブの名前の
-プレフィックスでなければなりません。これはジョブ識別子の
+先頭部分でなければなりません。これはジョブ識別子の
 \fB%\fP\fIstring\fP と似た機能を持っています。
 .TP
 .B histchars
@@ -4114,7 +4123,7 @@ CPU のパーセンテージ。(%U + %S) / %R で算出されます。
 最初の文字は \fI履歴展開 (history expansion)\fP 文字であり、
 履歴展開の先頭を示す文字です。通常、これは `\fB!\fP' です。
 2 番目の文字は \fI簡易置換 (quick substitution)\fP
-文字であり、前に入力したコマンドの文字列を
+文字であり、直前に入力したコマンドの文字列を
 別の文字列に置き換えて再実行するための省略表現として使います。
 デフォルト値は `\fB^\fP' です。
 3 番目の文字は省略可能です。単語の先頭でこの文字が見つかると、
