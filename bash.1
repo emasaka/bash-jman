@@ -3480,9 +3480,9 @@ SIGWINCH を受信すると自動的に設定されます。
 それぞれのパターンは行の先頭から比較され、
 行全体と完全に一致しなければなりません
 (`\fB*\fP' が暗黙的に追加されるこ
-とはありません)。各パターンの評価は
+とはありません)。行に対する各パターンの評価は
 .B HISTCONTROL
-で指定したチェックが行われた後の行に対して実行されます。
+で指定したチェックが行われた後で実行されます。
 .\"O In addition to the normal shell pattern matching characters, `\fB&\fP'
 .\"O matches the previous history line.  `\fB&\fP' may be escaped using a
 .\"O backslash; the backslash is removed before attempting a match.
@@ -3651,9 +3651,9 @@ SIGWINCH を受信すると自動的に設定されます。
 .\"O .B LANG
 .\"O and any other
 .\"O \fBLC_\fP variable specifying a locale category.
-この変数はロケールのカテゴリを指定する \fBLC_\fP 変数と
+この変数はロケールカテゴリを指定する \fBLC_\fP 変数と
 .B LANG
-の値に優先します。
+のすべての値に優先します。
 .TP
 .B LC_COLLATE
 .\"O This variable determines the collation order used when sorting the
@@ -4071,17 +4071,18 @@ CPU のパーセンテージ。(%U + %S) / %R で算出されます。
 曖昧な指定は許されません。
 入力された文字列で始まるジョブが複数ある場合には、
 最後にアクセスされたものが選ばれます。
+このとき、コマンドを起動するときに使ったコマンドラインを
 停止中のジョブの
 .I 名前
-とは、コマンドを起動する際に使ったコマンドラインのことです。
+として指定します。
 この変数の値に
 .IR exact
 が設定されている場合、
-与えられた文字列は停止しているジョブの名前に
+与えられた文字列は停止中のジョブの名前に
 正確にマッチしなければなりません。
 .IR substring
 が設定されている場合は、
-与えられた文字列は停止しているジョブの名前の部分文字列に
+与えられた文字列は停止中のジョブの名前の部分文字列に
 マッチする必要があります。
 .I substring
 という値は、ジョブ識別子の
@@ -4091,7 +4092,7 @@ CPU のパーセンテージ。(%U + %S) / %R で算出されます。
 .B ジョブ制御
 を参照)。
 これ以外の値が設定されている場合、
-与えられた文字列は停止しているジョブの名前の
+与えられた文字列は停止中のジョブの名前の
 先頭部分でなければなりません。これはジョブ識別子の
 \fB%\fP\fIstring\fP と似た機能を持っています。
 .TP
@@ -7844,7 +7845,7 @@ POSIX に準拠する形で \fBtest\fP コマンドを使う場合には
 .\"O .BR SIGHUP .
 終了する前には、シェルは実行中・停止中の全てのジョブに対して
 .B SIGHUP
-を再送信します。停止しているジョブには
+を再送信します。停止中のジョブには
 .SM
 .B SIGCONT
 が送られ、このジョブが
@@ -8124,7 +8125,7 @@ Control-Y) を打ち込むと、
 .\"O the foreground or started in the background.
 例えば、
 .B %ce
-は停止しているジョブ
+は停止中のジョブ
 .B ce
 を指します。
 先頭の部分がマッチするジョブが複数個ある場合には、
@@ -8261,7 +8262,7 @@ Control-Y) を打ち込むと、
 .B bash
 を再び終了させようとすると、
 シェルは警告を繰り返さないで、
-停止されているジョブを終了させます。
+停止中のジョブを終了させます。
 .SH プロンプト
 対話的に動作している場合、
 .B bash
@@ -12279,7 +12280,7 @@ readline がファイル名特有の処理
 .TP 8
 .B stopped
 .\"O Names of stopped jobs, if job control is active.
-ジョブ制御が有効であれば、停止しているジョブ名。
+ジョブ制御が有効であれば、停止中のジョブ名。
 .TP 8
 .B user
 .\"O User names.  May also be specified as \fB\-u\fP.
