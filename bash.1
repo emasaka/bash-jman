@@ -4384,13 +4384,13 @@ ${\fIname\fP[\fIsubscript\fP]} の長さに展開されます。
 展開はコマンドラインが単語へ分割された後に
 (コマンドライン上で) 行われます。行われる展開は
 7 種類あります:
-.IR "ブレースの展開 (brace expansion)" ,
-.IR "チルダの展開 (tilde expansion)" ,
+.IR "ブレース展開 (brace expansion)" ,
+.IR "チルダ展開 (tilde expansion)" ,
 .IR "パラメータと変数の展開 (parameter and variable expansion)" ,
 .IR "コマンド置換 (command substitution)" ,
 .IR "算術式展開 (arithmetic expansion)" ,
 .IR "単語の分割 (word splitting)" ,
-.IR "パス名の展開 (pathname expansion)" 。
+.IR "パス名展開 (pathname expansion)" 。
 .PP
 .\"O The order of expansions is: brace expansion, tilde expansion,
 .\"O parameter, variable and arithmetic expansion and
@@ -4417,7 +4417,7 @@ ${\fIname\fP[\fIsubscript\fP]} の長さに展開されます。
 単語の分割、パス名展開だけです。ほかの展開では、
 1 つの単語は 1 つの単語に展開されます。
 この規則の唯一の例外は先に説明した
- "\fB$@\fP" と "\fB${\fP\fIname\fP\fB[@]}\fP" の展開 (
+"\fB$@\fP" と "\fB${\fP\fIname\fP\fB[@]}\fP" の展開 (
 .SM
 .B パラメータ
 を参照) だけです。
@@ -4439,7 +4439,7 @@ ${\fIname\fP[\fIsubscript\fP]} の長さに展開されます。
 .\"O within the braces, and the postscript is then appended
 .\"O to each resulting string, expanding left to right.
 .I "ブレース展開 (brace expansion)"
-を使うと、任意の文字列を生成できます。この機構は
+を使うと、任意の文字列を生成できます。この仕組みは
 \fIパス名展開\fPに似ていますが、
 生成されたファイル名が実在する必要はありません。
 ブレース展開されるパターンは、
@@ -4454,7 +4454,7 @@ ${\fIname\fP[\fIsubscript\fP]} の長さに展開されます。
 .\"O Brace expansions may be nested.  The results of each expanded
 .\"O string are not sorted; left to right order is preserved.
 .\"O For example, a\fB{\fPd,c,b\fB}\fPe expands into `ade ace abe'.
-ブレースの展開は入れ子にできます。
+ブレース展開は入れ子にできます。
 展開して得られた文字列はソートされず、
 左から右への順番がそのまま残ります。
 例えば a\fB{\fPd,c,b\fB}\fPe は `ade ace abe' と展開されます。
@@ -4477,17 +4477,18 @@ ${\fIname\fP[\fIsubscript\fP]} の長さに展開されます。
 シーケンス式は
 \fB{\fP\fIx\fP\fB..\fP\fIy\fP\fB[..\fP\fIincr\fP\fB]}\fP
 の形になります。\fIx\fP と \fIy\fP は整数または 1 つの文字で、
-省略可能な \fIincr\fP は整数です。
+省略可能な \fIincr\fP は増減分の整数です。
 整数が与えられると、
-\fIx\fP と \fIy\fP の間の数を全て列挙した形に展開されます。
+\fIx\fP と \fIy\fP の間の両端を含む数を全て列挙した形に展開されます。
 与る整数の前に \fI0\fP を付けると、全ての項が同じ幅に揃えられます。
-\fIx\fP か \fPy\fP のどちらかが 0 で始まる場合、生成される全ての項が
+つまり、\fIx\fP か \fPy\fP のどちらかが 0 で始まる場合、生成される全ての項が
 同じ文字数になるように、必要であれば前に 0 が付けられます。
 文字が与えられると
-辞書順で \fIx\fP と \fIy\fP の間の文字を全て列挙した形に展開されます。
+辞書順で \fIx\fP と \fIy\fP の間の両端を含む文字を全て列挙した形に展開されます。
 \fIx\fP と \fIy\fP は同じ型である必要があります。
-increment が与えられると、その値が各項の間の差となります。
-increment のデフォルトは、1 または -1 のうち適切な方です。
+incr が与えられると、その値が各項の間の差となります。
+incr のデフォルトは、1 または -1 のうち適切な方です。
+.\" emasaka: "increment"は"incr"のことと思われるため変更
 .PP
 .\"O Brace expansion is performed before any other expansions,
 .\"O and any characters special to other expansions are preserved
@@ -4495,7 +4496,7 @@ increment のデフォルトは、1 または -1 のうち適切な方です。
 .\"O .B Bash
 .\"O does not apply any syntactic interpretation to the context of the
 .\"O expansion or the text between the braces.
-ブレースの展開はほかのどの展開よりも前に実行されます。
+ブレース展開はほかのどの展開よりも前に実行されます。
 また、ほかの展開において特殊な意味を持つ文字もそのまま結果に残ります。
 つまり、厳密にテキスト操作だけを行います。
 .B bash
@@ -4511,7 +4512,8 @@ increment のデフォルトは、1 または -1 のうち適切な方です。
 .\"O To avoid conflicts with parameter expansion, the string \fB${\fP
 .\"O is not considered eligible for brace expansion.
 正しい形のブレース展開には、クォートされていない開きブレースと
-閉じブレース、また少なくとも 1 つのクォートされていないコンマが
+閉じブレース、そしてシーケンス式か少なくとも 1
+つのクォートされていないコンマが
 含まれていなければなりません。正しい形でないブレース展開は全て、
 変更されないでそのまま残ります。
 \fB{\fP や \fB,\fP をバックスラッシュでクォートすれば、
@@ -4614,7 +4616,7 @@ chown root /usr/{ucb/{ex,edit},lib/{ex?.?*,how_ex}}
 はチルダプレフィックス (\fItilde-prefix\fP) と解釈されます。
 クォートされている文字がチルダプレフィックス中に無ければ、
 チルダプレフィックス中のチルダ以降の文字は、
-\fIログイン名 (login name)\fP になる可能性がある文字列として扱われます。
+\fIログイン名 (login name)\fP になるかもしれない文字列として扱われます。
 このログイン名が空文字列ならば、チルダはシェルパラメータ
 .SM
 .\"O If
