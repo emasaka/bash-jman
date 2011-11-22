@@ -3566,7 +3566,8 @@ SIGWINCH を受信すると自動的に設定されます。
 .\"O is unset, the hostname list is cleared.
 .SM
 .B HOSTFILE
-が設定されているがその値が空文字列の場合、
+が設定されているがその値が空文字列の場合や、
+読み込めるファイルの名前ではない場合には、
 \fBbash\fP は補完可能なホスト名のリストを取得するために
 .FN /etc/hosts
 を使用します。
@@ -4723,9 +4724,9 @@ chown root /usr/{ucb/{ex,edit},lib/{ex?.?*,how_ex}}
 .\"O not escaped by a backslash or within a quoted string, and not within an
 .\"O embedded arithmetic expansion, command substitution, or parameter
 .\"O expansion.
-ブレースを使った場合、マッチングを終えるブレースは最初の `\fB}\fP' です。
+ブレースを使った場合、対になるのは最初に表れる `\fB}\fP' です。
 ただしバックスラッシュでエスケープされているものや
-クォートされている文字列中のものは含まれませんし、
+クォートされている文字列中のものは含まれませんし、ブレースの内側にある
 算術式展開やコマンド置換、パラメータ展開に入っているものも含まれません。
 .PP
 .PD 0
@@ -4739,7 +4740,7 @@ ${\fIparameter\fP}
 .\"O .I parameter
 .\"O is followed by a character which is not to be
 .\"O interpreted as part of its name.
-\fIparameter\fP の値が置換されます。ブレースが必要になるのは、
+\fIparameter\fP の値に置換されます。ブレースが必要になるのは、
 .I parameter
 が 2 桁以上の数字を持つ位置パラメータの場合や、
 .I parameter
@@ -4775,7 +4776,7 @@ ${\fIparameter\fP}
 .\"O When not performing substring expansion, using the forms documented below,
 .\"O \fBbash\fP tests for a parameter that is unset or null.  Omitting the colon
 .\"O results in a test only for a parameter that is unset.
-部分文字列展開以外の場合、
+部分文字列展開以外の場合、以下の形式で、
 \fBbash\fP はパラメータが設定されているか、空ではないかを調べます。
 コロンを省略した場合には設定されているかどうかのみを調べます。
 .PP
@@ -4903,7 +4904,7 @@ ${\fIparameter\fP\fB:\fP\fIoffset\fP\fB:\fP\fIlength\fP}
 \fIoffset\fP を評価すると 0 未満の数になる場合、この値は
 \fIparameter\fP の値の末尾からのオフセットとして使われます。
 \fIlength\fP を評価すると 0 未満の数になる場合、
-\fIparameter\fP が \fB@\fP ではなく、配列や連想配列ではなければ、
+\fIparameter\fP が \fB@\fP ではなく、配列でも連想配列でもなければ、
 この値は文字数ではなく \fIparameter\fP の値の末尾からのオフセットとして使われ、
 展開結果は 2 つのオフセットの間の部分文字列となります。
 \fIparameter\fP が \fB@\fP ならば、結果は \fIoffset\fP から始まる
@@ -4935,7 +4936,7 @@ ${\fB!\fP\fIprefix\fP\fB@\fP}
 .\"O special variable.
 .\"O When \fI@\fP is used and the expansion appears within double quotes, each
 .\"O variable name expands to a separate word.
-\fB前方一致する名前\fP.
+\fB前方一致する変数名\fP。
 \fIprefix\fP で始まる全ての変数の名前に展開して、
 .SM
 .B IFS
@@ -4955,8 +4956,8 @@ ${\fB!\fP\fIname\fP[\fI*\fP]}
 .\"O otherwise.
 .\"O When \fI@\fP is used and the expansion appears within double quotes, each
 .\"O key expands to a separate word.
-\fB配列のキーのリスト\fP.
-\fIname\fP が配列変数であれば、\fIname\fP に代入されている配列の
+\fB配列のキーのリスト\fP。
+\fIname\fP が配列変数であれば、配列 \fIname\fP の
 インデックス (キー) のリストに展開されます。
 \fIname\fP が配列でない場合は、\fIname\fP が設定されていれば 0 に、
 そうでなければ空に展開されます。
@@ -4973,7 +4974,7 @@ ${\fB#\fP\fIparameter\fP}
 .\"O or 
 .\"O .BR @ ,
 .\"O the value substituted is the number of positional parameters.
-\fBパラメータの長さ\fP.
+\fBパラメータの長さ\fP。
 \fIparameter\fP の値に含まれる文字数に置換されます。
 .I parameter
 が
@@ -5011,7 +5012,7 @@ ${\fIparameter\fP\fB##\fP\fIword\fP}
 .\"O .I parameter
 .\"O with the shortest matching pattern (the ``\fB#\fP'' case) or the
 .\"O longest matching pattern (the ``\fB##\fP'' case) deleted.
-\fBパターンに前方一致した部分を取り除く\fP.
+\fBパターンに前方一致した部分を取り除く\fP。
 .I word
 が展開され、パス名展開の場合と同じようなパターンを作ります。
 このパターンが
@@ -5084,7 +5085,7 @@ ${\fIparameter\fP\fB%%\fP\fIword\fP}
 .\"O .BR * ,
 .\"O the pattern removal operation is applied to each member of the
 .\"O array in turn, and the expansion is the resultant list.
-\fBパターンに後方一致した部分を取り除く\fP.
+\fBパターンに後方一致した部分を取り除く\fP。
 .I word
 が展開され、パス名展開の場合と同じようなパターンを作ります。
 このパターンが
@@ -5125,7 +5126,7 @@ ${\fIparameter\fP\fB/\fP\fIpattern\fP\fB/\fP\fIstring\fP}
 .\"O of the expanded value of \fIparameter\fP.
 .\"O If \fIstring\fP is null, matches of \fIpattern\fP are deleted
 .\"O and the \fB/\fP following \fIpattern\fP may be omitted.
-\fBパターンの置換\fP.
+\fBパターンの置換\fP。
 \fIpattern\fP が展開され、
 パス名展開の場合と同じようなパターンを作ります。
 \fIparameter\fP の展開が行われ、
@@ -5193,14 +5194,14 @@ ${\fIparameter\fP\fB,,\fP\fIpattern\fP}
 .\"O the first character in the expanded value.
 .\"O If \fIpattern\fP is omitted, it is treated like a \fB?\fP, which matches
 .\"O every character.
-\fB大文字小文字の変換\fP.
+\fB大文字小文字の変換\fP。
 \fIparameter\fP に含まれるアルファベットの大文字小文字を変換します。
 \fIpattern\fP が展開され、
 パス名展開の場合と同じようなパターンを作ります。
 \fB^\fP 演算子は \fIpattern\fP にマッチした小文字を大文字に変換します。
 \fB,\fP 演算子は \fIpattern\fP にマッチした大文字を小文字に変換します。
-\fB^^\fP 演算子と \fB,,\fP 演算子は、マッチした中の全ての文字を変換します。
-\fB^\fP 演算子と \fB,\fP 演算子の場合は、マッチした中の最初の文字だけ変換します。
+\fB^^\fP 演算子と \fB,,\fP 演算子は、マッチした全ての文字を変換します。
+\fB^\fP 演算子と \fB,\fP 演算子の場合は、マッチした最初の文字だけ変換します。
 \fIpattern\fP を省略した場合、\fB?\fP を指定したものとして扱われ、
 全ての文字にマッチします。
 .\"O If
@@ -5216,8 +5217,8 @@ ${\fIparameter\fP\fB,,\fP\fIpattern\fP}
 .B @
 または
 .BR *
-の場合は、位置パラメータのそれぞれに大文字小文字の変換が適用され、
-結果はリストに展開されます。
+である場合、大文字小文字の変換は全ての位置パラメータに順番に適用され、
+展開結果はリストとして得られます。
 .\"O If
 .\"O .I parameter
 .\"O is an array variable subscripted with
@@ -5239,7 +5240,7 @@ ${\fIparameter\fP\fB,,\fP\fIpattern\fP}
 .\"O \fICommand substitution\fP allows the output of a command to replace
 .\"O the command name.  There are two forms:
 \fIコマンド置換 (command substitution)\fP を用いると、
-コマンド名をコマンドの出力で置き換えできます。
+コマンド名をコマンドの出力で置き換えられます。
 コマンド置換には以下の 2 つの形式があります:
 .RS
 .PP
@@ -5260,8 +5261,8 @@ ${\fIparameter\fP\fB,,\fP\fIpattern\fP}
 .\"O The command substitution \fB$(cat \fIfile\fP)\fR can be replaced by
 .\"O the equivalent but faster \fB$(< \fIfile\fP)\fR.
 .B bash
-による展開は、\fIcommand\fP の実行およびコマンド置換の部分を
-コマンドの標準出力と置換することにより実行されます。
+は \fIcommand\fP を実行し、
+command の標準出力でコマンド置換の部分を置き換えます。
 この際、末尾の改行文字は削除されます。
 文字列の途中にある改行文字は削除されませんが、
 単語分割の際に削除されることがあります。
@@ -5284,8 +5285,8 @@ ${\fIparameter\fP\fB,,\fP\fIpattern\fP}
 .BR ` ,
 .B \e
 の前にある場合は例外となります。
-バックスラッシュが前置されていないバッククォートがあると、
-そこでコマンド置換は閉じられます。
+コマンド置換は、バックスラッシュが前置されていない
+バッククォートまでの部分です。
 $(\^\fIcommand\fP\|) という形式を用いたときは、
 括弧の間にある全ての文字がコマンドとなります。
 特別扱いされる文字はありません。
@@ -5359,8 +5360,9 @@ $(\^\fIcommand\fP\|) という形式を用いたときは、
 .\"O \fB<(\fP\fIlist\^\fP\fB)\fP form is used, the file passed as an
 .\"O argument should be read to obtain the output of \fIlist\fP.
 \fIプロセス置換 (process substitution)\fP がサポートされるのは、
-名前付きパイプ (\fIFIFO\fP) または名前付きオープンファイルの
-\fB/dev/fd\fP メソッドをサポートしているシステムです。これは
+名前付きパイプ (\fIFIFO\fP) または
+ファイル・ディスクリプターの \fB/dev/fd\fP 形式での指定
+をサポートしているシステムです。これは
 \fB<(\fP\fIlist\^\fP\fB)\fP
 または
 \fB>(\fP\fIlist\^\fP\fB)\fP
@@ -5381,7 +5383,7 @@ $(\^\fIcommand\fP\|) という形式を用いたときは、
 .\"O command substitution,
 .\"O and arithmetic expansion.
 利用可能であれば、プロセス置換 (process substitution) は、
-パラメータ展開・変数展開・コマンド置換・算術式展開と同時に行われます。
+パラメータ展開、変数展開、コマンド置換、算術式展開と同時に行われます。
 .\"O .SS Word Splitting
 .SS 単語の分割
 .PP
@@ -5392,9 +5394,8 @@ $(\^\fIcommand\fP\|) という形式を用いたときは、
 .\"O arithmetic expansion
 .\"O that did not occur within double quotes for
 .\"O .IR "word splitting" .
-シェルはパラメータ展開・コマンド置換・算術式展開
-(ダブルクォートの内部ではこれらの展開は行われません)
-の結果をスキャンし、
+パラメータ展開、コマンド置換、算術式展開が行われたのが、ダブル
+クォートの内側ではない場合、シェルは展開の結果をスキャンして、
 .I "単語分割"
 を行います。
 .PP
@@ -5424,17 +5425,17 @@ $(\^\fIcommand\fP\|) という形式を用いたときは、
 ほかの展開の結果をこれらの文字によって単語に分割します。
 .SM
 .B IFS
-が設定されていないか、その値が正確にデフォルト値の
+が設定されていないか、その値がデフォルト値の
 .BR <スペース><タブ><改行>
-ならば、ほかの展開の結果の先頭や末尾の
-.BR <space> ,
-.BR <tab> ,
-.B <newline>
+と全く同じならば、前段の展開の結果の先頭や末尾の
+.BR <スペース> ,
+.BR <タブ> ,
+.B <改行>
 の並びは無視され、
 先頭と末尾以外の
 .SM
 .B IFS
-文字の任意の列で単語が区切られます。 
+文字の並びで単語が区切られます。
 .\"O If
 .\"O .SM
 .\"O .B IFS
@@ -5454,17 +5455,18 @@ $(\^\fIcommand\fP\|) という形式を用いたときは、
 .\"O whitespace character).
 .SM
 .B IFS
-がデフォルト以外の値を持っていれば、空白文字
-.RB ( スペース
-および
-.BR タブ )
-の列は単語の先頭と末尾では無視されます。これは空白文字が
+の値がデフォルト以外のときに、
+.BR スペース
+や
+.RB タブ
+という空白文字の並びが単語の先頭と末尾で無視されるのは、
+その空白文字が
 .SM
 .BR IFS
-の値 (
+の値に含まれるとき (
 .SM
 .B IFS
-空白文字) に含まれる限り成り立ちます。
+の空白文字の一つであるとき) だけです。
 .\"O Any character in
 .\"O .SM
 .\"O .B IFS
@@ -5510,7 +5512,7 @@ $(\^\fIcommand\fP\|) という形式を用いたときは、
 値を持たないパラメータを展開した結果として得られますが、
 これらは削除されます。
 値を持たないパラメータがダブルクォート内部で展開されると、
-これは空である引き数となり、消されずに残ります。
+空である引き数となり、消されずに残ります。
 .PP
 .\"O Note that if no expansion occurs, no splitting
 .\"O is performed.
