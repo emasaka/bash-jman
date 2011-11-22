@@ -4137,7 +4137,7 @@ CPU のパーセンテージ。(%U + %S) / %R で算出されます。
 .\"O provides one-dimensional indexed and associative array variables.
 .\"O Any variable may be used as an indexed array; the
 .B bash
-は 1 次元のインデックスによる配列または連想配列の変数を扱うことができます。
+は 1 次元のインデックスによる配列と連想配列の変数を扱うことができます。
 全ての変数は配列として使用できます。
 .\"O .B declare
 .\"O builtin will explicitly declare an array.
@@ -4152,7 +4152,8 @@ CPU のパーセンテージ。(%U + %S) / %R で算出されます。
 配列のサイズの上限はありませんし、
 メンバのインデックス付けや代入を
 連続的にしなければならないという条件もありません。
-インデックスによる配列は 0 からの整数 (算術式を含む) で参照し、
+インデックスによる配列は整数 (算術式を含む) で参照します。
+インデックスは 0 から始まります。
 連想配列は任意の文字列で参照します。
 .PP
 .\"O An indexed array is created automatically if any variable is assigned to
@@ -4188,13 +4189,13 @@ CPU のパーセンテージ。(%U + %S) / %R で算出されます。
 .B declare \-a \fIname\fP[\fIsubscript\fP]
 .\"O .B declare \-a \fIname\fP[\fIsubscript\fP]
 .\"O is also accepted; the \fIsubscript\fP is ignored.
-も許されます。\fIsubscript\fP は無視されます。
+も許されます。このとき \fIsubscript\fP は無視されます。
 .PP
 .\"O Associative arrays are created using
 .\"O .BR "declare \-A \fIname\fP" .
 連想配列は
 .BR "declare \-A \fIname\fP"
-で作られます。
+で作ります。
 .PP
 .\"O Attributes may be
 .\"O specified for an array variable using the
@@ -4207,7 +4208,7 @@ CPU のパーセンテージ。(%U + %S) / %R で算出されます。
 と
 .B readonly
 を使うと、配列変数に対して属性を設定できます。
-どちらの属性も配列のメンバ全てに対して適用されます。
+どの属性も配列のメンバ全てに対して適用されます。
 .PP
 .\"O Arrays are assigned to using compound assignments of the form
 .\"O \fIname\fP=\fB(\fPvalue\fI1\fP ... value\fIn\fP\fB)\fP, where each
@@ -4258,15 +4259,15 @@ CPU のパーセンテージ。(%U + %S) / %R で算出されます。
 配列の任意の要素は、${\fIname\fP[\fIsubscript\fP]}
 を使って参照できます。
 パス名展開との衝突を避けるためにブレースが必要です。
-\fI添字(subscript)\fPが \fB@\fP か \fB*\fP ならば、その単語は
-\fIname\fP の全ての要素に展開されます。これらの添字が異なるのは、
+\fIsubscript\fP が \fB@\fP か \fB*\fP ならば、配列の参照は
+\fIname\fP の全ての要素に展開されます。この 2 つの添字が異なるのは、
 単語がダブルクォートの内部にある場合だけです。
 単語がダブルクォートされていれば、${\fIname\fP[*]} は
 1 つの単語に展開されます。
 この単語は、配列の各メンバの値を特殊変数
 .SM
 .B IFS
-の値で区切って並べたものです。${\fIname\fP[@]}は、
+の最初の値で区切って並べたものです。一方、${\fIname\fP[@]} は、
 \fIname\fP の各要素を別々の単語に展開します。
 配列のメンバが全くないときは、${\fIname\fP[@]}
 は空の単語に展開されます。
@@ -4287,18 +4288,18 @@ CPU のパーセンテージ。(%U + %S) / %R で算出されます。
 最初のパラメータの展開結果がつながり、
 最後のパラメータの展開結果の後に
 元の単語のダブルクォートより後の部分がつながります。
-これは特殊パラメータ \fB*\fP や \fB@\fP に似ています (前述の
+これは特殊パラメータ \fB*\fP や \fB@\fP の展開に似ています (前述の
 .B 特殊パラメータ
 を参照)。
 ${#\fIname\fP[\fIsubscript\fP]} は
 ${\fIname\fP[\fIsubscript\fP]} の長さに展開されます。
 \fIsubscript\fP が \fB*\fP または \fB@\fP の場合は、
 配列中の要素数に展開されます。添字なしで配列変数を参照すると、
-要素 0 を参照したことになります。
+0 番目の要素を参照したことになります。
 .PP
 .\"O An array variable is considered set if a subscript has been assigned a
 .\"O value.  The null string is a valid value.
-配列変数は subscript に対して値が代入されれば
+配列変数は subscript に対して値が代入されていれば
 設定されているとみなされます。
 空文字列は有効な値です。
 .PP
@@ -4342,7 +4343,7 @@ ${\fIname\fP[\fIsubscript\fP]} の長さに展開されます。
 .B \-a
 オプションでインデックスによる配列を指定できます。
 .B \-A
-オプションで連想配列を指定できます。
+また、オプションで連想配列を指定できます。
 両方が指定されたときには、
 .B \-A
 が優先します。
