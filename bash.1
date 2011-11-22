@@ -8659,7 +8659,6 @@ C\-Meta\-u: universal\-argument
 コマンドが実行されるようになります。
 .PP
 .\"O The following symbolic character names are recognized:
-.\"O motoki: 分かりにくいと思いました。
 以下に示すシンボル名を使うことができます:
 .IR RUBOUT ,
 .IR DEL ,
@@ -8958,11 +8957,9 @@ Readline には、動作を細かくカスタマイズするために変数が�
 .\"O and "1" are equivalent to \fBOn\fP.  All other values are equivalent to
 .\"O \fBOff\fP.
 .\"O The variables and their default values are:
-.\"O motoki: null value というのは具体的にどういうことなのだろう???
-.\"O motoki: emtpy value と null value というのはどう違うのか。
-.\"O motoki: 必要なら元の英語や注釈を加えた方がいいかも。
-変数の値を読み取るとき、空や空白の値、"on" (大文字と小文字は区別しない)、
-"1" は \fBOn\fP とみなされます。それ以外の値は \fBOff\fP とみなされます。
+変数の値を読み取るとき、設定されてない場合や、空文字列、"on"
+(大文字と小文字は区別しない)、"1" は
+\fBOn\fP とみなされます。それ以外の値は \fBOff\fP とみなされます。
 変数とそのデフォルト値を以下に示します:
 .PP
 .PD 0
@@ -9300,11 +9297,10 @@ readline は補完でマッチするものをアルファベット順にして�
 .\"O compilation features of the C preprocessor which allows key
 .\"O bindings and variable settings to be performed as the result
 .\"O of tests.  There are four parser directives used.
-.\"O motoki: 「評価の結果」というのが分かりにくいかな。
 Readline には、
 C 言語のプリプロセッサの条件付きコンパイル機能と
 似たコンセプトに基づく機能が実装されています。
-これを使うとキー割り当てや変数の設定を評価の結果として実行できます。
+これを使うと、条件に応じてキー割り当てや変数の設定を実行できます。
 パーザディレクティブは 4 つあります。
 .IP \fB$if\fP
 .\"O The 
@@ -9317,7 +9313,6 @@ C 言語のプリプロセッサの条件付きコンパイル機能と
 構文を使うと、編集モードや使用中の端末、
 readline を使っているアプリケーションに応じた割り当てを行えます。
 行末までの全テキストが評価対象となります。
-.\"O motoki: 意味が理解できませんでした。
 これを分離するには文字は必要ありません。
 .RS
 .IP \fBmode\fP
@@ -9392,12 +9387,10 @@ readline ライブラリを使っているプログラムはそれぞれ
 .IP \fB$endif\fP
 .\"O This command, as seen in the previous example, terminates an
 .\"O \fB$if\fP command.
-\"O motoki: 「上の例で見たように」は最後に括弧書きくらいの方が読みやすい
 このコマンドは \fB$if\fP コマンドを終了させます (上記の例の通り)。
 .IP \fB$else\fP
 .\"O Commands in this branch of the \fB$if\fP directive are executed if
 .\"O the test fails.
-.\"O motoki: 日本語だけ読んだときに意味が分かりにくかったです。
 \fB$if\fP ディレクティブのこの分岐内に書かれたコマンドは、
 評価が失敗したときに実行されます。
 .IP \fB$include\fP
@@ -9478,11 +9471,6 @@ Control-G はインクリメンタル検索を異常終了させ、元の行を�
 Control-R を適宜入力します。これにより、
 今まで入力した検索文字列にマッチする次のエントリを
 履歴の前方または後方に向かって探します。
-.\"O motoki: that command は key sequence に対応するコマンドだと思います。
-.\"O motoki: 元の訳の場合、履歴で得られたコマンド自体が実行されるように読めました。
-.\"O motoki: newline の場合は、入力行を実行することを示すので、いいのですが。
-.\"O motoki: "accept" は shell が「受け取る」ということではないでしょうか。
-.\"O motoki: 「入力する」が type の訳としても使われているので区別が必要。
 readline に割り当てられた他のキーシーケンスを入力すると検索が終わり、
 入力したキーシーケンスに対応するコマンドが実行されます。
 例えば、\fI改行\fPは検索を終了させて、その行を入力します。
@@ -9499,7 +9487,6 @@ readline は前回のインクリメンタル検索で入力された
 .\"O Non-incremental searches read the entire search string before starting
 .\"O to search for matching history lines.  The search string may be
 .\"O typed by the user or be part of the contents of the current line.
-.\"O motoki: "search string" は他の箇所では「検索文字列」なので、統一。
 インクリメンタルでない検索の場合には、検索文字列全体を読み込んでから、
 履歴行にマッチするものの検索を始めます。
 検索文字列には、ユーザが入力したものか、現在の行の内容の一部が使えます。
@@ -9546,7 +9533,6 @@ readline は前回のインクリメンタル検索で入力された
 .B forward\-word (M\-f)
 .\"O Move forward to the end of the next word.  Words are composed of
 .\"O alphanumeric characters (letters and digits).
-.\"O motoki: letter は「英字」の方がよいかも。「文字」だと character と区別ができない。
 次の単語の最後に進みます。単語は英数字 (英字と数字) からなります。
 .TP
 .B backward\-word (M\-b)
@@ -9590,9 +9576,7 @@ readline は前回のインクリメンタル検索で入力された
 .\"O .B HISTCONTROL
 .\"O variable.  If the line is a modified history
 .\"O line, then restore the history line to its original state.
-.\"O motoki: accept を入力というと、文字を type するのと区別がつかない
-.\"O motoki: さてどうしたものか？「確定する」というのもありかなぁ。
-カーソルの位置に関わらず、行を入力します。この行が空でなければ、変数
+カーソルの位置に関わらず、行を確定します。この行が空でなければ、変数
 .SM
 .B HISTCONTROL
 の状態に従って、これが履歴リストに追加されます。
@@ -9997,8 +9981,7 @@ yank\-last\-arg (M\-.\^, M\-_\^)
 .\"O .B yank
 .\"O or
 .\"O .BR yank\-pop .
-.\"O motoki: kill ring の rotate って意味が分かるか?
-キルリングをローテートし、新たに先頭になったテキストをヤンクします。
+キルリングの順番を 1 つ移動し、新たに先頭になったテキストをヤンクします。
 .B yank
 または
 .B yank\-pop
@@ -10038,8 +10021,6 @@ M\-\- を使うと、負の値を指定できます。
 を再び実行すると数値の引き数を終了しますが、
 そうでない場合は無視されます。
 特殊なケースとして、
-.\"O motoki: multiplied by four の訳が抜けている。
-.\"O motoki: argument count を引き数カウントで分かるか。
 このコマンドの直後に数字でもマイナス記号でもない文字がある場合には、
 次のコマンドに対する引き数カウントが 4 倍になります。
 引き数カウントは最初は 1 なので、
@@ -10134,8 +10115,6 @@ M\-\- を使うと、負の値を指定できます。
 .B possible\-filename\-completions (C\-x /)
 .\"O List the possible completions of the text before point,
 .\"O treating it as a filename.
-.\"O motoki: ポイントの前のテキストをファイル名とみなした場合の
-.\"O         補完の候補を列挙します、はどうかな。以下同様。
 ポイントの前のテキストについて補完の候補を列挙します。
 テキストはファイル名として扱われます。
 .TP
@@ -10197,7 +10176,6 @@ M\-\- を使うと、負の値を指定できます。
 .\"O Attempt completion on the text before point, comparing
 .\"O the text against lines from the history list for possible
 .\"O completion matches.
-.\"O motoki: for 以下は compare にかかるのではないでしょうか。
 ポイントの前のテキストについて補完を試みます。
 履歴リストの各行に対してテキストの比較が行われ、
 マッチしたものが補完の候補となります。
@@ -10206,7 +10184,6 @@ M\-\- を使うと、負の値を指定できます。
 .\"O Attempt menu completion on the text before point, comparing
 .\"O the text against lines from the history list for possible
 .\"O completion matches.
-.\"O motoki: dynamic-complete-history と同様。
 ポイントの前のテキストについてメニュー補完を試みます。
 履歴リストの各行に対してテキストの比較が行われ、
 マッチしたものが補完の候補となります。
@@ -10375,6 +10352,7 @@ Home や End などのキーに定義されるような複数キーからなる�
 その値が挿入されます。マッチする場合には、\fBcomment\-begin\fP
 の文字が行の先頭から削除されます。
 .\"O motoki: ????? 原文がよく分からない。
+.\" emasaka: 実際の動作はトグルのため、意訳
 いずれの場合も、改行が打ち込まれたのと同じように行の入力が完了します。
 \fBcomment\-begin\fP のデフォルト値によって、
 このコマンドは現在の行をシェルのコメントとします。
@@ -11230,9 +11208,9 @@ complete -D -F _completion_loader
 .\"O Refer to the most recent command preceding the current position in the
 .\"O history list starting with
 .\"O .IR string .
-.\"O motoki: preceding the current positoion in the history list に対応する訳がない。
 .IR string
-で始まるコマンドのうち、一番現在に近いところで実行したものを参照します。
+で始まるコマンドのうち、履歴リスト中の現在位置以前で、
+一番近いところで実行したものを参照します。
 .TP
 .B !?\fIstring\fR\fB[?]\fR
 .\"O Refer to the most recent command preceding the current postition in the
@@ -11241,9 +11219,9 @@ complete -D -F _completion_loader
 .\"O The trailing \fB?\fP may be omitted if
 .\"O .I string
 .\"O is followed immediately by a newline.
-.\"O motoki: preceding the current positoion in the history list に対応する訳がない。
 .I string
-を含むコマンドのうち、一番現在に近いところで実行したものを参照します。
+を含むコマンドのうち、履歴リスト中の現在位置以前で、
+一番近いところで実行したものを参照します。
 .I string
 の直後が改行文字ならば、最後の \fB?\fP は省略してもかまいません。
 .TP
