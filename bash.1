@@ -5663,13 +5663,13 @@ $(\^\fIcommand\fP\|) という形式を用いたときは、
 .B ``.''
 と
 .B ``..''
-は必ず無視されます。これは
+は
 .SM
 .B GLOBIGNORE
-が設定されていても同じです。しかし、
+に空でない値が設定されていても必ず無視されます。しかし、
 .SM
 .B GLOBIGNORE
-を設定するとシェルオプションの
+に空でない値を設定するとシェルオプションの
 .B dotglob
 が有効になるので、
 .B ``.''
@@ -5688,7 +5688,7 @@ $(\^\fIcommand\fP\|) という形式を用いたときは、
 のパターンに含めてください。
 .SM
 .B GLOBIGNORE
-が設定されていなければ、
+を unset すると、
 .B dotglob
 オプションは無効になります。
 .\"O .SM
@@ -5708,10 +5708,10 @@ $(\^\fIcommand\fP\|) という形式を用いたときは、
 .\"O escaping backslash is discarded when matching.
 .\"O The special pattern characters must be quoted if
 .\"O they are to be matched literally.
-パターンに含まれる文字のうち、後述する特殊パターン文字以外の文字は、
+パターンに含まれる文字のうち、以下の特殊パターン文字以外の文字は、
 自分自身にマッチします。NUL 文字がパターン中に現われてはいけません。
-バックスラッシュは特殊パターン文字をエスケープします。
-バックスラッシュ自身はマッチングに使われません。
+バックスラッシュは直後の文字をエスケープします。
+このバックスラッシュは、マッチングでは無視されます
 特殊パターン文字をその文字そのものにマッチさせるためには、
 クォートしなければなりません。
 .PP
@@ -5732,10 +5732,11 @@ $(\^\fIcommand\fP\|) という形式を用いたときは、
 空文字列を含む、任意の文字列にマッチします。
 シェルオプション \fBglobstar\fP が有効で、
 \fB*\fP がパス名展開に用いられる場面では、
-2 つ連続した \fB*\fPs が 1 つのパターンとして使われると、
-0 レベル以上のディレクトリやサブディレクトリの全てのファイルにマッチします
-2 つ連続した \fB*\fPs の後に \fB/\fP が続く場合には、
-ディレクトリとサブディレクトリのみにマッチします。
+連続する 2 つの \fB*\fP だけのパターンが使われると、
+その階層以下のディレクトリとそのサブディレクトリ、
+そこにある全てのファイルにマッチします。
+2 つ連続した \fB*\fP の後に \fB/\fP が続く場合には、
+ディレクトリとそのサブディレクトリのみにマッチします。
 .TP
 .B ?
 .\"O Matches any single character.
@@ -5751,8 +5752,9 @@ $(\^\fIcommand\fP\|) という形式を用いたときは、
 括られた文字のうち任意の 1 文字にマッチします。
 2 つの文字の間にハイフンを入れたものは、
 .I 範囲表現 (range expression)
-を表します。ソート順で 2 つの文字の間にある任意の文字と、
-両端の 2 文字がマッチします。
+を表します。
+ソート順で両端を含む 2 つの文字の間にある任意の 1 文字と
+マッチします。
 ソートには現在のロケールの照合順序 (collating sequence)
 と文字セットが用いられます。
 .B [
@@ -5765,7 +5767,7 @@ $(\^\fIcommand\fP\|) という形式を用いたときは、
 .B !
 または
 .B ^
-ならば、括られた文字に含まれない任意の文字がマッチします。
+ならば、括られた文字に含まれない任意の 1 文字にマッチします。
 .\"O The sorting order of characters in range expressions is determined by
 .\"O the current locale and the value of the
 .\"O .SM
@@ -5831,10 +5833,10 @@ $(\^\fIcommand\fP\|) という形式を用いたときは、
 .B [
 と
 .B ]
-の間では、\fI同値クラス (equivalence class)\fP を指定できます。
+の間では、\fI等値クラス (equivalence class)\fP を指定できます。
 指定には \fB[=\fP\fIc\fP\fB=]\fP という記法を使います。
 これは現在のロケールにおける定義において \fIc\fP と同じ 
-照合重さ (collation weight) を持つ全ての文字にマッチします。
+照合重み (collation weight) を持つ全ての文字にマッチします。
 .br
 .if t .sp 0.5
 .if n .sp 1
@@ -5884,11 +5886,11 @@ $(\^\fIcommand\fP\|) という形式を用いたときは、
 .TP
 \fB@(\fP\^\fIpattern-list\^\fP\fB)\fP
 .\"O Matches one of the given patterns
-与えられたパターンのうち 1 つだけにマッチします。
+与えられたパターンに 1 回だけマッチします。
 .TP
 \fB!(\fP\^\fIpattern-list\^\fP\fB)\fP
 .\"O Matches anything except one of the given patterns
-与えられたパターンいずれにも含まれないもの全てにマッチします。
+与えられたパターンのどれでもないものにマッチします。
 .RE
 .PD
 .\"O .SS Quote Removal
