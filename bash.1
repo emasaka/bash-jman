@@ -141,13 +141,13 @@ bash \- GNU Bourne-Again SHell
 .\"O option is present, then commands are read from
 .\"O .IR string .
 オプションが指定されると、コマンドが
-.IR string
+.I string
 から読み込まれます。
 .\"O If there are arguments after the
 .\"O .IR string ,
 .\"O they are assigned to the positional parameters, starting with
 .\"O .BR $0 .
-.IR string
+.I string
 の後に引き数があれば、これらは
 位置パラメータ (positional parameter:
 .BR $0
@@ -666,7 +666,7 @@ bash \- GNU Bourne-Again SHell
 このシェルはまず
 .I /etc/profile
 と
-.IR ~/.profile
+.I ~/.profile
 の順でコマンドの読み込みと実行をしようとします。
 .\"O The
 .\"O .B \-\-noprofile
@@ -930,7 +930,7 @@ bash \- GNU Bourne-Again SHell
 .\"O 128+\fIn\^\fP if the command is terminated by signal
 .\"O .IR n .
 単純なコマンドの返り値はコマンドの終了コードですが、シグナル
-.IR n
+.I n
 を受けてコマンドが終了した場合には 128+\fIn\^\fP となります。
 .\"O .SS Pipelines
 .SS パイプライン (Pipeline)
@@ -960,7 +960,7 @@ bash \- GNU Bourne-Again SHell
 .\"O below).
 .I command
 の標準出力は
-.IR command2
+.I command2
 の標準入力にパイプで接続されます。
 この接続は、
 コマンドで指定したどのリダイレクションよりも先に実行されます
@@ -1511,7 +1511,7 @@ EOF を読み込むとコマンドが終了します。
 .\"O or zero if no commands were executed.
 .B select
 の終了ステータスは、
-.IR list
+.I list
 中で最後に実行したコマンドの終了ステータスですが、
 コマンドが全く実行されなかった場合には 0 となります。
 .TP
@@ -1843,7 +1843,7 @@ EOF を読み込むとコマンドが終了します。
 .\"O is treated as a line continuation (that is, it is removed from the
 .\"O input stream and effectively ignored).
 クォートされていないバックスラッシュ (\fB\e\fP) は
-.IR エスケープ文字
+.I エスケープ文字
 です。エスケープ文字は <newline> という例外を除き、
 後に続く文字 1 つの文字としての値を保持させます。
 \fB\e\fP<newline> という組み合わせが現われ、
@@ -3392,14 +3392,14 @@ SIGWINCH を受信すると自動的に設定されます。
 .\"O .B space
 .\"O character are not saved in the history list.
 履歴リストに入れるコマンドを制御する値をコロンで区切って並べたリストです。
-.IR ignorespace
+.I ignorespace
 の値が設定されていると、
 .B 空白
 文字で始まる行は履歴リストに入りません。
 .\"O A value of 
 .\"O .I ignoredups
 .\"O causes lines matching the previous history entry to not be saved.
-.IR ignoredups
+.I ignoredups
 の値が設定されていると、
 履歴の最後の行にマッチする行は履歴リストに入りません。
 .\"O A value of
@@ -3412,7 +3412,7 @@ SIGWINCH を受信すると自動的に設定されます。
 .\"O causes all previous lines matching the current line to be removed from
 .\"O the history list before that line is saved.
 .\"O Any value not in the above list is ignored.
-.IR erasedups
+.I erasedups
 の値が設定されていると、行が保存される前に、
 現在の行に一致する過去の行が履歴リストから削除されます。
 上記以外の値を設定しても無視されます。
@@ -4074,11 +4074,11 @@ CPU のパーセンテージ。(%U + %S) / %R で算出されます。
 .I 名前
 とは、コマンドを起動する際に使ったコマンドラインのことです。
 この変数の値に
-.IR exact
+.I exact
 が設定されている場合、
 与えられた文字列は停止中のジョブの名前に
 正確にマッチしなければなりません。
-.IR substring
+.I substring
 が設定されている場合は、
 与えられた文字列は停止中のジョブの名前の部分文字列に
 マッチする必要があります。
@@ -5989,7 +5989,7 @@ ls \fB>\fP dirlist 2\fB>&\fP1
 .\"O .IR dirlist ,
 .\"O while the command
 は標準出力と標準エラー出力を両方ともファイル
-.IR dirlist
+.I dirlist
 に書き込みますが、次のコマンド
 .RS
 .PP
@@ -6002,9 +6002,9 @@ ls 2\fB>&\fP1 \fB>\fP dirlist
 .\"O before the standard output was redirected to
 .\"O .IR dirlist .
 では標準出力だけがファイル
-.IR dirlist
+.I dirlist
 に書き込まれます。なぜなら後者の場合には、標準エラー出力は
-.IR dirlist
+.I dirlist
 にリダイレクトされる前の標準出力の複製となるからです。
 .PP
 .\"O \fBBash\fP handles several filenames specially when they are used in
@@ -6072,7 +6072,7 @@ ls 2\fB>&\fP1 \fB>\fP dirlist
 入力をリダイレクトすると、
 .I word
 を展開した結果の名前を持つファイルがオープンされ、ファイル・ディスクリプター
-.IR n
+.I n
 で読み込めるようになります。
 .\"O .I n
 .\"O is not specified.
@@ -6101,7 +6101,7 @@ ls 2\fB>&\fP1 \fB>\fP dirlist
 出力をリダイレクトすると、
 .I word
 の展開した結果の名前を持つファイルがオープンされ、ファイル・ディスクリプター
-.IR n
+.I n
 で書き込めるようになります。
 .I n
 が指定されていなければ、書き込みは標準出力
@@ -6169,7 +6169,7 @@ ls 2\fB>&\fP1 \fB>\fP dirlist
 この形式を使って出力のリダイレクトを行うと、
 .I word
 を展開した結果の名前を持つファイルがオープンされ、ファイル・ディスクリプター
-.IR n
+.I n
 に対する出力がこのファイルに追加されるようになります。
 .I n
 を指定しなければ、標準出力 (ファイル・ディスクリプター 1) で追加されます。
@@ -6334,7 +6334,7 @@ and
 リダイレクト演算子が
 .BR <<\-
 ならば、行頭にあるタブ文字は全て入力行および
-.IR delimiter
+.I delimiter
 を含む行から取り除かれます。
 これにより、シェルスクリプト中のヒアドキュメントを
 自然な形でインデントさせることができます。
@@ -6439,7 +6439,7 @@ and
 .\"O or the standard input (file descriptor 0) if \fIn\fP is not specified.
 .\"O \fIdigit\fP is closed after being duplicated to \fIn\fP.
 を使うと、ファイル・ディスクリプターの \fIdigit\fP を
-.IR n
+.I n
 に変更します。
 \fIn\fP が指定されていない場合は、標準入力
 (ファイル・ディスクリプター 0) が使われます。
@@ -6456,7 +6456,7 @@ and
 .\"O .IR n ,
 .\"O or the standard output (file descriptor 1) if \fIn\fP is not specified.
 を使うと、ファイル・ディスクリプターの \fIdigit\fP を
-.IR n
+.I n
 に変更します。
 \fIn\fP が指定されていない場合は、標準出力
 (ファイル・ディスクリプター 1) が使われます。
@@ -6478,7 +6478,7 @@ and
 ならば、
 .I word
 を展開した結果の名前を持つファイルがファイル・ディスクリプター
-.IR n
+.I n
 での読み書きのためにオープンされます。
 .\"O .I n
 .\"O is not specified.  If the file does not exist, it is created.
@@ -7590,7 +7590,7 @@ POSIX に準拠する形で \fBtest\fP コマンドを使う場合には
 .I 環境 (environment)
 と呼ばれる文字列の配列が渡されます。
 これは \fI変数名\fP\-\fI値\fP のペアからなるリストで、
-.IR "変数名\fR=\fP値"
+.I "変数名\fR=\fP値"
 という形になります。
 .PP
 .\"O The shell provides several ways to manipulate the environment.
@@ -9166,7 +9166,7 @@ readline が単語の補完を試みるときにチルダ展開が行われま�
 vi\-command\fP, .IR vi\-insert です。\fIvi\fP は \fIvi\-command\fP
 と等価で、\fIemacs\fP は \fIemacs\-standard\fP と等価です。
 デフォルト値は
-.IR emacs
+.I emacs
 です。
 .B editing\-mode
 の値もデフォルトキーマップに影響を与えます。
@@ -11214,7 +11214,7 @@ complete -D -F _completion_loader
 .\"O Refer to the most recent command preceding the current position in the
 .\"O history list starting with
 .\"O .IR string .
-.IR string
+.I string
 で始まるコマンドのうち、履歴リスト中の現在位置以前で、
 一番近いところで実行したものを参照します。
 .TP
@@ -11242,7 +11242,7 @@ complete -D -F _completion_loader
 簡易置換。
 .I string1
 を
-.IR string2
+.I string2
 に置換して直前のコマンドを繰り返します。
 ``!!:s/\fIstring1\fP/\fIstring2\fP/'' と同義です
 (後述の\fB修飾子\fPを参照)。
@@ -11681,7 +11681,7 @@ complete -D -F _completion_loader
 .\"O e.g., '"\eC\-x\eC\-r": re\-read\-init\-file'.
 .\"O Options, if supplied, have the following meanings:
 受け付ける割り当ての記法は
-.IR .inputrc
+.I .inputrc
 と全く同じですが、
 それぞれの割り当ては別々の引き数として渡さなければなりません。
 例えば '"\eC\-x\eC\-r": re\-read\-init\-file' のように指定します。
@@ -11706,7 +11706,7 @@ complete -D -F _completion_loader
 名は、
 \fIemacs, emacs\-standard, emacs\-meta, emacs\-ctlx, vi,
 vi\-move, vi\-command\fP,
-.IR vi\-insert
+.I vi\-insert
 です。
 .\"O \fIvi\fP is equivalent to \fIvi\-command\fP; \fIemacs\fP is
 .\"O equivalent to \fIemacs\-standard\fP.
@@ -11846,7 +11846,7 @@ break します。
 .\"O .I shell\-builtin
 .\"O is not a shell builtin command.
 指定されたシェル組み込みコマンドを実行します。コマンドには
-.IR arguments
+.I arguments
 を引き数として渡し、このコマンドの終了ステータスを返します。
 これはシェル組み込みコマンドと同じ名前の関数を定義するときに便利で、
 その関数内で組み込みコマンドを使ったときに、その機能を損ないません。
@@ -12071,7 +12071,7 @@ break します。
 それ以外の場合には、組み込みコマンド
 .B command
 の終了ステータスは、
-.IR command
+.I command
 の終了ステータスです。
 .TP
 \fBcompgen\fP [\fIoption\fP] [\fIword\fP]
@@ -13433,7 +13433,7 @@ POSIX の\fI特殊\fP組み込みコマンドだけに制限されます。
 .\"O parses those instead.
 .B getopts
 は通常位置パラメータを展開しますが、他の引き数が
-.IR args
+.I args
 に指定されている場合には、
 .B getopts
 は位置パラメータでなくこれらを展開します。
@@ -13509,7 +13509,7 @@ POSIX の\fI特殊\fP組み込みコマンドだけに制限されます。
 必要な引き数が見つからず、かつ
 .B getopts
 が静かなモードでない場合には、疑問符 (\^\fB?\fP\^) が
-.IR name
+.I name
 に設定され、
 .SM
 .B OPTARG
@@ -13862,7 +13862,7 @@ POSIX の\fI特殊\fP組み込みコマンドだけに制限されます。
 を対応するプロセスのグループ ID で置き換え、
 .I command
 に
-.IR args
+.I args
 を与えて実行し、終了ステータスを返します。
 .RE
 .TP
@@ -13982,7 +13982,7 @@ prefix)
 それぞれの引き数に対して
 .I name 
 という名前のローカル変数が生成され、
-.IR value
+.I value
 が代入されます。
 \fIoption\fP には、
 \fBdeclare\fP コマンドに使えるオプションが全て使えます。
@@ -14039,11 +14039,11 @@ prefix)
 .\"O .B \-u
 .\"O option is supplied.
 標準入力の各行を配列変数
-.IR array
+.I array
 に読み込みます。
 .B \-u
 オプションが指定されたときは、ファイル・ディスクリプター
-.IR fd
+.I fd
 から読み込みます。
 .\"O The variable
 .\"O .SM
@@ -14074,7 +14074,7 @@ prefix)
 .\"O The default index is 0.
 .I array
 のインデックス
-.IR origin
+.I origin
 から代入します。デフォルトのインデックスは 0 です。
 .TP
 .B \-s
@@ -14097,13 +14097,13 @@ prefix)
 \fIquantum\fP 行が読み込まれるごとに
 .I callback
 を評価します。\fB\-c\fP オプションで
-.IR quantum
+.I quantum
 を指定します。
 .TP
 .B \-c
 .\"O Specify the number of lines read between each call to
 .\"O .IR callback .
-.IR callback
+.I callback
 を呼び出す間隔の行数を指定します。
 .PD
 .PP
@@ -14438,17 +14438,17 @@ prefix)
 標準入力、
 または \fB\-u\fP オプションに指定されたファイル・ディスクリプター \fIfd\fP
 から 1 行を読み込み、最初の単語を最初の
-.IR name
+.I name
 に代入し、2 番目の単語を 2 番目の
-.IR name
+.I name
 に代入します。以降も同様です。
 余った単語とそれらの間の区切り文字は、最後の
-.IR name
+.I name
 に代入されます。
-.IR name
+.I name
 よりも標準入力から読み込んだ単語の方が少ない場合には、
 余っている
-.IR name
+.I name
 には空文字列が値として代入されます。
 .SM
 .B IFS
@@ -14468,7 +14468,7 @@ prefix)
 .\"O .IR aname ,
 .\"O starting at 0.
 単語を配列変数
-.IR aname
+.I aname
 にインデックス順に代入します。インデックスは 0 から始まります。
 .\"O .I aname
 .\"O is unset before any new values are assigned.
@@ -14696,7 +14696,7 @@ readline は現在の (行編集がそれまで有効になっていなければ
 .\"O script as the exit status of the script.  If used outside a
 .\"O function and not during execution of a script by \fB.\fP\^,
 .\"O the return status is false.
-.IR n
+.I n
 で関数を終了させます。
 関数の外側で使われているが、
 .B .
@@ -16055,7 +16055,7 @@ GNU 標準のエラーメッセージの形式で出力されます。
 .\"O the evaluation of the conditional expression
 .\"O .IR expr .
 条件式
-.IR expr
+.I expr
 を評価した結果に基づいて、ステータス 0 または 1 を返します。
 .\"O Each operator and operand must be a separate argument.
 .\"O Expressions are composed of the primaries described above under
@@ -16228,7 +16228,7 @@ ASCII コードに基づき辞書順にソートします
 .\"O signal(s)
 .\"O .IR sigspec .
 シェルがシグナル
-.IR sigspec
+.I sigspec
 を受け取ると、コマンド
 .I arg
 が読み込まれて、実行されます。
@@ -16512,7 +16512,7 @@ being inverted via
 .if t \f(CWtype -t name\fP
 .if n ``type -t name''
 が
-.IR file
+.I file
 を返さない場合です。
 .\"O The
 .\"O .B \-P
@@ -16529,7 +16529,7 @@ being inverted via
 .if t \f(CWtype -t name\fP
 .if n ``type -t name''
 が
-.IR file
+.I file
 を返さない場合でも \fIname\fP を
 .SM
 .B PATH
@@ -16562,7 +16562,7 @@ being inverted via
 オプションを使うと、
 .B type
 は
-.IR name
+.I name
 が示す実行ファイルがある場所を全て出力します。
 .\"O This includes aliases and functions,
 .\"O if and only if the 
@@ -16770,7 +16770,7 @@ CPU 時間の最大量 (秒単位)
 .\"O The user file-creation mask is set to 
 .\"O .IR mode .
 ユーザのファイル生成マスクに
-.IR mode
+.I mode
 を設定します。
 .\"O If
 .\"O .I mode
@@ -16836,7 +16836,7 @@ CPU 時間の最大量 (秒単位)
 .\"O .I name
 .\"O refers to a shell variable.
 .\"O Read-only variables may not be unset.
-.IR name
+.I name
 それぞれについて、対応する変数や関数を削除します。
 オプションが全く与えられていない場合や、
 .B \-v
@@ -17218,7 +17218,7 @@ chet.ramey@case.edu
 .\"O this manual page should be directed to
 .\"O .IR chet.ramey@case.edu .
 このオンラインマニュアルに関するコメントやバグ報告は
-.IR chet.ramey@case.edu
+.I chet.ramey@case.edu
 宛にお願いします。
 .\"O .SH BUGS
 .SH バグ
