@@ -4757,12 +4757,10 @@ ${\fIparameter\fP}
 .\"O ${\fB!\fP\fIname\fP[\fI@\fP]} described below.
 .\"O The exclamation point must immediately follow the left brace in order to
 .\"O introduce indirection.
-\fIparameter\fP の最初の文字が感嘆符ならば、一段の変数間接参照が
-行われます。
-この場合、\fBbash\fP はまず、\fIparameter\fP の感嘆符を除いた部分を
-変数名とし、展開します。
-そして、\fIparameter\fP ではなく、この値を使って置換を行います。
-これが\fI間接展開 (indirect expansion)\fP と呼ばれるものです。
+\fIparameter\fP の最初の文字が感嘆符ならば、変数間接展開が行われます。
+\fBbash\fP は残りの \fIparameter\fP からなる変数の値を変数の名前と見なします。
+そしてそこで得られた名前の変数を展開した値を、置換処理の続きで使います。
+これが \fI間接展開\fP です。
 ただし ${!\fIprefix\fP*} や ${\fB!\fP\fIname\fP[\fI@\fP]} の展開は例外です。
 これは以下で説明します。
 間接展開を表すには、感嘆符は左ブレースの直後に続ける必要があります。
