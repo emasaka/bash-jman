@@ -6506,6 +6506,7 @@ ls 2\fB>&\fP1 \fB>\fP dirlist
 ファイル・ディスクリプター 0 で読み書きが行われます。
 ファイルが存在しなければ、新しく生成されます。
 .\"O .SH ALIASES
+.SH エイリアス
 .\"O \fIAliases\fP allow a string to be substituted for a word when it is used
 .\"O as the first word of a simple command.
 .\"O The shell maintains a list of aliases that may be set and unset with the
@@ -6516,7 +6517,6 @@ ls 2\fB>&\fP1 \fB>\fP dirlist
 .\"O .SM
 .\"O .B SHELL BUILTIN COMMANDS
 .\"O below).
-.SH エイリアス
 \fIエイリアス(alias)\fP を使うと、
 ある単語が単純なコマンドの先頭の単語として使われた場合に、
 この文字列を別の単語に置換できます。
@@ -6557,10 +6557,10 @@ ls 2\fB>&\fP1 \fB>\fP dirlist
 これには先に挙げた
 .I メタ文字
 も含まれます。
-置換されるテキストの最初の単語に対しても
+置換されたテキストの最初の単語に対しても
 エイリアスかどうかの評価がされますが、
 最初の単語が展開されるエイリアスと同じ場合には
-展開は 1度しか行われません。つまり
+展開は一度しか行われません。つまり
 .B ls
 が
 .BR "ls \-F"
@@ -6690,7 +6690,7 @@ ls 2\fB>&\fP1 \fB>\fP dirlist
 関数は現在のシェルのコンテキスト内で実行されます。
 つまり、新しいプロセスを生成して関数を処理することはありません
 (これはシェルスクリプトと対照的な点です)。
-関数の実行中には、関数に与えた引き数が位置パラメータとなります。
+関数の実行時には、関数に与えた引き数が位置パラメータとなります。
 .\"O The special parameter
 .\"O .B #
 .\"O is updated to reflect the change.  Special parameter \fB0\fP
@@ -6698,7 +6698,8 @@ ls 2\fB>&\fP1 \fB>\fP dirlist
 特殊パラメータ
 .B #
 は更新され、この変更が反映されます。
-位置パラメータ \fB0\fP は変わりません。
+.\"O motoki: $0 は special parameter に載っているので positional parameter ではないと思います。
+特殊パラメータ \fB0\fP は変わりません。
 .\"O The first element of the
 .\"O .SM
 .\"O .B FUNCNAME
@@ -6734,7 +6735,7 @@ ls 2\fB>&\fP1 \fB>\fP dirlist
 .\"O .B ERR
 .\"O trap is not inherited unless the \fB\-o errtrace\fP shell option has
 .\"O been enabled.
-通常、シェル実行環境の状態は全て、関数とその呼び出し側で同じになります。
+上記以外は、シェル実行環境の状態は全て、関数とその呼び出し側で同じになります。
 ただし、以下の例外があります:
 .SM
 .B DEBUG
@@ -6750,7 +6751,7 @@ ls 2\fB>&\fP1 \fB>\fP dirlist
 .SM
 .B declare
 の説明を参照) が与えられている場合や、\fB\-o functrace\fP シェルオプションが
-組み込みコマンド \fBset\fP によって有効になっている (全ての関数が
+組み込みコマンド \fBset\fP によって有効になっている (つまり、全ての関数が
 \fBDEBUG\fP と \fBRETURN\fP のトラップを継承している) 場合を除いて
 継承されません。
 .SM
@@ -6782,7 +6783,7 @@ ls 2\fB>&\fP1 \fB>\fP dirlist
 .\"O call.
 組み込みコマンド
 .B return
-が関数中で実行された場合、関数は終了し、
+が関数中で実行された場合、関数は完了し、
 関数呼び出しの次のコマンドから実行が再開されます。
 .\"O Any command associated with the \fBRETURN\fP trap is executed
 .\"O before execution resumes.
@@ -6792,7 +6793,7 @@ ls 2\fB>&\fP1 \fB>\fP dirlist
 .\"O are restored to the values they had prior to the function's
 .\"O execution.
 再開される前に、\fBRETURN\fP トラップに設定されたコマンドが実行されます。
-関数の終了時には、位置パラメータの値と特殊パラメータ
+関数の完了時には、位置パラメータの値と特殊パラメータ
 .B #
 の値は、関数の実行前の値に戻ります。
 .PP
