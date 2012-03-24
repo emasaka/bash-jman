@@ -6860,7 +6860,12 @@ ls 2\fB>&\fP1 \fB>\fP dirlist
 .\"O The \fBFUNCNEST\fP variable may be used to limit the depth of the
 .\"O function call stack and restrict the number of function invocations.
 .\"O By default, no limit is imposed on the number of recursive calls.
+関数は再帰させることができます。\fBFUNCNEST\fP 変数を使うと、
+関数の呼び出しスタックの深さを制限し、関数の呼び出し回数を制限する
+ことができます。
+デフォルトでは再帰呼び出し回数に制限は課せられていません。
 .\"O .SH "ARITHMETIC EVALUATION"
+.SH 算術式評価
 .\"O The shell allows arithmetic expressions to be evaluated, under
 .\"O certain circumstances (see the \fBlet\fP and \fBdeclare\fP builtin
 .\"O commands and \fBArithmetic Expansion\fP).
@@ -6871,11 +6876,6 @@ ls 2\fB>&\fP1 \fB>\fP dirlist
 .\"O The following list of operators is grouped into levels of
 .\"O equal-precedence operators.
 .\"O The levels are listed in order of decreasing precedence.
-関数は再帰させることができます。\fBFUNCNEST\fP 変数を使うと、
-関数の呼び出しスタックの深さを制限し、関数の呼び出し回数を制限する
-ことができます。
-デフォルトでは再帰呼び出し回数に制限は課せられていません。
-.SH 算術式評価
 シェルにおいては、特定の状況下で算術式を評価させることができます
 (組み込みコマンドの \fBlet\fP と \fB算術式展開\fP を参照)。
 評価は固定長の整数として行われ、
@@ -6977,7 +6977,8 @@ ls 2\fB>&\fP1 \fB>\fP dirlist
 パラメータ展開は式の評価より前に行われます。
 式の中では、シェル変数を (パラメータ展開規則を用いずに)
 変数名で参照できます。
-空か値が設定されていないシェル変数は、
+.\"O motoki: null が値がない変数で、unset を宣言されていない変数としてみました。
+値が空のシェル変数や宣言されていないシェル変数は、
 パラメータの展開の文法を使わずに名前を参照されると、
 0 として評価されます。
 変数の値は、変数が参照されたときや、\fBdeclare -i\fP によって
@@ -7016,6 +7017,7 @@ ls 2\fB>&\fP1 \fB>\fP dirlist
 演算子は優先度の順に評価されます。括弧内にある部分式は最初に評価され、
 前述の優先規則よりも優先させることができます。
 .\"O .SH "CONDITIONAL EXPRESSIONS"
+.SH 条件式
 .\"O Conditional expressions are used by the \fB[[\fP compound command and
 .\"O the \fBtest\fP and \fB[\fP builtin commands to test file attributes
 .\"O and perform string and arithmetic comparisons.
@@ -7025,15 +7027,14 @@ ls 2\fB>&\fP1 \fB>\fP dirlist
 .\"O If the \fIfile\fP argument to one of the primaries is one of
 .\"O \fI/dev/stdin\fP, \fI/dev/stdout\fP, or \fI/dev/stderr\fP, file
 .\"O descriptor 0, 1, or 2, respectively, is checked.
-.SH 条件式
 条件式は複合コマンド \fB[[\fP と組み込みコマンドの \fBtest\fP および
 \fB[\fP によって使用でき、ファイルの属性を調べたり、
 文字列比較や算術式比較を行ったりできます。
 式は以下に示す単項のプライマリや二値のプライマリから構成されます。
-プライマリのいずれかに対する
+プライマリのいずれかの
 \fIfile\fP 引き数が \fI/dev/fd/n\fP という形式ならば、
 ファイル・ディスクリプター \fIn\fP が調べられます。
-プライマリのいずれかに対する \fIfile\fP 引き数が
+プライマリのいずれかの \fIfile\fP 引き数が
 \fI/dev/stdin\fP、\fI/dev/stdout\fP、\fI/dev/stderr\fP
 のいずれかであれば、 対応するファイル・ディスクリプター
 0、1、2 が調べられます。
@@ -7134,7 +7135,7 @@ ls 2\fB>&\fP1 \fB>\fP dirlist
 .B \-N \fIfile\fP
 .\"O True if \fIfile\fP exists and has been modified since it was last read.
 \fIfile\fP が存在し、
-かつ前回読み込まれた後に修正されていれば真となります。
+かつ前回読み込まれた以降に修正されていれば真となります。
 .TP
 .B \-O \fIfile\fP
 .\"O True if \fIfile\fP exists and is owned by the effective user id.
@@ -7154,14 +7155,14 @@ ls 2\fB>&\fP1 \fB>\fP dirlist
 \fIfile1\fP \-\fBnt\fP \fIfile2\fP
 .\"O True if \fIfile1\fP is newer (according to modification date) than \fIfile2\fP,
 .\"O or if \fIfile1\fP exists and \fPfile2\fP does not.
-\fIfile1\fP が (変更日時に関して) \fIfile2\fP より新しいか
-\fIfile1\fP が存在するのに \fPfile2\fP が存在しなければ真となります。
+\fIfile1\fP が (変更日時に関して) \fIfile2\fP より新しいか、
+\fIfile1\fP が存在するが \fPfile2\fP が存在しなければ、真となります。
 .TP
 \fIfile1\fP \-\fBot\fP \fIfile2\fP
 .\"O True if \fIfile1\fP is older than \fIfile2\fP, or if \fIfile2\fP exists
 .\"O and \fIfile1\fP does not.
 \fIfile1\fP が \fIfile2\fP より古いか、
-\fIfile2\fP が存在するのに \fIfile1\fP が存在しなければ真となります。
+\fIfile2\fP が存在するのに \fIfile1\fP が存在しなければ、真となります。
 .TP
 .B \-o \fIoptname\fP
 .\"O True if the shell option
@@ -7229,8 +7230,7 @@ POSIX に準拠する形で \fBtest\fP コマンドを使う場合には
 辞書順で後にある場合に真となります。
 .TP
 .I \fIarg1\fP \fBOP\fP \fIarg2\fP
-.SM
-.B OP
+.\"O .SM
 .\"O .B OP
 .\"O is one of
 .\"O .BR \-eq ,
@@ -7240,6 +7240,8 @@ POSIX に準拠する形で \fBtest\fP コマンドを使う場合には
 .\"O .BR \-gt ,
 .\"O or
 .\"O .BR \-ge .
+.SM
+.B OP
 は
 .BR \-eq ,
 .BR \-ne ,
@@ -7251,7 +7253,7 @@ POSIX に準拠する形で \fBtest\fP コマンドを使う場合には
 .\"O These arithmetic binary operators return true if \fIarg1\fP
 .\"O is equal to, not equal to, less than, less than or equal to,
 .\"O greater than, or greater than or equal to \fIarg2\fP, respectively.
-これらの二値演算子が真を返すのはそれぞれ、
+これらの算術二値演算子が真を返すのはそれぞれ、
 \fIarg1\fP が \fIarg2\fP に対して等しい場合、
 等しくない場合、小さい場合、小さいか等しい場合、大きい場合、
 大きいか等しい場合です。
@@ -7259,7 +7261,7 @@ POSIX に準拠する形で \fBtest\fP コマンドを使う場合には
 .\"O and
 .\"O .I arg2
 .\"O may be positive or negative integers.
-.I Arg1
+.I arg1
 や
 .I arg2
 には、正または負の整数を使用できます。
