@@ -5905,6 +5905,7 @@ $(\^\fIcommand\fP\|) という形式を用いたときは、
 .BR ' ,
 \^\f3"\fP\^ 
 のうち、先の展開の結果でないものは全て削除されます。
+.\"O motoki: (この行は Emacs の色付けが直前の " でおかしくなるので、元に戻すためのトリックです)
 .\"O .SH REDIRECTION
 .SH リダイレクト
 .\"O Before a command is executed, its input and output
@@ -5937,13 +5938,15 @@ $(\^\fIcommand\fP\|) という形式を用いたときは、
 .\"O than 10 and assign it to \fIvarname\fP.  If >&- or <&- is preceded
 .\"O by {\fIvarname\fP}, the value of \fIvarname\fP defines the file
 .\"O descriptor to close.
+.\"O motoki: 最後の文は「varname の値は〜を指定します。」は少し分かりにくいかもしれません。
+.\"O motoki: 「varname の値には〜を指定します」とか「値は〜を示します」などはどうでしょうか。
 ファイル・ディスクリプター番号で始まるリダイレクトでは、
 代わりに {\fIvarname\fP} という形式の単語で始めることもできます。
 この場合、>&- と <&- 以外のリダイレクト演算子では、
 シェルは 10 より大きいファイル・ディスクリプターを割り当て、
 \fIvarname\fP に代入します。
-{\fIvarname\fP} で始まる >&- や <&- では、\fIvarname\fP の値は
-クローズするファイル・ディスクリプターを指定します。
+{\fIvarname\fP} で始まる >&- や <&- の場合には、\fIvarname\fP の値は
+クローズするファイル・ディスクリプターを示します。
 .PP
 .\"O In the following descriptions, if the file descriptor number is
 .\"O omitted, and the first character of the redirection operator is
@@ -5972,7 +5975,8 @@ $(\^\fIcommand\fP\|) という形式を用いたときは、
 特に説明しない限り、
 ブレース展開・チルダ展開・パラメータ展開・コマンド置換・
 算術式展開・クォート削除・パス名展開・単語分割が行われます。
-ある単語が複数の単語に展開された場合はエラーになります。
+.\"O motoki: "it" なので、「その単語」=「リダイレクト演算子の次の単語」ですね。
+その単語が複数の単語に展開された場合はエラーになります。
 .PP
 .\"O Note that the order of redirections is significant.  For example, 
 .\"O the command
@@ -6045,7 +6049,11 @@ ls 2\fB>&\fP1 \fB>\fP dirlist
 \fIhost\fP が有効なホスト名またはインターネットアドレスで
 \fIport\fP が整数のポート番号ならば、
 \fBbash\fP は対応するソケットに対して UDP 接続のオープンを試みます。
-\" 訳注 UDP connection というのはナンセンス?!?
+.\"O 訳注 UDP connection というのはナンセンス?!?
+.\"O motoki: これは誰が書いた訳注なのでしょう？
+.\"O motoki: connection less 型なので、接続をオープンするのが変ということかなぁ。
+.\"O motoki: 強いて書くなら「UDP で接続します」くらいでしょうが、
+.\"O motoki: そのままで意味は通じるのでそのままでもよいかと。
 .PD
 .RE
 .PP
@@ -6067,13 +6075,14 @@ ls 2\fB>&\fP1 \fB>\fP dirlist
 .\"O to be opened for reading on file descriptor
 .\"O .IR n ,
 .\"O or the standard input (file descriptor 0) if
-入力をリダイレクトすると、
-.I word
-を展開した結果の名前を持つファイルがオープンされ、ファイル・ディスクリプター
-.I n
-で読み込めるようになります。
 .\"O .I n
 .\"O is not specified.
+入力をリダイレクトすると、
+.I word
+を展開した結果の名前を持つファイルがオープンされ、
+ファイル・ディスクリプター
+.I n
+で読み込めるようになります。
 .I n
 が指定されていなければ、読み込みは標準入力
 (ファイル・ディスクリプター 0) で行われます。
@@ -6098,7 +6107,8 @@ ls 2\fB>&\fP1 \fB>\fP dirlist
 .\"O if it does exist it is truncated to zero size.
 出力をリダイレクトすると、
 .I word
-の展開した結果の名前を持つファイルがオープンされ、ファイル・ディスクリプター
+の展開した結果の名前を持つファイルがオープンされ、
+ファイル・ディスクリプター
 .I n
 で書き込めるようになります。
 .I n
@@ -6123,13 +6133,17 @@ ls 2\fB>&\fP1 \fB>\fP dirlist
 .\"O builtin has been enabled, the redirection will fail if the file
 .\"O whose name results from the expansion of \fIword\fP exists and is
 .\"O a regular file.
+.\"O motoki: noclobber の部分が少し意訳ですが、ちょっと変えてみました。
+.\"O motoki: set コマンドに対してオプションを設定するというのが読んだときに分かりにくかったので。
 リダイレクト演算子が
 .BR >
 であり、かつ
-.B noclobber
-オプションが組み込みコマンド
+組み込みコマンド
 .B set
-に対して設定されている場合、\fIword\fP の展開で得たファイルが存在し、
+で
+.B noclobber
+オプションが有効になっている場合、
+\fIword\fP の展開で得たファイルが存在し、
 かつそれが通常ファイルならば、リダイレクトは失敗します。
 .\"O If the redirection operator is
 .\"O .BR >| ,
@@ -6143,14 +6157,14 @@ ls 2\fB>&\fP1 \fB>\fP dirlist
 .\"O if the file named by \fIword\fP exists.
 リダイレクト演算子が
 .BR >|
-の場合や、
+の場合、もしくは
 リダイレクト演算子が
 .B >
 で組み込みコマンド
 .B set
-に対する
+で
 .B noclobber
-オプションが設定されていない場合、
+オプションが有効になっていない場合、
 \fIword\fP という名前のファイルが存在していてもリダイレクトが試みられます。
 .\"O .SS Appending Redirected Output
 .SS リダイレクトによる追加出力
@@ -6166,7 +6180,8 @@ ls 2\fB>&\fP1 \fB>\fP dirlist
 .\"O is not specified.  If the file does not exist it is created.
 この形式を使って出力のリダイレクトを行うと、
 .I word
-を展開した結果の名前を持つファイルがオープンされ、ファイル・ディスクリプター
+を展開した結果の名前を持つファイルがオープンされ、
+ファイル・ディスクリプター
 .I n
 に対する出力がこのファイルに追加されるようになります。
 .I n
@@ -6202,14 +6217,16 @@ ls 2\fB>&\fP1 \fB>\fP dirlist
 .PP
 \fB&>\fP\fIword\fP
 .RE
-and
+.\"O and
+と
 .RS
 \fB>&\fP\fIword\fP
 .RE
 .PP
 .\"O Of the two forms, the first is preferred.
 .\"O This is semantically equivalent to
-両者のうち望ましいのは前者の方です。これは次のものと同じ意味です:
+両者のうち望ましいのは前者の方です。
+上記は以下と同じ意味です:
 .RS
 .PP
 \fB>\fP\fIword\fP 2\fB>&\fP1
@@ -6308,10 +6325,13 @@ and
 \fIword\fP がクォートされていなければ、
 ヒアドキュメント中の全ての行に対して
 パラメータ展開・コマンド置換・算術式展開が行われます。
-後者の場合には
+.I word
+がクォートされていない場合には、
 .B \e<newline>
-という文字列は無視されます (出力から取り除かれます)。
-また
+.\"O motoki: 括弧内の「出力から取り除かれるます」が分かりにくいと思いました。
+.\"O motoki: ヒアドキュメントの内容は標準入力として使われるので、どこにも出力という表現が
+.\"O motoki: 出て来ず、どこの出力だろうと思ってしまうのも原因の一つかと。
+という文字列は無視され、
 .BR \e ,
 .BR $ ,
 .B `
@@ -6327,8 +6347,6 @@ and
 .\"O This allows
 .\"O here-documents within shell scripts to be indented in a
 .\"O natural fashion.
-.\"O .SS "Here Strings"
-.\"O A variant of here documents, the format is:
 リダイレクト演算子が
 .BR <<\-
 ならば、行頭にあるタブ文字は全て入力行および
@@ -6336,7 +6354,9 @@ and
 を含む行から取り除かれます。
 これにより、シェルスクリプト中のヒアドキュメントを
 自然な形でインデントさせることができます。
+.\"O .SS "Here Strings"
 .SS ヒアストリング(Here Strings)
+.\"O A variant of here documents, the format is:
 ヒアドキュメントの変形で、以下の形式です:
 .RS
 .PP
@@ -6358,8 +6378,8 @@ and
 [\fIn\fP]\fB<&\fP\fIword\fP
 .RE
 .PP
-を使うと入力ファイル・ディスクリプターを複製できます。
 .\"O is used to duplicate input file descriptors.
+を使うと入力ファイル・ディスクリプターを複製できます。
 .\"O If
 .\"O .I word
 .\"O expands to one or more digits, the file descriptor denoted by
@@ -6370,11 +6390,12 @@ and
 が 1 桁以上の数値に展開された場合、
 .I n
 で示されるファイル・ディスクリプターが生成され、
-そのファイル・ディスクリプターのコピーとなります。
+.I word
+で指定された数値のファイル・ディスクリプターのコピーとなります。
 .\"O .I word
 .\"O do not specify a file descriptor open for input, a redirection error occurs.
 .I word
-に含まれる数値が入力のためにオープンされたファイル・ディスクリプターを
+に含まれる数値が入力用にオープンされたファイル・ディスクリプターを
 指していない場合、リダイレクト・エラーが起きます。
 .\"O If
 .\"O .I word
@@ -6407,16 +6428,16 @@ and
 .\"O is not specified, the standard output (file descriptor 1) is used.
 を使って出力ファイル・ディスクリプターを複製できます。
 .I n
-.\"O If the digits in
 が指定されていない場合は、標準出力
 (ファイル・ディスクリプター 1) が使われます。
+.\"O If the digits in
 .\"O .I word
 .\"O do not specify a file descriptor open for output, a redirection error occurs.
 .\"O As a special case, if \fIn\fP is omitted, and \fIword\fP does not
 .\"O expand to one or more digits, the standard output and standard
 .\"O error are redirected as described previously.
 .I word
-に含まれる数値が、出力のためにオープンされた
+に含まれる数値が、出力用にオープンされた
 ファイル・ディスクリプターを指していない場合、
 リダイレクト・エラーが起きます。特別な場合ですが、
 \fIn\fP が省略され、かつ \fIword\fP が
@@ -6473,13 +6494,17 @@ and
 .\"O to be opened for both reading and writing on file descriptor
 .\"O .IR n ,
 .\"O or on file descriptor 0 if
+.\"O .I n
+.\"O is not specified.  If the file does not exist, it is created.
 ならば、
 .I word
 を展開した結果の名前を持つファイルがファイル・ディスクリプター
 .I n
 での読み書きのためにオープンされます。
-.\"O .I n
-.\"O is not specified.  If the file does not exist, it is created.
+.I n
+が指定されていなければ、
+ファイル・ディスクリプター 0 で読み書きが行われます。
+ファイルが存在しなければ、新しく生成されます。
 .\"O .SH ALIASES
 .\"O \fIAliases\fP allow a string to be substituted for a word when it is used
 .\"O as the first word of a simple command.
@@ -6491,10 +6516,6 @@ and
 .\"O .SM
 .\"O .B SHELL BUILTIN COMMANDS
 .\"O below).
-.I n
-が指定されていなければ、
-ファイル・ディスクリプター 0 で読み書きが行われます。
-ファイルが存在しなければ、新しく生成されます。
 .SH エイリアス
 \fIエイリアス(alias)\fP を使うと、
 ある単語が単純なコマンドの先頭の単語として使われた場合に、
