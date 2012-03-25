@@ -7790,7 +7790,7 @@ POSIX に準拠する形で \fBtest\fP コマンドを使う場合には
 を無視し (したがって \fBkill 0\fP では対話シェルは kill されません)、
 .SM
 .B SIGINT
-を捕捉、処理します
+を捕捉し処理します
 (したがって組み込みコマンド \fBwait\fP は割り込み可能です)。
 .\"O In all cases, \fBbash\fP ignores
 .\"O .SM
@@ -7830,6 +7830,7 @@ POSIX に準拠する形で \fBtest\fP コマンドを使う場合には
 .\"O .SM
 .\"O .B SIGQUIT
 .\"O in addition to these inherited handlers.
+.\"O motoki: "in addition to these inherited handlers" の訳が抜けています。
 \fBbash\fP が起動した外部コマンドは、
 シェルが自分の親から継承した値をシグナルハンドラに設定します。
 ジョブ制御が有効でないときには、非同期コマンドは
@@ -7923,7 +7924,7 @@ POSIX に準拠する形で \fBtest\fP コマンドを使う場合には
 .B huponexit
 が
 .BR shopt
-を使って設定された場合、対話的なログインシェルが終了するときに、
+を使って設定されていた場合、対話的なログインシェルが終了するときに、
 .B bash
 は
 .SM
@@ -7955,12 +7956,14 @@ POSIX に準拠する形で \fBtest\fP コマンドを使う場合には
 .\"O this facility via an interactive interface supplied jointly
 .\"O by the operating system kernel's terminal driver and
 .\"O .BR bash .
-.I ジョブ制御(job control)
+.\"O motoki: 最後の文をかなり書き直してみました。確認ください。
+.I ジョブ制御 (job control)
 とは、プロセスの実行を選択的に停止 (\fIサスペンド/suspend\fP) させ、
-後に再び実行を続けさせる (\fIリジューム/resume\fP) 機能のことです。
-ユーザは通常、システムの端末ドライバと
+後で実行を再開させる (\fIリジューム/resume\fP) 機能のことです。
+ユーザは通常、対話的インタフェースを通してこの機能を利用します。
+対話的インタフェースは、オペレーティングシステムのカーネルの端末ドライバと
 .B bash
-を組み合わせて使い、対話的インタフェースを通してこの機能を利用します。
+の組み合わせで提供されます。
 .PP
 .\"O The shell associates a
 .\"O .I job
@@ -8019,6 +8022,8 @@ POSIX に準拠する形で \fBtest\fP コマンドを使う場合には
 このプロセスグループのメンバ
 (プロセスグループ ID が現在の端末プロセスのグループ ID と等しいプロセス) は、
 .SM
+.BR SIGINT
+のような、キーボードで生成されたシグナルを受け取ります。
 .\"O These processes are said to be in the
 .\"O .IR foreground .
 .\"O .I Background
@@ -8033,8 +8038,6 @@ POSIX に準拠する形で \fBtest\fP コマンドを使う場合には
 .\"O .B SIGTTIN (SIGTTOU)
 .\"O signal by the kernel's terminal driver, 
 .\"O which, unless caught, suspends the process.
-.BR SIGINT
-のような、キーボードで生成されたシグナルを受け取ります。
 このようなプロセスは
 .I フォアグラウンド (foreground)
 にあると言われます。
@@ -8060,7 +8063,7 @@ POSIX に準拠する形で \fBtest\fP コマンドを使う場合には
 .\"O .B bash
 .\"O contains facilities to use it.
 .B bash
-を動かしているオペレーティングシステムがジョブ制御をサポートしているならば、
+が動作しているオペレーティングシステムがジョブ制御をサポートしているならば、
 ユーザは
 .B bash
 を使ってジョブ制御を行えます。
@@ -8073,7 +8076,7 @@ POSIX に準拠する形で \fBtest\fP コマンドを使う場合には
 .\"O .BR bash .
 プロセスの動作中に
 .I サスペンド
-文字(通常は
+文字 (通常は
 .BR ^Z , 
 Control-Z) を打ち込むと、そのプロセスは停止させられ、
 .B bash
@@ -8104,7 +8107,7 @@ Control-Y) を打ち込むと、
 制御が
 .B bash
 に戻ります。
-このときユーザはこのジョブの状態を操作できます。
+この時点でユーザはこのジョブの状態を操作できます。
 利用できるのは、バックグラウンドで実行を継続するならば
 .B bg
 コマンド、フォアグラウンドで実行を継続するならば
@@ -8196,6 +8199,8 @@ Control-Y) を打ち込むと、
 は
 .BR %\-
 を使って参照できます。
+ジョブが一つしかない場合には、\fB%+\fP と \fB%\-\fP のどちらも使っても
+そのジョブを参照することができます。
 ジョブに関する出力 (
 .B jobs
 コマンドの出力など) では、カレントジョブには必ず
@@ -8215,7 +8220,8 @@ Control-Y) を打ち込むと、
 .\"O .B ``%1 &''
 .\"O resumes job 1 in the background, equivalent to
 .\"O \fB``bg %1''\fP.
-単にジョブを呼べば、
+.\"O motoki: "naming" の部分をもう少し訳出した方がよいように思いました。
+ジョブの名前だけを指定すると、
 そのジョブをフォアグラウンドに持ってきます。つまり、
 .B %1
 は
@@ -8242,8 +8248,9 @@ Control-Y) を打ち込むと、
 .\"O is enabled,
 .\"O .B bash
 .\"O reports such changes immediately.
+通常、
 .B bash
-がジョブの状態変化を報告するのは通常、プロンプトを出力する直前です。
+がジョブの状態変化を報告するのは、プロンプトを出力する直前です。
 これは他の出力を妨害しないためです。
 組み込みコマンド
 .B set
@@ -8251,7 +8258,7 @@ Control-Y) を打ち込むと、
 .B \-b
 オプションが指定されていると、
 .B bash
-はこのような変化を即座に報告します。
+はジョブの状態の変化を即座に報告します。
 .\"O Any trap on
 .\"O .B SIGCHLD
 .\"O is executed for each child that exits.
@@ -8280,7 +8287,13 @@ Control-Y) を打ち込むと、
 .\"O If a second attempt to exit is made without an intervening command,
 .\"O the shell does not print another warning, and any stopped
 .\"O jobs are terminated.
+間にコマンドを挟まずに
+.B bash
+を再び終了させようとすると、
+シェルは警告を繰り返さないで、
+停止中のジョブを終了させます。
 .\"O .SH PROMPTING
+.SH プロンプト
 .\"O When executing interactively, 
 .\"O .B bash
 .\"O displays the primary prompt
@@ -8290,12 +8303,6 @@ Control-Y) を打ち込むと、
 .\"O .SM
 .\"O .B PS2
 .\"O when it needs more input to complete a command.
-間にコマンドを挟まずに
-.B bash
-を再び終了させようとすると、
-シェルは警告を繰り返さないで、
-停止中のジョブを終了させます。
-.SH プロンプト
 対話的に動作している場合、
 .B bash
 はコマンドを読む込み準備ができたときにプライマリプロンプト
