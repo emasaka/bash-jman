@@ -7310,7 +7310,7 @@ POSIX に準拠する形で \fBtest\fP コマンドを使う場合には
 .\"O an error occurs, and the command exits with a non-zero status.
 コマンド名が残らなかった場合には、
 変数を代入した結果が現在のシェル環境に効果を及ぼします。
-そうでない場合、変数は実行されるコマンドの環境に追加されるだけで、
+それ以外の場合、変数は実行されるコマンドの環境に追加されるだけで、
 現在のシェル環境には影響を与えません。
 読み込み専用の変数に対して代入をしようとするとエラーが発生し、
 そのコマンドは 0 でないステータスで終了します。
@@ -7463,9 +7463,6 @@ POSIX に準拠する形で \fBtest\fP コマンドを使う場合には
 .\"O interpreter name on the first line of the program, followed
 .\"O by the name of the program, followed by the command
 .\"O arguments, if any.
-.\"O .SH COMMAND EXECUTION ENVIRONMENT
-.\"O The shell has an \fIexecution environment\fP, which consists of the
-.\"O following:
 プログラムが
 .BR #!
 で始まるファイルである場合、
@@ -7476,7 +7473,10 @@ POSIX に準拠する形で \fBtest\fP コマンドを使う場合には
 プログラムの先頭の行のインタプリタ名の後の省略可能な引き数 1 つと、
 その後のプログラム名、さらに
 (もしあれば) その後のコマンドへの引き数から構成されます。
+.\"O .SH COMMAND EXECUTION ENVIRONMENT
 .SH コマンド実行環境
+.\"O The shell has an \fIexecution environment\fP, which consists of the
+.\"O following:
 シェルは以下の要素からなる\fI実行環境(execution environment)\fPを持ちます:
 .IP \(bu
 .\"O open files inherited by the shell at invocation, as modified by
@@ -7534,7 +7534,7 @@ POSIX に準拠する形で \fBtest\fP コマンドを使う場合には
 .\"O is invoked in a separate execution environment that consists of
 .\"O the following.  Unless otherwise noted, the values are inherited
 .\"O from the shell.
-組み込みコマンドやシェル関数を除く単純なコマンドを実行するとき、
+組み込みコマンドやシェル関数以外の単純なコマンドを実行するとき、
 このコマンドは独立した実行環境内で呼び出されます。
 この環境は以下の要素から成り立っています。
 特に断らない限り、この値はシェルから引き継がれます。
@@ -7543,7 +7543,7 @@ POSIX に準拠する形で \fBtest\fP コマンドを使う場合には
 .\"O the shell's open files, plus any modifications and additions specified
 .\"O by redirections to the command
 シェルのオープンしているファイルと、
-コマンドに対するリダイレクションで指定した変更・追加をこれに加えたもの。
+コマンドに対するリダイレクションで指定した変更・追加を加えたもの。
 .IP \(bu
 .\"O the current working directory
 現在の作業ディレクトリ
@@ -7553,15 +7553,17 @@ POSIX に準拠する形で \fBtest\fP コマンドを使う場合には
 .IP \(bu
 .\"O shell variables and functions marked for export, along with variables
 .\"O exported for the command, passed in the environment
+.\"O motoki: shell variables and functions の functions の方がありません。
 エクスポートするシェル変数と、
 そのコマンドに対してエクスポートされた変数。
 これらは環境で渡されます。
 .IP \(bu
 .\"O traps caught by the shell are reset to the values inherited from the
 .\"O shell's parent, and traps ignored by the shell are ignored
-シェルが捕捉したトラップは、
+.\"O motoki: まだ捕捉しているわけではないので、受動態の方がよいと思います。
+シェルに捕捉されるトラップは、
 そのシェルの親から継承された値に再設定されます。
-そのシェルが無視したトラップは無視されます。
+そのシェルにより無視されるトラップは無視されます。
 .PP
 .\"O A command invoked in this separate environment cannot affect the
 .\"O shell's execution environment. 
@@ -7576,9 +7578,10 @@ POSIX に準拠する形で \fBtest\fP コマンドを使う場合には
 .\"O commands that are invoked as part of a pipeline are also executed in a
 .\"O subshell environment.  Changes made to the subshell environment
 .\"O cannot affect the shell's execution environment.
+.\"O motoki: "commands grouped with parentheses" に対応する訳がありません。
 コマンド置換と非同期コマンドは、サブシェル環境内で呼び出されます。
 このサブシェル環境はシェル環境を複製したものです。
-ただし、シェルが捕捉したトラップは、
+ただし、シェルにより捕捉されるトラップは、
 そのシェルの起動時に親から継承した値に再設定されます。
 パイプラインの一部として起動された組み込みコマンドは、
 サブシェル環境で実行されます。サブシェル環境に対して行われた変更は、
@@ -7587,10 +7590,12 @@ POSIX に準拠する形で \fBtest\fP コマンドを使う場合には
 .\"O Subshells spawned to execute command substitutions inherit the value of
 .\"O the \fB\-e\fP option from the parent shell.  When not in \fIposix\fP mode,
 .\"O \fBbash\fP clears the \fB\-e\fP option in such subshells.
-コマンド置換の実行で生成されたサブシェルは、
+.\"O motoki: "in such subshells" は「サブシェルごとに」というよりは
+.\"O motoki: posix mode でないシェルという意味ではないでしょうか。
+コマンド置換を実行するために起動されたサブシェルは、
 \fB\-e\fP オプションの値を親シェルから継承します。
-\fIposix\fP モードでなければ、\fBbash\fP は \fB\-e\fP
-オプションをサブシェルごとにクリアします。
+\fIposix\fP モードでない場合、\fBbash\fP はそのサブシェルでは
+\fB\-e\fP オプションをクリアします。
 .PP
 .\"O If a command is followed by a \fB&\fP and job control is not active, the
 .\"O default standard input for the command is the empty file \fI/dev/null\fP.
@@ -7641,9 +7646,9 @@ POSIX に準拠する形で \fBtest\fP コマンドを使う場合には
 シェルは、環境を操作する様々な方法を提供しています。
 起動時には、シェルは自分自身の環境を調べ、
 見つかった名前それぞれに対してパラメータを生成し、
-それに自動的に印を付けて子プロセスに
+それに自動的に子プロセスへの
 .I エクスポート (export)
-します。実行されたコマンドは環境を継承します。
+の印を付けます。実行されたコマンドは環境を継承します。
 .B export
 コマンドまたは
 .B declare \-x
@@ -7720,7 +7725,7 @@ POSIX に準拠する形で \fBtest\fP コマンドを使う場合には
 終了ステータスは 0 から 255 の値を取りますが、後述するように、
 125 より大きい値は特別にシェルによって使われることがあります。
 シェルの組み込みコマンドや複合コマンドの終了ステータスも、
-同じ範囲に制限されます。
+同じ範囲に限定されています。
 環境によっては、シェルは仕様で決められた失敗のモードを表す
 特別の値を使います。
 .PP
@@ -7742,11 +7747,12 @@ POSIX に準拠する形で \fBtest\fP コマンドを使う場合には
 そのコマンドを実行するために生成された子プロセスが
 ステータス 127 を返します。
 コマンドが見つかったけれど実行できなかった場合には、
-返却ステータスは 126 です。
+.\"O motoki: ここだけ返却ステータスになっていました。
+終了ステータスは 126 です。
 .PP
 .\"O If a command fails because of an error during expansion or redirection,
 .\"O the exit status is greater than zero.
-展開やリダイレクションの際のエラーのために
+展開やリダイレクションの際にエラーが発生し
 コマンドが失敗した場合には、
 0 より大きい終了ステータスが返されます。
 .PP
@@ -7764,7 +7770,7 @@ POSIX に準拠する形で \fBtest\fP コマンドを使う場合には
 .\"O executed, unless a syntax error occurs, in which case it exits
 .\"O with a non-zero value.  See also the \fBexit\fP builtin
 .\"O command below.
-\fBbash\fP 自身が返す終了ステータスは、文法エラーが起きなければ、
+\fBbash\fP 自身が返す終了ステータスは、文法エラーが起きた場合を除き、
 実行した最後のコマンドの終了ステータスです。
 文法エラーの場合には 0 でない値が終了ステータスとなります。
 後述の組み込みコマンド \fBexit\fP も参照してください。
