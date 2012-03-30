@@ -15255,14 +15255,14 @@ vi 形式のコマンド行編集インタフェースを使います。
 .\"O .BR PS4 ,
 .\"O followed by the command and its expanded arguments
 .\"O or associated word list.
-.\"O motoki: "or associated word list" に対応する訳がない。
 .\"O motoki: 各コマンドの展開を行うたびに表示を行うのか、コマンドの一つ一つを展開した後で、
 .\"O motoki: 一回表示を行うのかが、よく分からなかった。原文でもよく分からないが。
 \fI単純なコマンド\fP、\fBfor\fP コマンド、\fBcase\fP コマンド、
 \fBselect\fP コマンド、算術 \fBfor\fP コマンドをそれぞれ展開した後、
 .SM
 .BR PS4
-を展開した値を表示し、その後にそのコマンドと展開した引き数を表示します。
+を展開した値を表示し、その後にそのコマンドと展開した引き数や、
+結び付いた単語のリストを表示します。
 .TP 8
 .B \-B
 .\"O The shell performs brace expansion (see
