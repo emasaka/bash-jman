@@ -11715,17 +11715,15 @@ complete -D -F _completion_loader
 .\"O but each binding or command must be passed as a separate argument;
 .\"O e.g., '"\eC\-x\eC\-r": re\-read\-init\-file'.
 .\"O Options, if supplied, have the following meanings:
-.\"O motoki: 少し意訳しすぎか。
-.\"O motoki: binding or command の command に対応する訳がない。
 .\"O motoki: bind の書式では keyseq:function-name のように続いているが
 .\"O motoki: 本当は keyseq: function-name にしないといけないのかな？
 .\"O emasaka: ':' 直後の空白は無視され、有無のどちらでもよいようです。
 .\"O emasaka: 書式の記載は、空白なしにすることで 1 つの引き数であることを
 .\"O emasaka: 示しているのかと。
-受け付ける割り当ての記法は
-.I .inputrc
-と全く同じですが、
-それぞれの割り当ては別々の引き数として渡さなければなりません。
+オプション以外の引き数はすべて、
+.I .inputrc ,
+に書くのと同じ形式のコマンドですが、
+それぞれの割り当てやコマンドは独立した引き数として渡さなければなりません。
 例えば '"\eC\-x\eC\-r": re\-read\-init\-file' のように指定します。
 オプションを指定した場合には、以下のような意味を持ちます:
 .RS
