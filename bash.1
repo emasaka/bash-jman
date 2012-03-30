@@ -13404,11 +13404,8 @@ POSIX の\fI特殊\fP組み込みコマンドだけに制限されます。
 \fBgetopts\fP \fIoptstring\fP \fIname\fP [\fIargs\fP]
 .\"O .B getopts
 .\"O is used by shell procedures to parse positional parameters.
-.\"O motoki: "procedure" はこのマニュアルでここだけで登場するので何を指すのでしょうか。
-.\"O motoki: 「手続き」というよりは、その後ろの to 以降とくみ合わさって
-.\"O motoki: 「位置パラメータを解釈するシェルの処理」などでもいいかもしれません。
 .B getopts
-はシェルの手続きが位置パラメータを解釈するために使います。
+は位置パラメータを解釈するシェルの処理で使います。
 .\"O .I optstring
 .\"O contains the option characters to be recognized; if a character
 .\"O is followed by a colon, the option is expected to have an
