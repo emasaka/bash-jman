@@ -10094,7 +10094,7 @@ M\-\- を使うと、負の値を指定できます。
 .TP
 .B possible\-completions (M\-?)
 .\"O List the possible completions of the text before point.
-ポイントの前のテキストを補完して得られるものの候補を列挙します。
+ポイントの前のテキストの補完候補を列挙します。
 .TP
 .B insert\-completions (M\-*)
 .\"O Insert all completions of the text before point
@@ -10119,7 +10119,7 @@ M\-\- を使うと、負の値を指定できます。
 \fBcomplete\fP コマンドに似ていますが、
 補完される単語を補完候補リストのうちの 1 つと置換します。
 \fBmenu\-complete\fP を繰り返して実行すると、
-補完の候補リストが次々と順番に挿入されます。
+補完候補のリストが次々と順番に挿入されます。
 補完リストの最後まで来るとベルが
 (\fBbell\-style\fP の設定に基づいて)
 鳴らされ、元のテキストに戻ります。
@@ -10156,7 +10156,7 @@ M\-\- を使うと、負の値を指定できます。
 .B possible\-filename\-completions (C\-x /)
 .\"O List the possible completions of the text before point,
 .\"O treating it as a filename.
-ポイントの前のテキストについて補完の候補を列挙します。
+ポイントの前のテキストについて補完候補を列挙します。
 テキストはファイル名として扱われます。
 .TP
 .B complete\-username (M\-~)
@@ -10168,7 +10168,7 @@ M\-\- を使うと、負の値を指定できます。
 .B possible\-username\-completions (C\-x ~)
 .\"O List the possible completions of the text before point,
 .\"O treating it as a username.
-ポイントの前のテキストについて補完の候補を列挙します。
+ポイントの前のテキストについて補完候補を列挙します。
 テキストはユーザ名として扱われます。
 .TP
 .B complete\-variable (M\-$)
@@ -10180,7 +10180,7 @@ M\-\- を使うと、負の値を指定できます。
 .B possible\-variable\-completions (C\-x $)
 .\"O List the possible completions of the text before point,
 .\"O treating it as a shell variable.
-ポイントの前のテキストについて補完の候補を列挙します。
+ポイントの前のテキストについて補完候補を列挙します。
 テキストはシェル変数として扱われます。
 .TP
 .B complete\-hostname (M\-@)
@@ -10192,7 +10192,7 @@ M\-\- を使うと、負の値を指定できます。
 .B possible\-hostname\-completions (C\-x @)
 .\"O List the possible completions of the text before point,
 .\"O treating it as a hostname.
-ポイントの前のテキストについて補完の候補を列挙します。
+ポイントの前のテキストについて補完候補を列挙します。
 テキストはホスト名として扱います。
 .TP
 .B complete\-command (M\-!)
@@ -10210,7 +10210,7 @@ M\-\- を使うと、負の値を指定できます。
 .B possible\-command\-completions (C\-x !)
 .\"O List the possible completions of the text before point,
 .\"O treating it as a command name.
-ポイントの前のテキストについて補完の候補を列挙します。
+ポイントの前のテキストについて補完候補を列挙します。
 テキストはコマンド名として扱います。
 .TP
 .B dynamic\-complete\-history (M\-TAB)
@@ -10234,7 +10234,7 @@ M\-\- を使うと、負の値を指定できます。
 .\"O enclosed within braces so the list is available to the shell (see
 .\"O .B Brace Expansion
 .\"O above).
-ファイル名補完を実行し、補完の候補リストを挿入します。
+ファイル名補完を実行し、補完候補のリストを挿入します。
 シェルから利用可能なリストとなるように、
 返される候補はブレースで括られます (前述の
 .B ブレース展開
@@ -10725,7 +10725,7 @@ readline の出力ストリームに出力します。
 .\"O generate no matches.
 デフォルトでは、補完仕様が見つかった場合、
 それが生成したものがなんであれ、
-可能性のある補完全てのリストとして、補完コードに返されます。
+全ての補完候補のリストとして、補完コードに返されます。
 デフォルトの \fBbash\fP 補完は試みられず、
 readline のデフォルトのファイル名補完は無効になります。
 補完仕様が定義されたときに
@@ -12126,7 +12126,7 @@ vi\-move, vi\-command\fP,
 .\"O set by the programmable completion facilities, while available, will not
 .\"O have useful values.
 .\"O motoki: programmable completion の訳はプログラム補完でよいか。ちょっと変？
-\fIoption\fP に従って、\fIword\fP の補完マッチのリストを生成します。
+\fIoption\fP に従って、\fIword\fP にマッチする補完候補のリストを生成します。
 オプションには \fBcomplete\fP 組み込みコマンドと同じものが指定できますが、
 \fB\-p\fP と \fB\-r\fP は指定できません。
 マッチのリストは標準出力に出力されます。
@@ -12263,6 +12263,7 @@ readline がファイル名特有の処理
 .\"O motoki: possible completions, completion match などの訳語を統一する必要がある。
 .\"O motoki: (bash.1 全体に通じる話)
 .\"O motoki: possible completion = 補完候補 としてみた。
+.\"O emasaka: 「possible completion = 補完候補」を bash.1 全体に適用しました。
 \fIaction\fP は補完候補リストの生成動作で、
 以下のどれかひとつを指定します。
 .RS
@@ -16030,10 +16031,10 @@ GNU 標準のエラーメッセージの形式で出力されます。
 が使われている場合、
 空行に対してコマンド補完をさせようとしたときに、
 .B bash
-は補完用の
+は補完候補を
 .SM
 .B PATH
-検索を行いません。
+から検索しません。
 .TP 8
 .B nocaseglob
 .\"O If set,
