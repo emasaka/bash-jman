@@ -2085,7 +2085,7 @@ control-\fIx\fP の文字
 そのパラメータは設定 (set) されていると言われます。
 空文字列も有効な値です。一度値を設定すると、組み込みコマンドの
 .B unset
-を使わなければ設定を取り消す (unset する) ことはできません
+を使わなければ削除 (unset) できません
 (後述の
 .SM
 .B シェルの組み込みコマンド
@@ -2181,7 +2181,7 @@ control-\fIx\fP の文字
 += を配列変数への複合代入 (後述の
 .B 配列
 を参照) で使うと、
-変数の現在の値は (= を使ったときとは違って) 破棄されません。
+変数の現在の値は (= を使ったときとは違って) 削除されません。
 インデックスによる配列の場合は、新しい値が最大のインデックス
 より一つ大きいインデックスから配列に追加されます。
 連想配列の場合は、新しいキーと値の組が追加されます。
@@ -4314,13 +4314,13 @@ ${\fIname\fP[\fIsubscript\fP]} の長さに展開されます。
 .\"O \fIsubscript\fP is \fB*\fP or \fB@\fP, removes the entire array.
 組み込みコマンドの
 .B unset
-は配列の破棄に使われます。\fBunset\fP \fIname\fP[\fIsubscript\fP]
-とすると、インデックスが \fIsubscript\fP である配列の要素が破棄されます。
+は配列の削除に使われます。\fBunset\fP \fIname\fP[\fIsubscript\fP]
+とすると、インデックスが \fIsubscript\fP である配列の要素が削除されます。
 パス名展開による意図しない副作用に注意してください。
 \fBunset\fP \fIname\fP (\fIname\fP は配列) または
 \fBunset\fP \fIname\fP[\fIsubscript\fP]
 (\fIsubscript\fP が \fB*\fP または \fB@\fP) とすると、
-配列全体が破棄されます。
+配列全体が削除されます。
 .PP
 .\"O The
 .\"O .BR declare ,
@@ -6525,7 +6525,7 @@ ls 2\fB>&\fP1 \fB>\fP dirlist
 .B alias
 と
 .B unalias
-を使って設定および設定の取り消しできます (後述の
+を使って設定および削除できます (後述の
 .SM
 .B シェルの組み込みコマンド
 を参照)。
@@ -13549,7 +13549,7 @@ POSIX の\fI特殊\fP組み込みコマンドだけに制限されます。
 さらに、静かなモードでない場合にはエラーメッセージが出力され、
 .SM
 .B OPTARG
-の設定が取り消されます。
+が削除されます。
 .\"O If
 .\"O .B getopts
 .\"O is silent,
@@ -13578,7 +13578,7 @@ POSIX の\fI特殊\fP組み込みコマンドだけに制限されます。
 に設定され、
 .SM
 .B OPTARG
-の設定が取り消され、診断メッセージが出力されます。
+が削除され、診断メッセージが出力されます。
 .\"O If
 .\"O .B getopts
 .\"O is silent, then a colon (\^\fB:\fP\^) is placed in
@@ -15237,10 +15237,9 @@ vi 形式のコマンド行編集インタフェースを使います。
 .\"O parameter expansion.  If expansion is attempted on an
 .\"O unset variable or parameter, the shell prints an error message, and,
 .\"O if not interactive, exits with a non-zero status.
-.\"O motoki: "unset" は「削除された」と訳した方がしっくり来る気がする。
 パラメータ展開の実行中に、特殊パラメータ "@" と "*" 以外で
-設定が取り消されている変数やパラメータをエラーとして扱います。
-設定が取り消されている変数やパラメータを展開しようとした場合、
+設定されていない変数やパラメータをエラーとして扱います。
+設定されていない変数やパラメータを展開しようとした場合、
 シェルはエラーメッセージを出力します。
 シェルが対話的でなければ、0 でないステータスで終了します。
 .TP 8
