@@ -7820,10 +7820,10 @@ POSIX に準拠する形で \fBtest\fP コマンドを使う場合には
 .\"O .SM
 .\"O .B SIGQUIT
 .\"O in addition to these inherited handlers.
-.\"O motoki: "in addition to these inherited handlers" の訳が抜けています。
 \fBbash\fP が起動した外部コマンドは、
 シェルが自分の親から継承した値をシグナルハンドラに設定します。
-ジョブ制御が有効でないときには、非同期コマンドは
+ジョブ制御が有効でないときには、非同期コマンドは、
+継承したシグナルハンドラに加えて
 .SM
 .B SIGINT
 と
