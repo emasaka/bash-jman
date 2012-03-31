@@ -7736,7 +7736,9 @@ POSIX に準拠する形で \fBtest\fP コマンドを使う場合には
 ステータス 127 を返します。
 コマンドが見つかったけれど実行できなかった場合には、
 .\"O motoki: ここだけ返却ステータスになっていました。
-終了ステータスは 126 です。
+.\"O emasaka: 原文でも exit status と return status が混在しているので、
+.\"O emasaka: 単なる「ステータス」にしておきます。
+ステータスは 126 です。
 .PP
 .\"O If a command fails because of an error during expansion or redirection,
 .\"O the exit status is greater than zero.
