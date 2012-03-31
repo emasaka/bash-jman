@@ -7568,8 +7568,8 @@ POSIX に準拠する形で \fBtest\fP コマンドを使う場合には
 .\"O commands that are invoked as part of a pipeline are also executed in a
 .\"O subshell environment.  Changes made to the subshell environment
 .\"O cannot affect the shell's execution environment.
-.\"O motoki: "commands grouped with parentheses" に対応する訳がありません。
-コマンド置換と非同期コマンドは、サブシェル環境内で呼び出されます。
+コマンド置換や括弧でグループ化されたコマンド、非同期コマンドは、
+サブシェル環境内で呼び出されます。
 このサブシェル環境はシェル環境を複製したものです。
 ただし、シェルにより捕捉されるトラップは、
 そのシェルの起動時に親から継承した値に再設定されます。
